@@ -1,0 +1,1230 @@
+<!doctype html>
+<html
+  lang="zh-cn"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="light"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  
+    <meta http-equiv="content-language" content="zh-cn">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color">
+
+  
+  
+    <title>Yolo学习笔记＿１ &middot; RainDrop</title>
+    <meta name="title" content="Yolo学习笔记＿１ &middot; RainDrop">
+  
+
+  
+  
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%91/">
+  
+
+  
+  
+    <meta name="author" content="Gordon Mark">
+  
+  
+    
+      
+        
+      
+    
+      
+        
+          <link href="https://github.com/raindrop2508" rel="me">
+        
+      
+    
+  
+
+  
+  <meta property="og:url" content="http://localhost:1313/posts/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%91/">
+  <meta property="og:site_name" content="RainDrop">
+  <meta property="og:title" content="Yolo学习笔记＿１">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-08-17T17:20:47+08:00">
+    <meta property="article:modified_time" content="2019-08-17T17:20:47+08:00">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Yolo学习笔记＿１">
+
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+  
+    
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.c54019dc7ccdfc63a28ff9e8941fdaa42b12ffb773bbe18f14e4ce062614784c356bb2fbdfe24d6682586d2fd2b84116ce839dac5c31a637b79210647364a1f4.css"
+    integrity="sha512-xUAZ3HzN/GOij/nolB/apCsS/7dzu&#43;GPFOTOBiYUeEw1a7L73&#43;JNZoJYbS/SuEEWzoOdrFwxpje3khBkc2Sh9A==">
+
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.6f41174b3a05b680820fe08cadbfa5fb7a7ca347b76a0955cdc68b9d8aca1ce24f0547e138cea33bcc7904d551a90afcb1cc7f2d9fe8557075d501419046c08c.js"
+    integrity="sha512-b0EXSzoFtoCCD&#43;CMrb&#43;l&#43;3p8o0e3aglVzcaLnYrKHOJPBUfhOM6jO8x5BNVRqQr8scx/LZ/oVXB11QFBkEbAjA=="></script>
+  
+  
+  
+  
+  
+  
+    
+    <script src="/lib/zoom/zoom.min.umd.b4b722fcb5d42f34f52b30a92f3521b69f403ca9d96d0d6179eb537cb870f5d83fdf1fe836688d95d5c99fefbda4170487711006e56051fa67ea00da10521721.js" integrity="sha512-tLci/LXULzT1KzCpLzUhtp9APKnZbQ1heetTfLhw9dg/3x/oNmiNldXJn&#43;&#43;9pBcEh3EQBuVgUfpn6gDaEFIXIQ=="></script>
+  
+
+  
+  
+  
+    
+  
+  
+    
+  
+  
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.12cc82450d4683bf2eb7de1400808bcc250dfbd607915c0fde6f3a878b70893d19af122c3f31109ab5ef31900c976b073d8e79543b70232bdbd69707f414a252.js"
+      integrity="sha512-EsyCRQ1Gg78ut94UAICLzCUN&#43;9YHkVwP3m86h4twiT0ZrxIsPzEQmrXvMZAMl2sHPY55VDtwIyvb1pcH9BSiUg=="
+      data-copy="复制"
+      data-copied="已复制"></script>
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "Yolo学习笔记＿１",
+    "headline": "Yolo学习笔记＿１",
+    
+    "inLanguage": "zh-cn",
+    "url" : "http://localhost:1313/posts/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%91/",
+    "author" : {
+      "@type": "Person",
+      "name": "Gordon Mark"
+    },
+    "copyrightYear": "2019",
+    "dateCreated": "2019-08-17T17:20:47\u002b08:00",
+    "datePublished": "2019-08-17T17:20:47\u002b08:00",
+    
+    "dateModified": "2019-08-17T17:20:47\u002b08:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "280"
+  }]
+  </script>
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <body class="flex flex-col h-screen m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32 text-lg bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral bf-scrollbar">
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content">
+        <span class="font-bold text-primary-600 pe-2 dark:text-primary-400">&darr;</span>
+        跳过正文
+      </a>
+    </div>
+    
+    
+      <div class="main-menu flex items-center w-full gap-2 p-1 pl-0">
+  
+  
+    <a href="/" class="text-base font-medium truncate min-w-0 shrink">
+      RainDrop
+    </a>
+  
+  <div class="flex items-center ms-auto">
+    <div class="hidden md:flex">
+      <nav class="flex items-center gap-x-5 h-12">
+  
+    
+      
+  
+    <a
+      href="/about/about/"
+      
+      class="flex items-center bf-icon-color-hover"
+      aria-label="关于"
+      title="About">
+      
+      
+        <span class="text-base font-medium break-normal">
+          关于
+        </span>
+      
+    </a>
+  
+
+    
+      
+  
+    <div class="nested-menu">
+      <div class="cursor-pointer flex items-center">
+        <a
+          
+            tabindex="0"
+          
+          aria-label="文章"
+          class="flex items-center text-base font-medium bf-icon-color-hover"
+          title="">
+          
+          <span class="text-bg font-bg break-normal" title="">
+            文章
+          </span>
+          <span>
+            <span class="relative block icon"><svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 20 20"
+  fill="currentColor"
+  aria-hidden="true"
+>
+  <path
+    fill-rule="evenodd"
+    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+    clip-rule="evenodd"
+  />
+</svg>
+</span>
+          </span>
+        </a>
+      </div>
+      <div class="menuhide">
+        <div class="pt-2 p-5 mt-2 rounded-xl backdrop-blur shadow-2xl bg-neutral/25 dark:bg-neutral-800/25">
+          <div class="flex flex-col space-y-3">
+            
+              <a
+                href="/posts/tech/"
+                
+                aria-label="技术"
+                class="flex items-center bf-icon-color-hover">
+                
+                <span class="text-sm font-sm" title="技术">
+                  技术
+                </span>
+              </a>
+            
+              <a
+                href="/posts/daily/"
+                
+                aria-label="生活"
+                class="flex items-center bf-icon-color-hover">
+                
+                <span class="text-sm font-sm" title="日常">
+                  生活
+                </span>
+              </a>
+            
+              <a
+                href="/posts/other/"
+                
+                aria-label="其他"
+                class="flex items-center bf-icon-color-hover">
+                
+                <span class="text-sm font-sm" title="其他">
+                  其他
+                </span>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+    
+  
+
+  
+
+  
+
+  
+    <button
+      id="search-button"
+      aria-label="Search"
+      class="text-base bf-icon-color-hover"
+      title="搜索 (/)">
+      <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+    </button>
+  
+
+  
+    <div class="flex items-center">
+      <button
+        id="appearance-switcher"
+        aria-label="Dark mode switcher"
+        type="button"
+        class="text-base bf-icon-color-hover">
+        <div class="flex items-center justify-center dark:hidden">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+        </div>
+        <div class="items-center justify-center hidden dark:flex">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+        </div>
+      </button>
+    </div>
+  
+</nav>
+
+
+
+    </div>
+    <div class="flex md:hidden">
+      <div class="flex items-center h-14 gap-4">
+  
+    <button
+      id="search-button-mobile"
+      aria-label="Search"
+      class="flex items-center justify-center bf-icon-color-hover"
+      title="搜索 (/)">
+      <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+    </button>
+  
+
+  
+    <button
+      id="appearance-switcher-mobile"
+      type="button"
+      aria-label="Dark mode switcher"
+      class="flex items-center justify-center text-neutral-900 hover:text-primary-600 dark:text-neutral-200 dark:hover:text-primary-400">
+      <div class="dark:hidden">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+      </div>
+      <div class="hidden dark:block">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+      </div>
+    </button>
+  
+
+  
+    <input type="checkbox" id="mobile-menu-toggle" autocomplete="off" class="hidden peer">
+    <label for="mobile-menu-toggle" class="flex items-center justify-center cursor-pointer bf-icon-color-hover">
+      <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+    </label>
+
+    <div
+      role="dialog"
+      aria-modal="true"
+      style="scrollbar-gutter: stable;"
+      class="fixed inset-0 z-50 invisible overflow-y-auto px-6 py-20 opacity-0 transition-[opacity,visibility] duration-300 peer-checked:visible peer-checked:opacity-100 bg-neutral-50/97 dark:bg-neutral-900/99
+      bf-scrollbar">
+      <label
+        for="mobile-menu-toggle"
+        class="fixed end-8 top-5 flex items-center justify-center z-50 h-12 w-12 cursor-pointer select-none rounded-full bf-icon-color-hover border bf-border-color bf-border-color-hover bg-neutral-50 dark:bg-neutral-900">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </label>
+      <nav class="mx-auto max-w-md space-y-6">
+        
+  
+    
+    <div class="px-2">
+      <a
+        href="/about/about/"
+        aria-label="关于"
+        
+        class="flex items-center gap-4 group bf-icon-color-hover text-neutral-700 dark:text-neutral-200">
+        
+        <span title="About" class="text-2xl font-bold tracking-tight">
+          关于
+        </span>
+        
+      </a>
+
+      
+    </div>
+  
+    
+    <div class="px-2">
+      <a
+        href=""
+        aria-label="文章"
+        
+        class="flex items-center gap-4 group bf-icon-color-hover text-neutral-700 dark:text-neutral-200">
+        
+        <span title="" class="text-2xl font-bold tracking-tight">
+          文章
+        </span>
+        
+          <label
+            for="fullscreen-submenu-文章"
+            class="ms-auto flex items-center justify-center h-10 w-10 cursor-pointer rounded-lg bf-icon-color-hover border bf-border-color bf-border-color-hover">
+            <span class="relative block icon"><svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 20 20"
+  fill="currentColor"
+  aria-hidden="true"
+>
+  <path
+    fill-rule="evenodd"
+    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+    clip-rule="evenodd"
+  />
+</svg>
+</span>
+          </label>
+        
+      </a>
+
+      
+        <input checked type="checkbox" id="fullscreen-submenu-文章" autocomplete="off" class="hidden peer/full">
+
+        <div
+          class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 peer-checked/full:grid-rows-[1fr]">
+          <div class="overflow-hidden">
+            <div class="ms-7 mt-4">
+              
+                <a
+                  href="/posts/tech/"
+                  aria-label="技术"
+                  
+                  class="flex items-center gap-3 p-2 group bf-icon-color-hover text-neutral-700 dark:text-neutral-200">
+                  
+                  <span title="技术" class="text-lg">
+                    技术
+                  </span>
+                </a>
+              
+                <a
+                  href="/posts/daily/"
+                  aria-label="生活"
+                  
+                  class="flex items-center gap-3 p-2 group bf-icon-color-hover text-neutral-700 dark:text-neutral-200">
+                  
+                  <span title="日常" class="text-lg">
+                    生活
+                  </span>
+                </a>
+              
+                <a
+                  href="/posts/other/"
+                  aria-label="其他"
+                  
+                  class="flex items-center gap-3 p-2 group bf-icon-color-hover text-neutral-700 dark:text-neutral-200">
+                  
+                  <span title="其他" class="text-lg">
+                    其他
+                  </span>
+                </a>
+              
+            </div>
+          </div>
+        </div>
+      
+    </div>
+  
+
+        
+  
+
+        
+  
+
+      </nav>
+    </div>
+  
+</div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+    
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  
+  <article>
+    
+    
+
+    
+    <header id="single_header" class="mt-5 max-w-prose">
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Yolo学习笔记＿１
+      </h1>
+      <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+        
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2019-08-17T17:20:47&#43;08:00">2019-08-17</time><span class="px-2 text-primary-500">&middot;</span><span>280 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">2 分钟</span>
+    
+
+    
+    
+  </div>
+
+  
+
+  
+  
+
+  
+  
+
+
+
+      </div>
+      
+        
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    
+    
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+      
+      
+        
+        
+        
+      
+      <img
+        class="!mt-0 !mb-0 h-24 w-24 rounded-full me-4"
+        width="96"
+        height="96"
+        alt="Gordon Mark"
+        src="/me_hu_49719bf1e4e52f5a.png"
+        data-zoom-src="/me_hu_ce5914990fee86b4.png">
+    
+  
+  <div class="place-self-center">
+    
+      <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+        作者
+      </div>
+      <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+        Gordon Mark
+      </div>
+    
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="mailto:mark20317@outlook.com"
+          target="_blank"
+          aria-label="Email"
+          title="Email"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+</span></span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/raindrop2508"
+          target="_blank"
+          aria-label="Github"
+          title="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span></span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+  
+
+  
+
+  
+    <div class="mb-5"></div>
+  
+
+      
+    </header>
+
+    
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      
+      
+      
+      
+      
+
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+
+        <div class="article-content max-w-prose mb-20">
+          
+<h1 class="relative group">yolov3学习笔记
+    <div id="yolov3学习笔记" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yolov3%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0" aria-label="锚点">#</a>
+    </span>
+    
+</h1>
+
+<h1 class="relative group">基本概念
+    <div id="基本概念" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" aria-label="锚点">#</a>
+    </span>
+    
+</h1>
+<p><strong>下采样</strong>即图像缩小；将x*x个像素点取均值换算为一个。<br>
+<strong>上采样</strong>即图像放大，利用插值算法。</p>
+<p><strong>ground truth</strong>即监督学习中数据标注的正确的范围。也就是标准答案的意思。<br>
+<strong>IOU</strong>预测的范围（bounding box）与ground truth的交集/两者并集</p>
+<p><strong>bounding box(bbox)</strong> 在目标检测中不仅要知道目标的类别还要知道它的位置。在木变检测中常用<strong>边界框</strong>来描述目标位置。<br>
+<strong>anchor box</strong>目标检测算法通常会在输入图像中采样大量的区域，然后判断这些区域中是否包含我们感兴趣的目标，并调整区域边缘从而更准确地预测目标的真实边界框（ground-truth bounding box）。不同的模型使用的区域采样方法可能不同。这里我们介绍其中的一种方法：它以每个像素为中心生成多个大小和宽高比（aspect ratio）不同的边界框。这些边界框被称为<strong>锚框（anchor box）</strong>。(<strong>——动手做深度学习</strong>)</p>
+<p><strong>精确率与召回率</strong>实际上非常简单，精确率是针对我们预测结果而言的，它表示的是预测为正的样本中有多少是真正的正样本。那么预测为正就有两种可能了，一种就是把正类预测为正类(TP)，另一种就是把负类预测为正类(FP)，也就是<br>
+P=TP/(TP+FP)<br>
+而召回率是针对我们原来的样本而言的，它表示的是样本中的正例有多少被预测正确了。那也有两种可能，一种是把原来的正类预测成正类(TP)，另一种就是把原来的正类预测为负类(FN)。<br>
+R=TP/TP+FN</p>
+<p><strong>非极大值抑制</strong>简称为NMS算法，思想是搜索局部最大值，抑制极大值。<br>
+流程如下：</p>
+<blockquote><p>根据置信度得分进行排序<br>
+选择置信度最高的比边界框添加到最终输出列表中，将其从边界框列表中删除<br>
+计算所有边界框的面积<br>
+计算置信度最高的边界框与其它候选框的IoU。<br>
+删除IoU大于阈值的边界框<br>
+重复上述过程，直至边界框列表为空。</p>
+</blockquote><p>**批标准化(batch normalization)**将分散的数据统一的做法，便与神经网络的学习和优化。normalization 预处理, 使得输入的 x 变化范围不会太大, 让输入值经过激励函数的敏感部分。BN实在每个全连接层之间都进行批数据标准化。(作者：
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BN"
+    src="https://pic3.zhimg.com/80/v2-083ca0bcd0749fd0f236a690b50442e6_hd.png"
+    ></figure>
+</p>
+
+<h2 class="relative group"><a href="https://zhuanlan.zhihu.com/p/21387568"  target="_blank" rel="noreferrer">聚类算法</a>
+    <div id="聚类算法" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%81%9a%e7%b1%bb%e7%ae%97%e6%b3%95" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>聚类算法是根据样本之间的距离来将他们归为一类的，这个距离不是普通的距离，理论上叫做欧氏距离。<br>
+一般面向大量的，同时维度在2个或两个以上的样本群。</p>
+<blockquote><p>1、在样本中随机选择K个点，作为每个类别的初始中心点，这K是自己定的，假如你想将样本分成3个类K就等于3,4个类K就等于4；<br>
+2、计算所有样本离这K个初始中心点的距离并分别进行比较，选出其中最近的距离并把这个样本归到这个初始中心点的类别里，即总共划分成K个类别；<br>
+3、舍弃原来的初始中心点，在划分好的K个类别里分别计算出新的中心点，使得这些中心点距离他类别里的所有样本的距离之和最小；<br>
+4、判断新获得的中心点是否与旧中心点一样，如不一样则回到第2步，重新计算所有样本离这K个新的中心点的距离并进行比较，选出其中最近的距离并归到这个新的中心点的类别里，继续下面的步奏；如一样则完成，即收敛。</p>
+</blockquote>
+<h2 class="relative group"><a href="https://www.cnblogs.com/wuliytTaotao/p/9560205.html"  target="_blank" rel="noreferrer">残差网络</a>
+    <div id="残差网络" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%ae%8b%e5%b7%ae%e7%bd%91%e7%bb%9c" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+
+<h3 class="relative group">残差
+    <div id="残差" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%ae%8b%e5%b7%ae" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>残差：实际观测值与估计值（拟合值）之间的差。如果回归模型正确则残差可以看做误差的观测值。</p>
+<p>理论上，可以训练一个 shallower 网络，然后在这个训练好的 shallower 网络上堆几层 identity mapping（恒等映射） 的层，即输出等于输入的层，构建出一个 deeper 网络。这两个网络（shallower 和 deeper）得到的结果应该是一模一样的.</p>
+
+<h3 class="relative group">退化问题
+    <div id="退化问题" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e9%80%80%e5%8c%96%e9%97%ae%e9%a2%98" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>为什么属于随着层数的增多<strong>训练集</strong>上的效果变差？</p>
+<p>原因是随着网络越来越深，训练变得原来越难，网络的优化变得越来越难。理论上，越深的网络，效果应该更好；但实际上，由于训练难度，过深的网络会产生退化问题，效果反而不如相对较浅的网络。而残差网络就可以解决这个问题的，残差网络越深，训练集上的效果会越好。（测试集上的效果可能涉及过拟合问题。过拟合问题指的是测试集上的效果和训练集上的效果之间有差距。）<strong>这里要注意到过拟合与退化问题之间的区别</strong></p>
+
+<h3 class="relative group">残差块
+    <div id="残差块" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%ae%8b%e5%b7%ae%e5%9d%97" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>残差网络是通过加入shortcut connections,变得更容易被优化。包含一个shortcut connection的几层网络被称为一个残差块。shortcut即图中x到
+⨁的箭头。</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="残差块"
+    src="https://img2018.cnblogs.com/blog/1351564/201809/1351564-20180914164307733-889668964.png"
+    ></figure>
+
+<h3 class="relative group">残差块（residual block）
+    <div id="残差块residual-block" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%ae%8b%e5%b7%ae%e5%9d%97residual-block" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>𝑥 表示输入，𝐹(𝑥) 表示残差块在第二层激活函数之前的输出，即 𝐹(𝑥)=𝑊2𝜎(𝑊1𝑥)，其中 𝑊1 和 𝑊2 表示第一层和第二层的权重，𝜎 表示 ReLU 激活函数。（这里省略了 bias。）最后残差块的输出是 𝜎(𝐹(𝑥)+𝑥)。</p>
+<p><strong>激活函数</strong>：上层节点的输出与下层节点的输入之间的函数关系。<br>
+常用的激活函数有：sigmoid函数，tanh函数，relu函数（这个比较常用）&hellip; &hellip;</p>
+<p>残差块中的网络可以使全连接层也可以是卷积层。</p>
+<blockquote><p>设第二层网络在激活函数之前的输出为 𝐻(𝑥)。如果在该 2 层网络中，最优的输出就是输入 𝑥，那么对于没有 shortcut connection 的网络，就需要将其优化成 𝐻(𝑥)=𝑥；对于有 shortcut connection 的网络，即残差块，最优输出是 𝑥，则只需要将 𝐹(𝑥)=𝐻(𝑥)−𝑥 优化为 0 即可。后者的优化会比前者简单。这也是残差这一叫法的由来。</p>
+</blockquote><p>上面相当于优化了恒等映射。残差网络可以不是神经网络，用全连接层也可以。</p>
+
+<h3 class="relative group">为什么残差网络会work
+    <div id="为什么残差网络会work" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%ae%8b%e5%b7%ae%e7%bd%91%e7%bb%9c%e4%bc%9awork" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>我们给一个网络不论在中间还是末尾加上一个残差块，并给残差块中的 weights 加上 L2 regularization（weight decay），这样图 1 中 𝐹(𝑥)=0 是很容易的。这种情况下加上一个残差块和不加之前的效果会是一样，所以加上残差块不会使得效果变得差。如果残差块中的隐藏单元学到了一些有用信息，那么它可能比 identity mapping（即 𝐹(𝑥)=0）表现的更好。</p>
+
+<h2 class="relative group"><a href="https://blog.csdn.net/zijin0802034/article/details/77685438"  target="_blank" rel="noreferrer">边界框回归</a>
+    <div id="边界框回归" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%be%b9%e7%95%8c%e6%a1%86%e5%9b%9e%e5%bd%92" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>对于窗口一般使用四维向量(x,y,w,h) 来表示， 分别表示窗口的中心点坐标和宽高。 对于图 2, 红色的框 P 代表原始的Proposal, 绿色的框 G 代表目标的 Ground Truth， 我们的目标是寻找一种关系使得输入原始的窗口 P 经过映射得到一个跟真实窗口 G 更接近的回归窗口Ĝ。</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="图2"
+    src="https://img-blog.csdn.net/20170831205020797?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemlqaW4wODAyMDM0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"
+    ></figure>
+<p>边框回归的目的既是：给定(Px,Py,Pw,Ph)(Px,Py,Pw,Ph)寻找一种映射ff， 使得f(Px,Py,Pw,Ph)=(Gx^,Gy^,Gw^,Gh^)f(Px,Py,Pw,Ph)=(Gx^,Gy^,Gw^,Gh^) 并且(Gx^,Gy^,Gw^,Gh^)≈(Gx,Gy,Gw,Gh)</p>
+<p><strong>边框回归的方法：平移+尺度缩放</strong></p>
+
+<h1 class="relative group"><a href="https://blog.csdn.net/xd1723138323/article/details/82532973"  target="_blank" rel="noreferrer">yolov1-yolov3</a>
+    <div id="yolov1-yolov3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yolov1-yolov3" aria-label="锚点">#</a>
+    </span>
+    
+</h1>
+
+<h2 class="relative group">yolov1
+    <div id="yolov1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yolov1" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+
+<h3 class="relative group">检测处理理想
+    <div id="检测处理理想" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%a3%80%e6%b5%8b%e5%a4%84%e7%90%86%e7%90%86%e6%83%b3" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>将输入图片划分为S * S的格子（逻辑区域），如果物体的中心坐标落在某个格子中，那么这个格子就负责检测这个物体（包括bounding box的坐标和类别概率）。每个格子预测B个bounding boxes和B个置信度，这个置信度表示这个格子预测的bounding  boxes包含物体的可信程度，论文作者将置信度定义为 Pr(Object)* IOU。Pr(Object)的值为0或者1，表示存不存在目标物体。</p>
+<p>每一个bounding box包括五个元素，x，y，w，h，confidence。坐标(x，y)表示的是box的中心坐标，并且是相对于格子的边界而言，w和h也是相对于整张图片的宽度和高度而言。置信度预测的值表示预测框和真实框的IOU值。虽然每个格子预测B个bounding box，但是每个格子只预测一组类条件概率，注意这里不是anchor，因为多个bounding box共用了一组class probability(表示的是<strong>先验概率</strong>)。所以网络架构的最后一层实际预测了B个bouding box和一组类别概率，注意这只是针对于一个格子，所以在不考虑batch size的情况下，实际预测输出长度为S* S*（B*5+C)</p>
+
+<h3 class="relative group">训练过程
+    <div id="训练过程" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%ae%ad%e7%bb%83%e8%bf%87%e7%a8%8b" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>对于前面所说bounding box，作者也做了一些处理，将bounding box的w,h除以训练图像的宽度和高度（448*448），使其值在0-1之间。至于bouding box的x,y的实际值意义，作者认为不是相对于整张图片的中心坐标值，而是相对于的对应格子坐标左上边界偏移值，所以x,y的值也在0-1之间，这个地方有些难以理解。</p>
+<p>通过置信度为每一个各自从B个bounding box中筛选一个最终的bounding box。于是每个各自的坐标为（0+x，0+y），（0+x, 1+y）&hellip;&hellip;.</p>
+<p>通过我们设定的置信度阈值使用非极大值抑制方法从这49个bounding box中筛选；还有一种做法就是直接从98个bounding boxes使用非极大值抑制方法筛选。从图片的全局性来考虑，第一种方法更能体现图片的整体性。确定完bounding boxes后，用bounding box坐标值乘以与原图的比例值就可以在原图中框出相应的物体。</p>
+
+<h2 class="relative group">yolov2
+    <div id="yolov2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yolov2" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>1.对数据进行批标准化处理。</p>
+<p>2.High Resolution Classifier:低分辨率训练分类网络，高分辨率训练检测网络，在两个过程见了一个适应性微调。</p>
+<p>3.Convolutional With Anchor Boxes（锚框卷积）：作者去掉了YOLOv1的全连接层，使用anchor boxes来预测bounding boxes，同时也去掉了最后池化层使得最后feature maps的分辨率大一些。与YOLOv1不同的是，YOLOv2为每一个bounding box预测一个类条件概率【YOLOv1中B个bounding box共用一个类条件概率】。在YOLOv1中bounding boxes数目为：S* S*(5* B+C)，而在YOLOv2中bounding box数目为S * S*B（5+C）。使用anchor box没有使精度提升，提高了召回率。</p>
+<p>4.作者采用维度聚类的方法对数据集的真实标签的bounding box进行聚类分析从而确定B的取值。如果用欧式距离来衡量K-means的距离，会使得大的bounding box比小的bounding box产生更大的误差，于是作者调整距离计算公式为：
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt=""
+    src="https://private.codecogs.com/gif.latex?%5Cdpi%7B120%7D%20%5Csmall%20d%28box%2Ccentroid%29%3D1-IOU%28box%2Ccentroid%29"
+    ></figure>
+</p>
+<p>5.13* 13的feature map可以提供足够信息预测较大的物体，但是对于小物体而言提供的信息仍然不够，所以作者提供了一个passthrough层，利用26*26的feature map来预测小物体（可能是受SSD的启发，不同大小的特征图检测不同大小的物体）。</p>
+<p>6.YOLOv2的网络只有卷积层和池化层，所以就可以在训练进行的过程改变feature maps的shape。 为了使得YOLOv2更具鲁棒性，我们让模型能够对不同大小的图片进行训练。在训练过程中，每10个batch就换一组新尺度的图片（这里的新图片指大小不同，图片的其他属性是一样的）。</p>
+<blockquote><p>作者提出了一种将分类数据集和检测数据集联合训练的方法，在训练的过程，我们将这两类数据集混合，当输入的检测数据集时，反向传播全部的误差损失（YOLOv2的loss），当遇到分类数据集时，只反向传播分类误差损失。</p>
+</blockquote>
+<h2 class="relative group">yolov3
+    <div id="yolov3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#yolov3" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>###　1.边界框预测</p>
+<blockquote><p>YOLOv3中引入一个<strong>Objectness score</strong>概念，使用logistic regression为每一个bounding box预测一个Objectness score。将预测的bounding boxes中与真实bounding box重叠最大的bounding box的Objectness score赋值为1，如果这个bounding box与真实bounding box重叠值达到设定的阈值0.5，这个bounding box的损失为0，其同一格子里面的其他bounding box只计算置信度损失，忽略坐标损失和类别损失。(可以认为0.5表示预测的边界框已经能很好地标记框出物体，所以不用计算它的损失。每一个格子中的object由一个预测的bounding box预测。既然已经找到了较好地bounding box，所以同一个格子里面的其他bounding box没有必要计算坐标误差和分类误差，只需要计算置信度误差，用来调整置信度，最理想的效果是这些bounding box的置信度值更新为0）。<br>
+这里bounding box是指网络模型预测的confidence，bx，by，bw，bh，计算置信度误差时，用真实标签坐标和预测坐标（bx，by，bw，bh）计算IOU，Objectness score相当于Pr(Object)，所以最终的置信度计算为IOU*Pr（Object）</p>
+</blockquote>
+<h3 class="relative group">2.类别预测
+    <div id="2类别预测" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2%e7%b1%bb%e5%88%ab%e9%a2%84%e6%b5%8b" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>类别预测使用了多标签分类（多分类），没有使用softmax，而是对每一个类各自对立地使用了logistic分类器，用binary cross-entroy loss替代softmax loss，这样能较好地处理标签重叠（包含）关系（例如：女人和人）。</p>
+
+<h3 class="relative group">3.交叉尺度(多尺度)预测
+    <div id="3交叉尺度多尺度预测" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#3%e4%ba%a4%e5%8f%89%e5%b0%ba%e5%ba%a6%e5%a4%9a%e5%b0%ba%e5%ba%a6%e9%a2%84%e6%b5%8b" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>YOLOv3预测三种不同尺度的box，每一种尺度预测三个anchor boxes，即N<em>N</em>(3*(4+1+80))，所以最终的输出是3*【N<em>N</em>(3*(4+1+80))】，最前面的3表示三种尺度。3种尺度，3个anchor box，是由聚类数为9决定的，按照一定的顺序（面积从小到大）将这个聚蔟box分配给不同尺度。在YOLOv2中，为了加强对小物体的检测，引入了passthrough层，假设最后提取的feature map的size是13<em>13，passthrough层的作用是将上层26</em>26的feature map和最后层13*13的feature map连接，作为网络最后的输出。</p>
+<p>YOLOv3是采用了低分辨率feature map上采用和高分辨率feature map做融合，形成新的feature map层，对新的feature map层单独做预测。这样就是多尺度预测。如果YOLOv3最后一层也是13<em>13的话，那么三个尺度的大小为（13</em>13，26<em>26，52</em>52），第三个尺度只用第二个尺度上采样并做融合。值得说明的是：YOLOv2中的多尺度指输入图像的大小不同，YOLOv3的多尺度是指用不同的分辨率的feature map做预测。</p>
+<hr>
+<p>##　参考文献：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/24810318"  target="_blank" rel="noreferrer">什么是批标准化</a>　　作者：莫烦</p>
+<p><a href="https://zhuanlan.zhihu.com/p/21387568"  target="_blank" rel="noreferrer">聚类算法</a>　　作者：挖数</p>
+<p><a href="https://www.cnblogs.com/wuliytTaotao/p/9560205.html"  target="_blank" rel="noreferrer">残差网络</a>　　作者：wuliytTaotao</p>
+<p><a href="https://blog.csdn.net/zijin0802034/article/details/77685438"  target="_blank" rel="noreferrer">边框回归(Bounding Box Regression)详解</a>　　作者：南有乔木NTU</p>
+<p><a href="https://blog.csdn.net/xd1723138323/article/details/82532973"  target="_blank" rel="noreferrer">目标检测之YOLO系列-V1至V3改进详解</a>　　作者：xd1723138323</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+
+        
+
+      </div>
+    </section>
+
+    
+    <footer class="pt-8 max-w-prose print:hidden">
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
+      <div class="flex justify-between pt-3">
+        <span class="flex flex-col">
+          
+            <a
+              class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+              href="/posts/tech/ubuntu_note/">
+              <span class="leading-6">
+                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;Ubuntu笔记
+              </span>
+            </a>
+            
+              <span class="ms-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                <time datetime="2019-06-30T11:00:55&#43;08:00">2019-06-30</time>
+              </span>
+            
+          
+        </span>
+        <span class="flex flex-col items-end">
+          
+            <a
+              class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+              href="/posts/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B00/">
+              <span class="leading-6">
+                算法笔记0&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+              </span>
+            </a>
+            
+              <span class="me-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                <time datetime="2021-01-04T13:09:05&#43;08:00">2021-01-04</time>
+              </span>
+            
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+    </footer>
+  </article>
+
+        
+
+
+  
+
+
+
+
+
+
+<div
+  id="scroll-to-top"
+  class="fixed bottom-6 end-6 z-50 transform translate-y-4 opacity-0 duration-200">
+  <a
+    href="#the-top"
+    class="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部"
+    title="返回顶部">
+    &uarr;
+  </a>
+</div>
+
+      </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+    
+    
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+          &copy;
+          2026
+          Gordon Mark
+      </p>
+    
+
+    
+    
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        
+        
+        由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+      </p>
+    
+  </div>
+  
+    <script>
+      mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+        margin: 24,
+        background: "rgba(0,0,0,0.5)",
+        scrollOffset: 0,
+      });
+    </script>
+  
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh] z-500"
+  data-url="http://localhost:1313/">
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800">
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0">
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+  
+</html>

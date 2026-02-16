@@ -1,14 +1,14 @@
 disabled = false
-languageCode = "en"
-languageName = "English"
+languageCode = "zh-cn"
+languageName = "中文"
 weight = 1
 title = "RainDrop"
 
 [params]
   displayName = "Mark"
-  isoCode = "en"
+  isoCode = "zh-cn"
   rtl = false
-  dateFormat = "2 January 2006"
+  dateFormat = "2006-01-02"
   # logo = "img/logo.png"
   # secondaryLogo = "img/secondary-logo.png"
   # description = "My awesome website"
