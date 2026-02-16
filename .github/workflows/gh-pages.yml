@@ -29,7 +29,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # 授权秘钥填写位置
+          github_token: ${{ secrets.BLOG }}  # 授权秘钥填写位置
           publish_branch: gh-pages
           publish_dir: ./public    
           cname: raindrop2508.github.io
