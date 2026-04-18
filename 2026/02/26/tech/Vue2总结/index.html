@@ -1,0 +1,450 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Vue2总结</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Vue2 核心概念与前端基础知识整理" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Vue2总结">
+<meta property="og:url" content="/2026/02/26/tech/Vue2%E6%80%BB%E7%BB%93/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="Vue2 核心概念与前端基础知识整理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/related-post.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+<div class="post-cover-img-wrap">
+  <div class="post-cover-img-placeholder"></div>
+  <div class="post-cover-img-placeholder-after"></div>
+  <script>
+    const coverImgStartTime = performance.now();
+    setTimeout(() => {
+      const postCoverImg = document.getElementById('postCoverImg');
+      if (postCoverImg && (!postCoverImg.classList.contains('loaded') || postCoverImg.classList.contains('cached'))) {
+        postCoverImg.classList.add('loading')
+      }
+    }, 100);
+
+    function onPostCoverImgLoaded(img) {
+      if (performance.now() - coverImgStartTime > 300) {
+        img.classList.add('loaded')
+      } else {
+        img.classList.add('cached')
+      }
+    }
+  </script>
+  <img id="postCoverImg" class="cover-img" src="/linen-theme/img/related-post.jpg" alt="" onload="onPostCoverImgLoaded(this)" />
+  
+</div>
+
+
+<article id="post" class="article">
+  <h1 class="post-title">Vue2总结</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2026-02-26T02:16:27.000Z">
+      2 月 26 日，2026
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>18</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>5705</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><p>Vue 通过组件允许创建可重用块标记。大多数时候，Vue 组件是使用一个特殊的 HTML 模板的语法写的。当需要比 HTML 语法允许的更多的控制时，可以编写 JSX 或纯 JavaScript 函数来定义组件。一个 Vue 应用由一个通过 <code>new Vue</code> 创建的<strong>根 Vue 实例</strong>，以及可选的嵌套的、可复用的组件树组成。</p>
+<p>template是一级节点，用于写tag组件，script和style是并列的一级节点，也就是有3个一级节点。</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/HTML">HTML</a> 是一种标记语言，用来结构化我们的网页内容并赋予内容含义，例如定义段落、标题和数据表，或在页面中嵌入图片和视频。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/CSS">CSS</a> 是一种样式规则语言，可将样式应用于 HTML 内容，例如设置背景颜色和字体，在多个列中布局内容。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/JavaScript">JavaScript</a> 是一种脚本语言，可以用来创建动态更新的内容，控制多媒体，制作图像动画，还有很多。</p>
+</li>
+</ul>
+<h3 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h3><p>文档对象模型（Document Object model，简称DOM）是针对HTML和XML文档的一个API（应用程序编程接口）。文档对象模型（DOM）通过将文档的结构（例如表示网页的 HTML）以对象的形式存储在内存中，将网页与脚本或编程语言连接起来。DOM 使用逻辑树的形式来表示文档。树的每个分支末端都是一个节点，每个节点都包含对象。DOM 方法允许以编程方式来访问树。借助这些方法，你可以改变文档的结构、样式或内容。</p>
+<h3 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h3><p>指令 (Directives) 是带有 <code>v-</code> 前缀的特殊 attribute。指令 attribute 的值预期是<strong>单个 JavaScript 表达式</strong> (<code>v-for</code> 是例外情况）。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 完整语法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-on:click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> @<span class="attr">click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 完整语法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-bind:href</span>=<span class="string">&quot;url&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">:href</span>=<span class="string">&quot;url&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h3 id="计算属性与方法属性"><a href="#计算属性与方法属性" class="headerlink" title="计算属性与方法属性"></a>计算属性与方法属性</h3><p><strong>计算属性是基于它们的响应式依赖进行缓存的</strong>。只在相关响应式依赖发生改变时它们才会重新求值。相比之下，每当触发重新渲染时，调用方法将<strong>总会</strong>再次执行函数。因此，计算属性对于性能要求更低。</p>
+<h4 id="getter和setter的含义"><a href="#getter和setter的含义" class="headerlink" title="getter和setter的含义"></a>getter和setter的含义</h4><blockquote>
+<h4 id="Getter"><a href="#Getter" class="headerlink" title="Getter"></a>Getter</h4><ol>
+<li><strong>含义</strong>:<ul>
+<li>Getter 是计算属性的主要组成部分，它是一个函数，用于获取计算属性的值。</li>
+<li>当你访问计算属性时，实际上是在调用 getter 方法。</li>
+</ul>
+</li>
+<li><strong>用途</strong>:<ul>
+<li>Getter 方法通常用于基于其他数据属性计算出一个新值。</li>
+<li>Getter 方法可以访问组件的所有数据和其他计算属性。</li>
+<li>当依赖的数据发生变化时，Vue.js 会自动调用 getter 方法来更新计算属性的值。</li>
+</ul>
+</li>
+</ol>
+<h4 id="Setter"><a href="#Setter" class="headerlink" title="Setter"></a>Setter</h4><ol>
+<li><strong>含义</strong>:<ul>
+<li>Setter 是一个可选的部分，它也是一个函数，用于设置计算属性的值。</li>
+<li>当你试图改变一个只读的计算属性时，Vue.js 会自动调用 setter 方法。</li>
+</ul>
+</li>
+<li><strong>用途</strong>:<ul>
+<li>Setter 方法通常用于更新其他数据属性的值，而不是直接改变计算属性本身。</li>
+<li>当计算属性被赋值时，Vue.js 会调用 setter 方法。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="箭头函数表达式"><a href="#箭头函数表达式" class="headerlink" title="箭头函数表达式&#x3D;&gt;"></a>箭头函数表达式&#x3D;&gt;</h3><pre><code>() =&gt; {
+  statements
+}
+
+param =&gt; {
+  statements
+}
+(param1, paramN) =&gt; {
+  statements
+}
+</code></pre>
+<p>箭头函数可以是 async 的，方法是在表达式前加上 async 关键字。</p>
+<pre><code>async param =&gt; expression
+async (param1, param2, ...paramN) =&gt; {
+  statements
+}
+</code></pre>
+<h3 id="异步操作和Async-Await"><a href="#异步操作和Async-Await" class="headerlink" title="异步操作和Async&#x2F;Await"></a>异步操作和Async&#x2F;Await</h3><h4 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h4><p>Promise 是现代 JavaScript 中异步编程的基础。它是一个由异步函数返回的对象，可以指示操作当前所处的状态。在 Promise 返回给调用者的时候，操作往往还没有完成，但 Promise 对象提供了方法来处理操作最终的成功或失败。</p>
+<p>Promise 的优雅之处在于 <em><code>then()</code> 本身也会返回一个 Promise，这个 Promise 将指示 <code>then()</code> 中调用的异步函数的完成状态</em>。由此可以链式使用promise。</p>
+<p>promise有**待定（pending）、已兑现（fulfilled）和已拒绝（rejected）**三种状态。</p>
+<h4 id="Async和Await"><a href="#Async和Await" class="headerlink" title="Async和Await"></a>Async和Await</h4><p>在一个函数的开头添加 <code>async</code>，就可以使其成为一个异步函数。</p>
+<p>在 uni-app 中，<code>async</code> 和 <code>await</code> 的底层逻辑与原理与其他 JavaScript 环境相同。</p>
+<p>在Vue组件的生命周期中，有一些钩子函数是异步的，比如created和mounted。这些钩子函数允许你在组件被创建或挂载到DOM之后执行异步操作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$api</span>.<span class="property">common</span>.<span class="title function_">login</span>(<span class="variable language_">this</span>.<span class="property">loginForm</span>).<span class="title function_">then</span>(<span class="keyword">async</span> res =&gt; &#123;   <span class="comment">// async 异步  箭头函数去除掉function关键字，在形参列表和函数体之间使用=&gt;连接</span></span><br><span class="line">    <span class="keyword">if</span> (res.<span class="property">code</span> == <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="comment">// 存储token和账号</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">saveToken</span>(res.<span class="property">token</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">saveAccount</span>();</span><br><span class="line">    <span class="comment">// 获取用户信息</span></span><br><span class="line">    <span class="keyword">let</span> profile = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">getProfile</span>();   <span class="comment">// 等待异步完成</span></span><br><span class="line">    uni.<span class="property">$u</span>.<span class="title function_">vuex</span>(<span class="string">&#x27;profile&#x27;</span>, profile);</span><br><span class="line">    <span class="comment">// 跳转主页</span></span><br><span class="line">    uni.<span class="title function_">switchTab</span>(&#123;</span><br><span class="line">    <span class="attr">url</span>: <span class="string">&#x27;/pages/tabBar/home/index&#x27;</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><code>async</code> 函数是一个特殊的函数，它总是返回一个 Promise。即使你不显式地返回一个 Promise，<code>async</code> 函数也会返回一个已解决的 Promise，其值为 <code>undefined</code>。</p>
+<p><code>await</code> 关键字只能在 <code>async</code> 函数内部使用。它用于等待一个 Promise 的结果。当 <code>await</code> 一个 Promise 时，JavaScript 引擎会暂停执行 <code>async</code> 函数，直到 Promise 解决或被拒绝。</p>
+<p><code>async</code> 和 <code>await</code> 的底层原理基于 Promise。Promise 是 JavaScript 中处理异步操作的标准方式之一，它有三种状态：pending（挂起）、fulfilled（已解决）和 rejected（已拒绝）。Promise 对象代表了一个最终可能会完成或失败的异步操作，并附带了完成或失败时的值。</p>
+<p><code>await</code> 关键字用于等待一个 Promise 的结果。当你在 <code>async</code> 函数中使用 <code>await</code> 关键字时，JavaScript 引擎会暂停执行 <code>async</code> 函数，直到 Promise 被解决或被拒绝。如果 Promise 被解决，<code>await</code> 表达式的值将是解决值；如果 Promise 被拒绝，<code>await</code> 表达式会抛出一个错误，这可以通过 <code>try...catch</code> 语句来处理。</p>
+<h3 id="插槽（slot）"><a href="#插槽（slot）" class="headerlink" title="插槽（slot）"></a>插槽（slot）</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 根据不同条件渲染图片 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">u--image</span> <span class="attr">v-if</span>=<span class="string">&quot;device.imgUrl&quot;</span> <span class="attr">:src</span>=<span class="string">&quot;device.imageUrl&quot;</span> <span class="attr">radius</span>=<span class="string">&quot;10&quot;</span> <span class="attr">mode</span>=<span class="string">&quot;aspectFill&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">width</span>=<span class="string">&quot;70&quot;</span> <span class="attr">height</span>=<span class="string">&quot;70&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 插槽（slot）显示不同状态时显示的图像 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">slot</span>=<span class="string">&quot;error&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 12px;&quot;</span>&gt;</span>加载失败<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">v-slot:loading</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">u-loading-icon</span>&gt;</span><span class="tag">&lt;/<span class="name">u-loading-icon</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>slot元素是——Web 组件技术套件的一部分——它是一个在 web 组件内部的占位符，你可以使用自己的标记来填充该占位符，从而创建单独的 DOM 树并将其一起呈现。</p>
+<h3 id="template中：的使用"><a href="#template中：的使用" class="headerlink" title="template中：的使用"></a>template中<code>：</code>的使用</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28369007/article/details/140122483">Vue.js 中属性绑定的详细解析：冒号 `:` 和非冒号的区别_vue 属性 冒号-CSDN博客</a></p>
+<p><code>v-bind</code> attribute 被称为指令。指令带有前缀 <code>v-</code>，以表示它们是 Vue 提供的特殊 attribute。</p>
+<p>在设置参数时是否添加<code>：</code>主要取决于是在设置HTML属性（attributes）还是Vue特有的指令。它们会在渲染的 DOM 上应用特殊的响应式行为。</p>
+<h4 id="不需要-的情况"><a href="#不需要-的情况" class="headerlink" title="不需要:的情况"></a>不需要<code>:</code>的情况</h4><p>静态HTML属性：当你直接在元素上写属性时，如<code>&lt;div id=&quot;app&quot;&gt;</code>，这里的<code>id=&quot;app&quot;</code>是一个静态的HTML属性，其值在编译时就已经确定，不会随着Vue实例中的数据变化而变化。</p>
+<p>Vue指令但非属性绑定：对于某些Vue指令，如<code>v-model</code>、<code>v-if</code>、<code>v-for</code>等，它们不是用于绑定HTML属性的，而是Vue特有的模板指令，用于实现数据绑定、条件渲染、列表渲染等功能。这些指令不需要<code>:</code>前缀，因为它们不是HTML属性的绑定。</p>
+<h4 id="需要-的情况"><a href="#需要-的情况" class="headerlink" title="需要:的情况"></a>需要<code>:</code>的情况</h4><p>动态HTML属性绑定：当你想要根据Vue实例中的数据动态地设置HTML元素的属性时，就需要使用<code>v-bind</code>指令。为了简化，Vue允许使用<code>:</code>作为<code>v-bind</code>的简写。例如，<code>&lt;div :id=&quot;dynamicId&quot;&gt;</code>中的<code>:id=&quot;dynamicId&quot;</code>表示<code>id</code>属性的值将绑定到Vue实例的<code>dynamicId</code>数据属性上。如果<code>dynamicId</code>的值发生变化，那么<code>&lt;div&gt;</code>的<code>id</code>属性也会相应地更新。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 完整语法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-on:click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> @<span class="attr">click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>动态绑定和静态绑定在性能上有所差异。动态绑定会增加一定的渲染开销，因为 Vue.js 需要监视表达式的变化并进行响应式更新。静态绑定则不会有这样的性能开销，因为它们是静态的值。</p>
+<h3 id="免密码登录相关"><a href="#免密码登录相关" class="headerlink" title="免密码登录相关"></a>免密码登录相关</h3><p>从本地缓存中读取token值，并将其存储到Vuex状态管理器中，以便在需要的地方可以方便地访问此token值。</p>
+<pre><code>getToken () {
+    // 本地缓存获取token
+    this.token = uni.getStorageSync(&#39;token&#39;);
+    // vuex存储token
+    uni.$u.vuex(&#39;vuex_token&#39;, this.token);
+}
+</code></pre>
+<h4 id="token、session和cookie三者之间的区别"><a href="#token、session和cookie三者之间的区别" class="headerlink" title="token、session和cookie三者之间的区别"></a>token、session和cookie三者之间的区别</h4><ul>
+<li><p><strong>安全性</strong>：Token 通常比 Cookie 更安全，因为它包含了加密签名，并且可以设计为不持久化存储。而 Cookie 存储在客户端，更容易受到攻击。</p>
+</li>
+<li><p><strong>可扩展性</strong>：Token 机制更适合于无状态架构和分布式系统，因为它不需要服务器维护会话状态。</p>
+</li>
+<li><p><strong>跨域问题</strong>：Token 可以轻松解决跨域问题，而传统的 Session Cookie 受到同源策略的限制。</p>
+</li>
+</ul>
+<h3 id="this-refs-form"><a href="#this-refs-form" class="headerlink" title="this.$refs.form"></a>this.$refs.form</h3><p><code>this.$refs.form</code> 是一个引用，指向了模板中带有 <code>ref=&quot;form&quot;</code> 的表单元素或组件。</p>
+<p>在 Vue 组件的模板中使用 <code>ref</code> 属性时，Vue 会在该组件实例的 <code>$refs</code> 对象中创建一个对应的属性，该属性的值就是对应的子组件实例或 DOM 元素。</p>
+<p>注意：<code>$refs</code> 的值在组件渲染完成之前是 <code>undefined</code>。因此，你不能在 <code>created</code> 钩子中直接访问 <code>$refs</code>，而应该在 <code>mounted</code> 钩子或之后的生命周期中访问。</p>
+<h4 id="页面结构"><a href="#页面结构" class="headerlink" title="页面结构"></a>页面结构</h4><p><a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/tutorial/page.html">页面 | uni-app官网 (dcloud.net.cn)</a></p>
+<p>一个页面内，有3个根节点标签：</p>
+<ul>
+<li>模板组件区 <code>&lt;template&gt;</code></li>
+<li>脚本区 <code>&lt;script&gt;</code></li>
+<li>样式区 <code>&lt;style&gt;</code></li>
+</ul>
+<p>在 vue 文件中，<code>template</code>、<code>script</code>、<code>style</code> 这3个是平级关系。<strong>在vue2中，<code>template</code> 的二级节点只能有一个节点</strong>，一般是在一个根 <code>view</code> 下继续写页面组件。但<strong>在vue3中，template可以有多个二级节点，省去一个层级</strong>。</p>
+<p>在脚本区中，开发者应谨慎编写 <code>export default {}</code> 外面的代码，这里的代码有2个注意事项：</p>
+<ol>
+<li>影响应用性能。这部分代码在应用启动时执行，而不是页面加载。如果这里的代码写的太复杂，会影响应用启动速度，占用更多内存。</li>
+<li>不跟随组件、页面关闭而回收。在外层的静态变量不会跟随页面关闭而回收。如果必要你需要手动处理。比如 <code>beforeDestroy</code> 或 <code>destroyed</code> 生命周期进行处理。</li>
+</ol>
+<h4 id="export"><a href="#export" class="headerlink" title="export"></a>export</h4><p>在ES6（<a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/es6-3rd/sidebar.md">ECMAScript 6</a>）中，export与export default均可用于导出变量(含常量)、函数、类、文件、模块等，然后在其它文件或模块中通过import 变量(含常量)|函数|类|文件|模块名的方式，将其导入，以便能够对其进行使用。export可以有多个，然而export default只能有一个。</p>
+<h4 id="install"><a href="#install" class="headerlink" title="install"></a>install</h4><p>在 Vue.js 中，使用 <code>const install = (Vue, vm) =&gt; { ... }</code> 和 <code>export default { install }</code> 是一种常见的模式来定义和导出 Vue 插件。这种方法允许创建一个可以在 Vue 应用程序中使用的插件。</p>
+<p><strong><code>install</code> 函数</strong>通常接收两个参数：</p>
+<ul>
+<li><code>Vue</code>:Vue 构造函数，可以用来扩展 Vue 的原型、注册全局组件、指令等。</li>
+<li><code>vm</code>:可选参数，通常用于访问 Vue 实例的上下文，但在 Vue 3 中已被废弃。</li>
+</ul>
+<p>在函数体中，可以执行各种操作来配置 Vue 或者注册自定义行为。当你在其他地方导入(比如<code>main.js</code>)这个模块时，可以通过 <code>Vue.use()</code> 方法来安装这个插件。</p>
+<h4 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h4><p>在 JavaScript 中，原型是一种特殊的机制，用于实现对象之间的继承和共享属性及方法。每个 JavaScript 对象都有一个内部属性 <code>[[[Prototype]]]</code>，它指向另一个对象，这个对象被称为<strong>原型对象</strong>。当试图访问一个对象的属性或方法时，如果该对象本身没有这个属性或方法，JavaScript 引擎会<strong>沿着原型链向上查找，直到找到这个属性或方法为止</strong>。Java 作为一种面向对象的编程语言，也有一种类似于 JavaScript 中原型机制的概念，但它采用的是类继承和接口实现的方式。Java 中并没有直接与 JavaScript 的 <code>prototype</code> 相对应的概念，但我们可以探讨 Java 中的一些机制，它们在某种程度上实现了类似的功能。</p>
+<p><code>prototype</code> 是一个特殊的属性，它存在于所有函数对象上。当创建一个函数时，这个函数会自动获得一个 <code>prototype</code> 属性。这个 <code>prototype</code> 属性是一个对象，它的用途是作为新创建对象的原型。当你使用构造函数创建对象时，新创建的对象会继承 <code>prototype</code> 对象上的属性和方法。</p>
+<p>在 Vue.js 中，可以利用 JavaScript 的原型机制来<strong>扩展 Vue 的原型，使得所有的 Vue 实例可以共享某些属性和方法</strong>。这通常通过将属性或方法添加到 <code>Vue.prototype</code> 来实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Vue</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">$api</span> = &#123;</span><br><span class="line">    <span class="comment">// 导入模块</span></span><br><span class="line">    common,</span><br><span class="line">    scene,</span><br><span class="line">    group,</span><br><span class="line">    deviceUser,</span><br><span class="line">    deviceLog,</span><br><span class="line">    device,</span><br><span class="line">    deviceJob,</span><br><span class="line">    account,</span><br><span class="line">    energyConsumptionAnalysis</span><br><span class="line">&#125;;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>上述代码，向 Vue 的原型上添加了一个名为 <code>$api</code> 的属性，并将自定义的模块加入之中。之后，可以在Vue 的任何实例中都可以通过 <code>$api</code> 访问这些方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$api</span>.<span class="property">common</span>.<span class="title function_">xxx</span>()   <span class="comment">// 访问自定的方法</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h4 id="Props"><a href="#Props" class="headerlink" title="Props"></a>Props</h4><p><a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/tutorial/vue-components.html#props">uni-app官网 (dcloud.net.cn)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cn.vuejs.org/guide/essentials/component-basics#passing-props">组件基础 | Vue.js (vuejs.org)</a></p>
+<p><code>props</code> 可以是数组或对象，用于接收来自父组件的数据。Props 可以在子组件上声明注册,在父组件定义其中声明参数的值，父级 prop 的更新会向下流动到子组件中，但不能反向。<code>props</code> 可以是简单的数组，或者使用对象作为替代，对象允许配置高级选项，如类型检测、自定义验证和设置默认值。</p>
+<h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><p><a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/tutorial/vue-components.html#ref">uni-app官网 (dcloud.net.cn)</a></p>
+<p>用来<strong>给元素或子组件注册引用信息</strong>，引用信息将会注册在父组件的 <code>$refs</code> 对象上。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index 父组件页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">view</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">base-input</span> <span class="attr">ref</span>=<span class="string">&quot;usernameInput&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">base-input</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;default&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;getFocus&quot;</span>&gt;</span>获取焦点<span class="tag">&lt;/<span class="name">button</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">	<span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">		<span class="attr">methods</span>:&#123;</span></span><br><span class="line"><span class="language-javascript">			<span class="title function_">getFocus</span>(<span class="params"></span>)&#123;</span></span><br><span class="line"><span class="language-javascript">				<span class="comment">//通过组件定义的ref调用focus方法</span></span></span><br><span class="line"><span class="language-javascript">				<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">usernameInput</span>.<span class="title function_">focus</span>()</span></span><br><span class="line"><span class="language-javascript">			&#125;</span></span><br><span class="line"><span class="language-javascript">		&#125;</span></span><br><span class="line"><span class="language-javascript">	&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h4 id="vuex"><a href="#vuex" class="headerlink" title="vuex"></a>vuex</h4><p>Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。</p>
+<p><strong>Vuex与全局变量区别</strong></p>
+<table>
+<thead>
+<tr>
+<th>vuex</th>
+<th>全局变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不能直接改变store里面的变量，由统一的方法修改数据</td>
+<td>可以任意修改</td>
+</tr>
+<tr>
+<td>每个组件可以根据自己vuex的变量名引用不受影响</td>
+<td>全局变量可能操作命名污染</td>
+</tr>
+<tr>
+<td>解决了多组件之间通信的问题</td>
+<td>跨页面数据共享</td>
+</tr>
+<tr>
+<td>适用于多模块、业务关系复杂的中大型项目</td>
+<td>适用于demo或者小型项目</td>
+</tr>
+</tbody></table>
+<p>每一个 <code>Vuex</code> 应用的核心就是 <code>store</code>（仓库），它包含着你的应用中大部分的状态 (<code>state</code>)。</p>
+<p>状态管理有5个核心：<code>state</code>、<code>getter</code>、<code>mutation</code>、<code>action</code>、<code>module</code>。</p>
+<div id="gitalk-initiator"></div></div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2026/02/26/tech/H5%E4%B8%8EJS%E6%80%BB%E7%BB%93/"><span class="item-link">H5与JS总结</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2026/02/26/tech/MQTT3.1.1%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/"><span class="item-link">MQTT3.1.1协议解析</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

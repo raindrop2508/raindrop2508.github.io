@@ -1,0 +1,1005 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>MQTT3.1.1协议解析</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="MQTT 3.1.1 协议要点与控制报文格式笔记" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="MQTT3.1.1协议解析">
+<meta property="og:url" content="/2026/02/26/tech/MQTT3.1.1%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="MQTT 3.1.1 协议要点与控制报文格式笔记">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/icons/default_cover.png"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="固定报头" href="#固定报头">固定报头</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="可变报头" href="#可变报头">可变报头</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="有效载荷" href="#有效载荷">有效载荷</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="客户端连接" href="#客户端连接">客户端连接</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="订阅主题" href="#订阅主题">订阅主题</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PUBLISH-发送消息" href="#PUBLISH-发送消息">PUBLISH 发送消息</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="取消订阅" href="#取消订阅">取消订阅</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="CONNECT-–-连接服务端" href="#CONNECT-–-连接服务端">CONNECT – 连接服务端</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-1" href="#固定报头-1">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-1" href="#可变报头-1">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-1" href="#有效载荷-1">有效载荷</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="响应" href="#响应">响应</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="CONNACK-–-确认连接请求" href="#CONNACK-–-确认连接请求">CONNACK – 确认连接请求</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-2" href="#固定报头-2">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-2" href="#可变报头-2">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="无有效载荷" href="#无有效载荷">无有效载荷</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="Publish-发布消息" href="#Publish-发布消息">Publish-发布消息</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-3" href="#固定报头-3">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-3" href="#可变报头-3">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-2" href="#有效载荷-2">有效载荷</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="响应-1" href="#响应-1">响应</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="动作" href="#动作">动作</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PUBACK-–发布确认" href="#PUBACK-–发布确认">PUBACK –发布确认</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-4" href="#固定报头-4">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-4" href="#可变报头-4">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="无有效载荷-1" href="#无有效载荷-1">无有效载荷</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PUBREC-–-发布收到（QoS-2，第一步）" href="#PUBREC-–-发布收到（QoS-2，第一步）">PUBREC – 发布收到（QoS 2，第一步）</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-5" href="#可变报头-5">可变报头</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PUBREL-–-发布释放（QoS-2，第二步）" href="#PUBREL-–-发布释放（QoS-2，第二步）">PUBREL – 发布释放（QoS 2，第二步）  </a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-5" href="#固定报头-5">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-6" href="#可变报头-6">可变报头</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PUBCOMP-–-发布完成（QoS-2，第三步）" href="#PUBCOMP-–-发布完成（QoS-2，第三步）">PUBCOMP – 发布完成（QoS 2，第三步）  </a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="SUBSCRIBE-订阅主题" href="#SUBSCRIBE-订阅主题"> SUBSCRIBE - 订阅主题  </a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-7" href="#可变报头-7">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-3" href="#有效载荷-3">有效载荷</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="响应-2" href="#响应-2">响应</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="SUBACK-–-订阅确认" href="#SUBACK-–-订阅确认">SUBACK – 订阅确认</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-8" href="#可变报头-8">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-4" href="#有效载荷-4">有效载荷</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="UNSUBSCRIBE-–取消订阅" href="#UNSUBSCRIBE-–取消订阅">UNSUBSCRIBE –取消订阅</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-6" href="#固定报头-6">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-9" href="#可变报头-9">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-5" href="#有效载荷-5">有效载荷</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="Response-响应" href="#Response-响应">Response 响应</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="UNSUBACK-–-取消订阅确认" href="#UNSUBACK-–-取消订阅确认">UNSUBACK – 取消订阅确认</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-7" href="#固定报头-7">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="可变报头-10" href="#可变报头-10">可变报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="有效载荷-6" href="#有效载荷-6">有效载荷</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PINGREQ-–-心跳请求" href="#PINGREQ-–-心跳请求">PINGREQ – 心跳请求</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-8" href="#固定报头-8">固定报头</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="响应-3" href="#响应-3">响应</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="PINGRESP-–-心跳响应" href="#PINGRESP-–-心跳响应">PINGRESP – 心跳响应</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="固定报头-9" href="#固定报头-9">固定报头</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="DISCONNECT-–断开连接" href="#DISCONNECT-–断开连接"> DISCONNECT –断开连接  </a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="Response" href="#Response"> Response  </a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="服务质量等级和协议流程" href="#服务质量等级和协议流程">服务质量等级和协议流程</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="QoS-0-最多分发一次" href="#QoS-0-最多分发一次">QoS 0:最多分发一次</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="QoS-1-至少分发一次" href="#QoS-1-至少分发一次">QoS 1: 至少分发一次</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="QoS-2-仅分发一次" href="#QoS-2-仅分发一次">QoS 2: 仅分发一次</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="消息分发重试" href="#消息分发重试">消息分发重试</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="主题名和主体过滤器" href="#主题名和主体过滤器">主题名和主体过滤器</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="主题通配符" href="#主题通配符">主题通配符</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="多层通配符" href="#多层通配符">多层通配符</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="单层通配符" href="#单层通配符">单层通配符</a></li>
+              
+            </ul>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+<div class="post-cover-img-wrap">
+  <div class="post-cover-img-placeholder"></div>
+  <div class="post-cover-img-placeholder-after"></div>
+  <script>
+    const coverImgStartTime = performance.now();
+    setTimeout(() => {
+      const postCoverImg = document.getElementById('postCoverImg');
+      if (postCoverImg && (!postCoverImg.classList.contains('loaded') || postCoverImg.classList.contains('cached'))) {
+        postCoverImg.classList.add('loading')
+      }
+    }, 100);
+
+    function onPostCoverImgLoaded(img) {
+      if (performance.now() - coverImgStartTime > 300) {
+        img.classList.add('loaded')
+      } else {
+        img.classList.add('cached')
+      }
+    }
+  </script>
+  <img id="postCoverImg" class="cover-img" src="/icons/default_cover.png" alt="" onload="onPostCoverImgLoaded(this)" />
+  
+</div>
+
+
+<article id="post" class="article">
+  <h1 class="post-title">MQTT3.1.1协议解析</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2026-02-26T02:13:30.000Z">
+      2 月 26 日，2026
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>21</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>7286</small>
+
+  <small>个字</small>
+
+  <small>，</small>
+
+  <small>4</small>
+
+  <small>张图片</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><p><a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2025/pdf/40667138/1760532241226-0b0592ba-9e07-4972-891f-b23c52e2e618.pdf">mqtt-v3.1.1-errata01-os-complete.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://mcxiaoke.gitbooks.io/mqtt-cn/content/mqtt/01-Introduction.html">第一章 - MQTT介绍 · MQTT协议中文版</a></p>
+<p><strong><font style="color:rgb(51, 51, 51);">应用消息 Application Message</font></strong><font style="color:rgb(51, 51, 51);"> MQTT协议通过网络传输应用数据。应用消息通过MQTT传输时，它们有关联的服务质量（QoS）和主题（Topic）。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">客户端 Client：</font></strong><font style="color:rgb(51, 51, 51);">发布消息，订阅请求。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">服务器 Server：</font></strong><font style="color:rgb(51, 51, 51);">接收、发布消息，处理订阅。</font></p>
+<p><font style="color:rgb(51, 51, 51);">订阅包含一个主题过滤器（Topic Filter）和一个最大的服务质量（QoS）等级。</font></p>
+<h1 id="控制报文格式"><a href="#控制报文格式" class="headerlink" title="控制报文格式"></a><font style="color:rgb(51, 51, 51);">控制报文格式</font></h1><p>MQTT 协议通过交换预定义的 MQTT 控制报文来通信。</p>
+<p><strong>控制报文主要包括：固定报头、可变报头（部分包含）和有效载荷（部分包含）。</strong></p>
+<h3 id="控制报文类型"><a href="#控制报文类型" class="headerlink" title="控制报文类型"></a>控制报文类型</h3><table>
+<thead>
+<tr>
+<th><strong><font style="color:rgb(51, 51, 51);">名字</font></strong></th>
+<th><strong><font style="color:rgb(51, 51, 51);">值</font></strong></th>
+<th><strong><font style="color:rgb(51, 51, 51);">报文流动方向</font></strong></th>
+<th><strong><font style="color:rgb(51, 51, 51);">描述</font></strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><font style="color:rgb(51, 51, 51);">Reserved</font></td>
+<td><font style="color:rgb(51, 51, 51);">0</font></td>
+<td><font style="color:rgb(51, 51, 51);">禁止</font></td>
+<td><font style="color:rgb(51, 51, 51);">保留</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">CONNECT</font></td>
+<td><font style="color:rgb(51, 51, 51);">1</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端到服务端</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端请求连接服务端</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">CONNACK</font></td>
+<td><font style="color:rgb(51, 51, 51);">2</font></td>
+<td><font style="color:rgb(51, 51, 51);">服务端到客户端</font></td>
+<td><font style="color:rgb(51, 51, 51);">连接报文确认</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PUBLISH</font></td>
+<td><font style="color:rgb(51, 51, 51);">3</font></td>
+<td><font style="color:rgb(51, 51, 51);">两个方向都允许</font></td>
+<td><font style="color:rgb(51, 51, 51);">发布消息</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PUBACK</font></td>
+<td><font style="color:rgb(51, 51, 51);">4</font></td>
+<td><font style="color:rgb(51, 51, 51);">两个方向都允许</font></td>
+<td><font style="color:rgb(51, 51, 51);">QoS 1消息发布收到确认</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PUBREC</font></td>
+<td><font style="color:rgb(51, 51, 51);">5</font></td>
+<td><font style="color:rgb(51, 51, 51);">两个方向都允许</font></td>
+<td><font style="color:rgb(51, 51, 51);">发布收到（保证交付第一步）</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PUBREL</font></td>
+<td><font style="color:rgb(51, 51, 51);">6</font></td>
+<td><font style="color:rgb(51, 51, 51);">两个方向都允许</font></td>
+<td><font style="color:rgb(51, 51, 51);">发布释放（保证交付第二步）</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PUBCOMP</font></td>
+<td><font style="color:rgb(51, 51, 51);">7</font></td>
+<td><font style="color:rgb(51, 51, 51);">两个方向都允许</font></td>
+<td><font style="color:rgb(51, 51, 51);">QoS 2消息发布完成（保证交互第三步）</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">SUBSCRIBE</font></td>
+<td><font style="color:rgb(51, 51, 51);">8</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端到服务端</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端订阅请求</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">SUBACK</font></td>
+<td><font style="color:rgb(51, 51, 51);">9</font></td>
+<td><font style="color:rgb(51, 51, 51);">服务端到客户端</font></td>
+<td><font style="color:rgb(51, 51, 51);">订阅请求报文确认</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">UNSUBSCRIBE</font></td>
+<td><font style="color:rgb(51, 51, 51);">10</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端到服务端</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端取消订阅请求</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">UNSUBACK</font></td>
+<td><font style="color:rgb(51, 51, 51);">11</font></td>
+<td><font style="color:rgb(51, 51, 51);">服务端到客户端</font></td>
+<td><font style="color:rgb(51, 51, 51);">取消订阅报文确认</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PINGREQ</font></td>
+<td><font style="color:rgb(51, 51, 51);">12</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端到服务端</font></td>
+<td><font style="color:rgb(51, 51, 51);">心跳请求</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">PINGRESP</font></td>
+<td><font style="color:rgb(51, 51, 51);">13</font></td>
+<td><font style="color:rgb(51, 51, 51);">服务端到客户端</font></td>
+<td><font style="color:rgb(51, 51, 51);">心跳响应</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">DISCONNECT</font></td>
+<td><font style="color:rgb(51, 51, 51);">14</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端到服务端</font></td>
+<td><font style="color:rgb(51, 51, 51);">客户端断开连接</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(51, 51, 51);">Reserved</font></td>
+<td><font style="color:rgb(51, 51, 51);">15</font></td>
+<td><font style="color:rgb(51, 51, 51);">禁止</font></td>
+<td><font style="color:rgb(51, 51, 51);">保留</font></td>
+</tr>
+</tbody></table>
+<h2 id="固定报头"><a href="#固定报头" class="headerlink" title="固定报头"></a>固定报头</h2><p>固定报头为两个字节。</p>
+<ul>
+<li>第一个字节：<strong>高四位为控制报文类型，而低四位为对应控制报文类型的标志位</strong></li>
+<li>第二个字节（剩余长度）：<font style="color:rgb(0, 0, 0);">表示当前报文剩余部分的字节数，包括可变报头和负载的数据。剩余长度不包括用于编码剩余长度字段本身的字节数。</font></li>
+</ul>
+<h2 id="可变报头"><a href="#可变报头" class="headerlink" title="可变报头"></a>可变报头</h2><p>位于固定报头与负载之间。<font style="color:rgb(51, 51, 51);">很多控制报文的可变报头部分包含</font><font style="color:rgb(0, 0, 0);">一个两字节的报文标识符字段</font><font style="color:rgb(51, 51, 51);">。</font></p>
+<h2 id="有效载荷"><a href="#有效载荷" class="headerlink" title="有效载荷"></a>有效载荷</h2><div id="gitalk-initiator"></div><p>位于报文最后。</p>
+<h1 id="MQTT-运行流程"><a href="#MQTT-运行流程" class="headerlink" title="MQTT 运行流程"></a>MQTT 运行流程</h1><h2 id="客户端连接"><a href="#客户端连接" class="headerlink" title="客户端连接"></a>客户端连接</h2><p><strong>客户端 向 服务端 发送 connect 报文</strong>    </p>
+<p>包含 客户端标识符（<strong>必须</strong>）、用户名、密码、协议级别以及遗嘱信息等</p>
+<p><strong>服务端 向 客户端 发送 CONNACK 确认连接请求</strong></p>
+<h2 id="订阅主题"><a href="#订阅主题" class="headerlink" title="订阅主题"></a>订阅主题</h2><p><font style="color:rgb(38, 38, 38);">客户端向服务端发送</font><strong><font style="color:rgb(38, 38, 38);"> SUBSCRIBE </font></strong><font style="color:rgb(38, 38, 38);">报文用于创建</font><strong><font style="color:rgb(38, 38, 38);">一个或多个订阅（支持通配符 ）</font></strong><font style="color:rgb(38, 38, 38);">。SUBSCRIBE 报文也</font><strong><font style="color:rgb(38, 38, 38);">（为每个订阅）指定了最大的QoS等级</font></strong><font style="color:rgb(38, 38, 38);">，服务端根据这个发送应用消息给客户端。 </font></p>
+<p><font style="color:rgb(38, 38, 38);">SUBACK 用来进行订阅 确认。</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;SUBACK&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">报文会为 </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;SUBSCRIBE&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">报文中的</font><strong><font style="color:rgb(0, 0, 0);">每个主题过滤器返回一个授予的QoS等级</font></strong><font style="color:rgb(0, 0, 0);">（这个等级可能等于或小于客户端请求的最大QoS，但不会高于它）。</font></p>
+<h2 id="PUBLISH-发送消息"><a href="#PUBLISH-发送消息" class="headerlink" title="PUBLISH 发送消息"></a>PUBLISH 发送消息</h2><p>客户端使用PUBLISH报文发送应用消息给服务端，目的是<strong>分发到其它订阅匹配的客户端</strong>。 </p>
+<p> 服务端使用PUBLISH报文发送应用消息给<strong>每一个订阅匹配的客户端</strong>。 </p>
+<p>可变报头中包含了 主题名 和 报文标识符，有效载荷中包含将要被发布的消息。</p>
+<ul>
+<li>QOS 为 0 时，无确认流程。</li>
+<li>当 QOS 为 1 时，需要通过 PUBACK 进行发布确认</li>
+<li>当 QOS 为 2 时，首先是通过 PUBREC 进行发布收到确认，之后使用 PUBREL 进行发布释放确认，最后使用 PUBCOMP 进行发布完成确认</li>
+</ul>
+<h2 id="取消订阅"><a href="#取消订阅" class="headerlink" title="取消订阅"></a>取消订阅</h2><p>使用 UNSUBSCRIBE 取消订阅</p>
+<p><font style="color:rgb(38, 38, 38);">使用 UNSUBACK  确认收到UNSUBSCRIBE报文。</font></p>
+<h1 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a><font style="color:rgb(38, 38, 38);">断开连接</font></h1><p><font style="color:rgb(38, 38, 38);"> 客户端发送DISCONNECT报文，断开与服务端连接。</font></p>
+<h1 id="控制报文"><a href="#控制报文" class="headerlink" title="控制报文"></a>控制报文</h1><h2 id="CONNECT-–-连接服务端"><a href="#CONNECT-–-连接服务端" class="headerlink" title="CONNECT – 连接服务端"></a><font style="color:rgb(51, 51, 51);">CONNECT – 连接服务端</font></h2><ul>
+<li><font style="color:rgb(0, 0, 0);">客户端到服务端的网络连接建立后，客户端发送给服务端的第一个报文</font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">是CONNECT报文</font></li>
+<li><font style="color:rgb(0, 0, 0);">在一个网络连接上，客户端只能发送一次CONNECT报文。</font></li>
+<li><font style="color:rgb(0, 0, 0);">有效载荷包含一个或多个编码的字段。包括客户端的唯一标识符，Will主题，Will消息，用户名和密码。</font></li>
+</ul>
+<h3 id="固定报头-1"><a href="#固定报头-1" class="headerlink" title="固定报头"></a>固定报头</h3><p>第一字节： 报文类型 0001  低四位作为保留位</p>
+<p><font style="color:rgb(51, 51, 51);">剩余长度等于可变报头的长度（10字节）加上有效载荷的长度。</font></p>
+<h3 id="可变报头-1"><a href="#可变报头-1" class="headerlink" title="可变报头"></a><font style="color:rgb(51, 51, 51);">可变报头</font></h3><p><font style="color:rgb(0, 0, 0);">CONNECT报文的可变报头按下列次序包含四个字段：协议名（Protocol Name），协议级别（Protocol Level），连接标志（Connect Flags）和保持连接（Keep Alive）。</font></p>
+<h4 id="协议名：表示-MQTT-的编码"><a href="#协议名：表示-MQTT-的编码" class="headerlink" title="协议名：表示 MQTT 的编码"></a>协议名：表示 MQTT 的编码</h4><h4 id="协议级别：表示协议版本"><a href="#协议级别：表示协议版本" class="headerlink" title="协议级别：表示协议版本"></a>协议级别：表示协议版本</h4><h4 id="连接标志-Connect-Flags"><a href="#连接标志-Connect-Flags" class="headerlink" title="连接标志 Connect Flags"></a><font style="color:rgb(51, 51, 51);">连接标志 Connect Flags</font></h4><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://i-blog.csdnimg.cn/img_convert/4313d4d9d3d79e469fadef4a2d8633d8.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://i-blog.csdnimg.cn/img_convert/4313d4d9d3d79e469fadef4a2d8633d8.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fi-blog.csdnimg.cn%2Fimg_convert%2F4313d4d9d3d79e469fadef4a2d8633d8.png%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<ul>
+<li><strong><font style="color:rgb(51, 51, 51);">清理会话 Clean Session</font></strong><font style="color:rgb(51, 51, 51);">为</font></li>
+</ul>
+<p><font style="color:rgb(51, 51, 51);">为 0 时：</font><font style="color:rgb(51, 51, 51);">服务端必须基于当前会话（使用客户端标识符识别）的状态恢复与客户端的通信。</font></p>
+<p><font style="color:rgb(51, 51, 51);">为 1 时：断开之后，旧的会话会被丢弃。</font></p>
+<p><font style="color:rgb(0, 0, 0);">要确保不丢失连接断开期间的消息，需要使用QoS 1或 QoS 2级别，同时将清理会话标志设置为0。</font></p>
+<ul>
+<li>**遗嘱标志：**服务端是否需要发布遗嘱消息</li>
+<li>**遗嘱 QOS：**遗嘱消息QOS等级</li>
+<li>**遗嘱保留：**是否将遗嘱消息作为保留消息发布</li>
+<li>**用户名标志：**有效载荷中是否包含用户名</li>
+<li>**密码标志：**有效载荷中是否包含密码</li>
+</ul>
+<h4 id="保持连接"><a href="#保持连接" class="headerlink" title="保持连接"></a>保持连接</h4><p><font style="color:rgb(51, 51, 51);">保持连接（Keep Alive）是一个以秒为单位的时间间隔。</font></p>
+<p><font style="color:rgb(0, 0, 0);">指在客户端传输完成一个控制报文的时刻到发送下一个报文的时刻，两者之间</font><strong><font style="color:rgb(0, 0, 0);">允许空闲的最大时间间隔</font></strong><font style="color:rgb(0, 0, 0);">。期间如果没有任何其它的控制报文可以发送，客户端</font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">发送一个PINGREQ报文</font></p>
+<p><font style="color:rgb(0, 0, 0);">如果保持连接的值非零，并且服务端在一点五倍的保持连接时间内没有收到客户端的控制报文，它</font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">断开客户端的网络连接，认为网络连接已断开。</font></p>
+<p><font style="color:rgb(0, 0, 0);">客户端发送了PINGREQ报文之后，如果在合理的时间内仍没有收到PINGRESP报文，它</font><strong><font style="color:rgb(0, 0, 0);">应该</font></strong><font style="color:rgb(0, 0, 0);">关闭到服务端的网络连接。</font></p>
+<p><font style="color:rgb(0, 0, 0);">保持连接的值为零表示关闭保持连接功能。</font></p>
+<h3 id="有效载荷-1"><a href="#有效载荷-1" class="headerlink" title="有效载荷"></a><font style="color:rgb(0, 0, 0);">有效载荷</font></h3><p><font style="color:rgb(0, 0, 0);">CONNECT报文的有效载荷（payload）包含一个或多个以长度为前缀的字段，可变报头中的标志决定是否包含这些字段。如果包含的话，</font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">按这个顺序出现：客户端标识符，遗嘱主题，遗嘱消息，用户名，密码。</font></p>
+<h4 id="客户端标识符"><a href="#客户端标识符" class="headerlink" title="客户端标识符"></a><font style="color:rgb(0, 0, 0);">客户端标识符</font></h4><p><font style="color:rgb(51, 51, 51);">服务端使用客户端标识符 (ClientId) 识别客户端。连接服务端的</font><font style="color:rgb(0, 0, 0);">每个客户端都有</font><strong><font style="color:rgb(0, 0, 0);">唯一</font></strong><font style="color:rgb(0, 0, 0);">的客户端标识符</font><font style="color:rgb(51, 51, 51);">（ClientId）。</font><font style="color:rgb(0, 0, 0);">客户端和服务端都必须使用ClientId识别两者之间的MQTT会话相关的状态。</font></p>
+<p><font style="color:rgb(0, 0, 0);">客户端标识符 (ClientId)</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">存在而且</font><strong><font style="color:rgb(0, 0, 0);">必须</font></strong><font style="color:rgb(0, 0, 0);">是CONNECT报文有效载荷的</font><strong><font style="color:rgb(0, 0, 0);">第一个字段。</font></strong></p>
+<h4 id="遗嘱主题"><a href="#遗嘱主题" class="headerlink" title="遗嘱主题"></a><font style="color:rgb(0, 0, 0);">遗嘱主题</font></h4><p> 如果遗嘱标志被设置为1，有效载荷中的下一个字段是遗嘱主题（Will Topic）。  之后是遗嘱消息，根据是否含有标志包括了用户名和密码。</p>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>服务器可以在同一个TCP端口或其他网络端点上支持多种协议  。</p>
+<p>服务端必须发送返回码为零的CONNACK报文作为CONNECT报文的确认响应 。但客户端可以在收到CONNACK之前发送控制报文 。</p>
+<h2 id="CONNACK-–-确认连接请求"><a href="#CONNACK-–-确认连接请求" class="headerlink" title="CONNACK – 确认连接请求"></a>CONNACK – 确认连接请求</h2><p> 服务端发送CONNACK报文响应从客户端收到的CONNECT报文。服务端发送给客户端的第一个报文必 须是CONNACK 。</p>
+<h3 id="固定报头-2"><a href="#固定报头-2" class="headerlink" title="固定报头"></a>固定报头</h3><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://i-blog.csdnimg.cn/img_convert/2bc0bfa8a6e3753ab723647c08889a07.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://i-blog.csdnimg.cn/img_convert/2bc0bfa8a6e3753ab723647c08889a07.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fi-blog.csdnimg.cn%2Fimg_convert%2F2bc0bfa8a6e3753ab723647c08889a07.png%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<h3 id="可变报头-2"><a href="#可变报头-2" class="headerlink" title="可变报头"></a>可变报头</h3><h4 id="连接确认标志"><a href="#连接确认标志" class="headerlink" title="连接确认标志"></a>连接确认标志</h4><p> 第0 (SP)位 是当前会话（Session Present）标志。  其他（１－７）位应为０</p>
+<p> 如果服务端收到清理会话（CleanSession）标志为1的连接，除了将CONNACK报文中的返回码设置为0 之外，还必须将CONNACK报文中的当前会话设置（Session Present）标志为0  </p>
+<blockquote>
+<p>当服务端收到一个CleanSession为0的连接请求时，需要根据是否已经保存了该客户端（通过ClientId识别）的会话信息来决定CONNACK响应中的当前会话标志。如果之前有保存过这个客户端的会话信息，那么在CONNACK里就把当前会话标志设为1；如果没有保存过，则设为0。另外，不管哪种情况，都要确保CONNACK里的返回码是0。</p>
+</blockquote>
+<h4 id="连接返回码"><a href="#连接返回码" class="headerlink" title="连接返回码"></a>连接返回码</h4><p>一个无符号值,0 表示正常连接;非 0 值则表明连接被拒绝</p>
+<h3 id="无有效载荷"><a href="#无有效载荷" class="headerlink" title="无有效载荷"></a>无有效载荷</h3><h2 id="Publish-发布消息"><a href="#Publish-发布消息" class="headerlink" title="Publish-发布消息"></a>Publish-发布消息</h2><h3 id="固定报头-3"><a href="#固定报头-3" class="headerlink" title="固定报头"></a>固定报头</h3><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://i-blog.csdnimg.cn/img_convert/295f8236ae99fe546106c5ae92ad2b24.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://i-blog.csdnimg.cn/img_convert/295f8236ae99fe546106c5ae92ad2b24.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fi-blog.csdnimg.cn%2Fimg_convert%2F295f8236ae99fe546106c5ae92ad2b24.png%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<h4 id="重发标志-DUP-0-第一次请求发送-1-表示重发报文"><a href="#重发标志-DUP-0-第一次请求发送-1-表示重发报文" class="headerlink" title="重发标志 DUP: 0 第一次请求发送,1 表示重发报文."></a>重发标志 DUP: 0 第一次请求发送,1 表示重发报文.</h4><p> 发送（出站）的PUBLISH 报文与收到（入站）的 PUBLISH报文中的 DUP标志是独立设置的，它的值必须 单独的根据发送（出站）的PUBLISH报文是否是一个重发来确定 .</p>
+<h4 id="服务质量等级-QOS"><a href="#服务质量等级-QOS" class="headerlink" title="服务质量等级  QOS"></a>服务质量等级  QOS</h4><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://i-blog.csdnimg.cn/img_convert/500600c740dc29b9ef3e6788b3f531c1.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://i-blog.csdnimg.cn/img_convert/500600c740dc29b9ef3e6788b3f531c1.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fi-blog.csdnimg.cn%2Fimg_convert%2F500600c740dc29b9ef3e6788b3f531c1.png%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<h4 id="保留标志-RETAIN"><a href="#保留标志-RETAIN" class="headerlink" title="保留标志  RETAIN"></a>保留标志  RETAIN</h4><p> 如果客户端发给服务端的 PUBLISH 报文的保留（RETAIN）标志被设置为 1，服务端必须存储这个应用消 息和它的服务质量等级（QoS），以便它可以被分发给未来的主题名匹配的订阅者 </p>
+<p> 一个 新的订阅建立时，对每个匹配的主题名，如果存在最近保留的消息，它必须被发送给这个订阅者 </p>
+<p> 如果服务端收到一条保留（RETAIN）标志为 1的 QoS 0消息，它必须丢弃之前为那个主题保留 的任何消息。它应该将这个新的 QoS 0消息当作那个主题的新保留消息，但是任何时候都可以选择丢弃它 — 如果这种情况发生了，那个主题将没有保留消息</p>
+<p> 服务端发送<strong>PUBLISH报文给客户端时</strong>，如果消息是作为客户端一个<strong>新订阅的结果</strong>发送，它必须将**报文的保 留标志设为1    **</p>
+<h4 id="剩余长度字段"><a href="#剩余长度字段" class="headerlink" title="剩余长度字段"></a>剩余长度字段</h4><p> 可变报头的长度加上有效载荷的长度  </p>
+<h3 id="可变报头-3"><a href="#可变报头-3" class="headerlink" title="可变报头"></a>可变报头</h3><p> 包含主题名和报文标识符。  </p>
+<h4 id="主题名"><a href="#主题名" class="headerlink" title="主题名"></a>主题名</h4><p> 可变报头的第一个字段  </p>
+<p> 主题名不能包含通配符  </p>
+<h4 id="报文标识符"><a href="#报文标识符" class="headerlink" title="报文标识符"></a>报文标识符</h4><p>QOS 为 1 或 2 时存在</p>
+<h3 id="有效载荷-2"><a href="#有效载荷-2" class="headerlink" title="有效载荷"></a>有效载荷</h3><p> 有效载荷包含将被发布的应用消息。数据的内容和格式是应用特定的。</p>
+<h3 id="响应-1"><a href="#响应-1" class="headerlink" title="响应"></a>响应</h3><p>接收者与发布者的 QOS 等级应相同</p>
+<h3 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h3><p> 客户端使用PUBLISH报文发送应用消息给服务端，目的是<strong>分发到其它订阅匹配的客户端</strong>。  </p>
+<p> 服务端使用PUBLISH报文发送应用消息给<strong>每一个订阅匹配的客户端</strong>。  </p>
+<p> 客户端使用带通配符的主题过滤器请求订阅时，客户端的订阅可能会<strong>重复</strong>，因此发布的消息可能会匹配多 个过滤器。对于这种情况，服务端必须将消息分发给<strong>所有订阅匹配的QoS等级最高的客户端</strong> .</p>
+<p> 服务端之后可以按照订阅的QoS等级，分发消息的副本给每一个匹配的订阅者。  </p>
+<h2 id="PUBACK-–发布确认"><a href="#PUBACK-–发布确认" class="headerlink" title="PUBACK –发布确认"></a>PUBACK –发布确认</h2><p> QoS 1等级的PUBLISH报文的响应。  </p>
+<h3 id="固定报头-4"><a href="#固定报头-4" class="headerlink" title="固定报头"></a>固定报头</h3><p>MQTT 报文控制类型为 4</p>
+<p>剩余长度字段为   2</p>
+<h3 id="可变报头-4"><a href="#可变报头-4" class="headerlink" title="可变报头"></a>可变报头</h3><p> 包含等待确认的PUBLISH报文的报文标识符。  </p>
+<h3 id="无有效载荷-1"><a href="#无有效载荷-1" class="headerlink" title="无有效载荷"></a>无有效载荷</h3><h2 id="PUBREC-–-发布收到（QoS-2，第一步）"><a href="#PUBREC-–-发布收到（QoS-2，第一步）" class="headerlink" title="PUBREC – 发布收到（QoS 2，第一步）"></a>PUBREC – 发布收到（QoS 2，第一步）</h2><p> QoS等级2的PUBLISH报文的响应。   它是QoS 2等级协议交换的第二个报文。  </p>
+<p><strong><font style="color:rgb(38, 38, 38);">固定报头</font></strong><font style="color:rgb(38, 38, 38);"><br></font><font style="color:rgb(38, 38, 38);">MQTT 报文控制类型为 5<br></font><font style="color:rgb(38, 38, 38);">剩余长度字段为 2</font></p>
+<h3 id="可变报头-5"><a href="#可变报头-5" class="headerlink" title="可变报头"></a><font style="color:rgb(38, 38, 38);">可变报头</font></h3><p><font style="color:rgb(38, 38, 38);">包含等待确认的PUBLISH报文的报文标识符。</font></p>
+<p><strong><font style="color:rgb(38, 38, 38);">无有效载荷</font></strong></p>
+<h2 id="PUBREL-–-发布释放（QoS-2，第二步）"><a href="#PUBREL-–-发布释放（QoS-2，第二步）" class="headerlink" title="PUBREL – 发布释放（QoS 2，第二步）  "></a><font style="color:rgb(38, 38, 38);">PUBREL – 发布释放（QoS 2，第二步）  </font></h2><p> 对PUBREC报文的响应。它是QoS 2等级协议交换的第三个报文。  </p>
+<h3 id="固定报头-5"><a href="#固定报头-5" class="headerlink" title="固定报头"></a>固定报头</h3><p><font style="color:rgb(38, 38, 38);">MQTT 报文控制类型为 5</font></p>
+<p><font style="color:rgb(38, 38, 38);">剩余长度字段为 2</font></p>
+<h3 id="可变报头-6"><a href="#可变报头-6" class="headerlink" title="可变报头"></a><font style="color:rgb(38, 38, 38);">可变报头</font></h3><p> 与等待确认的PUBREC报文相同的报文标识符。  </p>
+<p><strong><font style="color:rgb(38, 38, 38);">无有效载荷</font></strong></p>
+<h2 id="PUBCOMP-–-发布完成（QoS-2，第三步）"><a href="#PUBCOMP-–-发布完成（QoS-2，第三步）" class="headerlink" title="PUBCOMP – 发布完成（QoS 2，第三步）  "></a><font style="color:rgb(38, 38, 38);">PUBCOMP – 发布完成（QoS 2，第三步）  </font></h2><p> 对PUBREL报文的响应。它是QoS 2等级协议交换的第四个也是最后一个报文。  </p>
+<p><strong><font style="color:rgb(38, 38, 38);">固定报头</font></strong><font style="color:rgb(38, 38, 38);"><br></font><font style="color:rgb(38, 38, 38);">MQTT 报文控制类型为 7<br></font><font style="color:rgb(38, 38, 38);">剩余长度字段为 2<br></font><strong><font style="color:rgb(38, 38, 38);">可变报头</font></strong></p>
+<p><font style="color:rgb(38, 38, 38);"> 与等待确认的PUBREC报文相同的报文标识符。<br></font><strong><font style="color:rgb(38, 38, 38);">无有效载荷</font></strong></p>
+<h2 id="SUBSCRIBE-订阅主题"><a href="#SUBSCRIBE-订阅主题" class="headerlink" title=" SUBSCRIBE - 订阅主题  "></a><font style="color:rgb(38, 38, 38);"> SUBSCRIBE - 订阅主题  </font></h2><p> 客户端向服务端发送SUBSCRIBE报文用于创建<strong>一个或多个订阅</strong>。SUBSCRIBE 报文也**（为每个订阅）指定了最大的QoS等级**，服务端根据这个发送应用消息给客户端。  </p>
+<p><strong><font style="color:rgb(38, 38, 38);">固定报头</font></strong><font style="color:rgb(38, 38, 38);"><br></font><font style="color:rgb(38, 38, 38);">MQTT 报文控制类型为 5<br></font><font style="color:rgb(38, 38, 38);">剩余长度字段为 可变报头 + 有效载荷 的长度</font></p>
+<h3 id="可变报头-7"><a href="#可变报头-7" class="headerlink" title="可变报头"></a><font style="color:rgb(38, 38, 38);">可变报头</font></h3><p> 可变报头包含客户端标识符。  </p>
+<h3 id="有效载荷-3"><a href="#有效载荷-3" class="headerlink" title="有效载荷"></a>有效载荷</h3><p> **主题过滤器 和 QoS等级字段组合 ** </p>
+<p> 表示客户端想要订阅的主题。  <strong>服务端</strong>应该**支持 包含通配符（4.7.1节定义的）的主题过滤器。**如果服务端选择不支持包含通配符的主题过滤器，必须拒绝 任何包含通配符过滤器的订阅请求  。</p>
+<p> 每一个过滤器后面跟着一个字节，这个字节被叫做 服 务质量要求（Requested QoS）。它给出了服务端向客户端发送应用消息所允许的最大QoS等级。 有效载荷必须包含至少一对主题过滤器 和 QoS等级字段组合。</p>
+<p>没有有效载荷的 SUBSCRIBE报文是违反协议的  。  </p>
+<h3 id="响应-2"><a href="#响应-2" class="headerlink" title="响应"></a>响应</h3><p> 服务端收到客户端发送的一个SUBSCRIBE报文时，必须使用SUBACK报文响应  , SUBACK报文必须和等待确认的SUBSCRIBE报文有相同的报文标识符 </p>
+<p> 新订阅的主题过滤器和之前订阅的相同，但是它的最大QoS值可以不 同。与这个主题过滤器匹配的任何现存的保留消息必须被重发，但是发布流程不能中断 。</p>
+<p> 如果服务端收到包含多个主题过滤器的SUBSCRIBE报文，它必须如同收到了一系列的多个SUBSCRIBE 报文一样处理那个，除了需要将它们的响应合并到一个单独的SUBACK报文发送     SUBACK  <strong>响应可以合并</strong></p>
+<p> SUBACK报文对每一对主题过滤器 和QoS等级都必须包含一个返回码。  </p>
+<p> 服务端可以授予比 订阅者要求的低一些的QoS等级。为响应订阅而发出的消息的有效载荷的QoS必须是原始发布消息的 QoS和服务端授予的QoS两者中的最小值。  </p>
+<p>** 确定消息分发时可能的最大QoS等级是发布者的责任，而订阅者可以 要求服务端降低QoS到更适合它的等级。  **</p>
+<h2 id="SUBACK-–-订阅确认"><a href="#SUBACK-–-订阅确认" class="headerlink" title="SUBACK – 订阅确认"></a>SUBACK – 订阅确认</h2><p> 用于确认它已收到并且正在处理SUBSCRIBE报文。   包含一个返回码清单，它们指定了SUBSCRIBE请求的每个订阅被授予的最大QoS等级。  </p>
+<p><strong><font style="color:rgb(38, 38, 38);">固定报头</font></strong></p>
+<p><font style="color:rgb(38, 38, 38);">MQTT 报文控制类型为 5 </font></p>
+<p><font style="color:rgb(38, 38, 38);">剩余长度字段为 可变报头 + 有效载荷 的长度</font></p>
+<h3 id="可变报头-8"><a href="#可变报头-8" class="headerlink" title="可变报头"></a><font style="color:rgb(38, 38, 38);">可变报头</font></h3><p> 包含等待确认的SUBSCRIBE报文的报文标识符。  </p>
+<h3 id="有效载荷-4"><a href="#有效载荷-4" class="headerlink" title="有效载荷"></a>有效载荷</h3><p> 包含一个返回码清单。每个返回码对应等待确认的SUBSCRIBE报文中的一个主题过滤器。返回 码的顺序必须和SUBSCRIBE报文中主题过滤器的顺序相同  </p>
+<p> 允许的返回码值： </p>
+<p>0x00 - 最大QoS 0 </p>
+<p>0x01 - 成功 – 最大QoS 1 </p>
+<p>0x02 - 成功 – 最大 QoS 2 </p>
+<p>0x80 - Failure 失败  </p>
+<h2 id="UNSUBSCRIBE-–取消订阅"><a href="#UNSUBSCRIBE-–取消订阅" class="headerlink" title="UNSUBSCRIBE –取消订阅"></a>UNSUBSCRIBE –取消订阅</h2><p>用于取消订阅主题</p>
+<h3 id="固定报头-6"><a href="#固定报头-6" class="headerlink" title="固定报头"></a>固定报头</h3><p>控制报文类型 10</p>
+<p>保留位  0，0，1，0</p>
+<p>**剩余长度字段     **<font style="color:rgb(38, 38, 38);">可变报头 + 有效载荷 的长度</font></p>
+<h3 id="可变报头-9"><a href="#可变报头-9" class="headerlink" title="可变报头"></a><font style="color:rgb(38, 38, 38);">可变报头</font></h3><h3 id="有效载荷-5"><a href="#有效载荷-5" class="headerlink" title="有效载荷"></a>有效载荷</h3><p>包含客户端想要取消订阅的主体过考虑列表。</p>
+<h3 id="Response-响应"><a href="#Response-响应" class="headerlink" title="Response 响应"></a>Response 响应</h3><p> 如果服务端删除了一个订阅：  </p>
+<ul>
+<li>停止分发任何新消息给这个客户端  </li>
+<li>完成分发任何已经开始往客户端发送的QoS 1和QoS 2的消息  </li>
+<li>继续发送任何现存的准备分发给客户端的缓存消息。</li>
+</ul>
+<p> 服务端必须发送UNSUBACK报文响应客户端的UNSUBSCRIBE请求。  </p>
+<h2 id="UNSUBACK-–-取消订阅确认"><a href="#UNSUBACK-–-取消订阅确认" class="headerlink" title="UNSUBACK – 取消订阅确认"></a>UNSUBACK – 取消订阅确认</h2><p> 用于确认收到UNSUBSCRIBE报文。  </p>
+<h3 id="固定报头-7"><a href="#固定报头-7" class="headerlink" title="固定报头"></a>固定报头</h3><p>控制报文类型 11 </p>
+<p>剩余长度 2</p>
+<h3 id="可变报头-10"><a href="#可变报头-10" class="headerlink" title="可变报头"></a>可变报头</h3><h3 id="有效载荷-6"><a href="#有效载荷-6" class="headerlink" title="有效载荷"></a>有效载荷</h3><p>无有效载荷</p>
+<h2 id="PINGREQ-–-心跳请求"><a href="#PINGREQ-–-心跳请求" class="headerlink" title="PINGREQ – 心跳请求"></a>PINGREQ – 心跳请求</h2><ul>
+<li>告知服务端客户端还活着。  </li>
+<li>请求服务端发送 响应确认它还活着。  </li>
+<li>使用网络以确认网络连接没有断开。</li>
+</ul>
+<h3 id="固定报头-8"><a href="#固定报头-8" class="headerlink" title="固定报头"></a>固定报头</h3><p>控制报文类型  12</p>
+<p>剩余长度  0</p>
+<p>无 可变报头，有效载荷</p>
+<h3 id="响应-3"><a href="#响应-3" class="headerlink" title="响应"></a>响应</h3><p> 服务端必须发送 PINGRESP报文响应客户端的PINGREQ报文  </p>
+<h2 id="PINGRESP-–-心跳响应"><a href="#PINGRESP-–-心跳响应" class="headerlink" title="PINGRESP – 心跳响应"></a>PINGRESP – 心跳响应</h2><p> 发送PINGRESP报文响应客户端的PINGREQ报文。表示服务端还活着。  </p>
+<h3 id="固定报头-9"><a href="#固定报头-9" class="headerlink" title="固定报头"></a>固定报头</h3><p>控制报文类型 13</p>
+<p><font style="color:rgb(38, 38, 38);">剩余长度 0<br></font><font style="color:rgb(38, 38, 38);">无 可变报头，有效载荷</font></p>
+<h2 id="DISCONNECT-–断开连接"><a href="#DISCONNECT-–断开连接" class="headerlink" title=" DISCONNECT –断开连接  "></a><font style="color:rgb(38, 38, 38);"> DISCONNECT –断开连接  </font></h2><p>控制报文类型 14</p>
+<p>保留位 0</p>
+<p><font style="color:rgb(38, 38, 38);">剩余长度 0 无 可变报头，有效载荷</font></p>
+<h3 id="Response"><a href="#Response" class="headerlink" title=" Response  "></a><font style="color:rgb(38, 38, 38);"> Response  </font></h3><p> 客户端发送DISCONNECT报文之后：  </p>
+<ul>
+<li>必须关闭网络连接  </li>
+<li>不能通过那个网络连接再发送任何控制报文</li>
+</ul>
+<p>服务端收到 到DISCONNECT报文时：  </p>
+<ul>
+<li>必须丢弃任何与当前连接关联的未发布的遗嘱消息  </li>
+<li>应该关闭网络连接，如果客户端 还没有这么做。</li>
+</ul>
+<h1 id="操作行为"><a href="#操作行为" class="headerlink" title="操作行为"></a>操作行为</h1><p> MQTT 3.1使用的传输层协议是 [RFC793] 定义的TCP&#x2F;IP协议。同事也支持 TLS、   WebSocket协议  </p>
+<h2 id="服务质量等级和协议流程"><a href="#服务质量等级和协议流程" class="headerlink" title="服务质量等级和协议流程"></a>服务质量等级和协议流程</h2><h3 id="QoS-0-最多分发一次"><a href="#QoS-0-最多分发一次" class="headerlink" title="QoS 0:最多分发一次"></a>QoS 0:最多分发一次</h3><p> 消息的分发依赖于底层网络的能力。接收者不会发送响应，发送者也不会重试。  </p>
+<h3 id="QoS-1-至少分发一次"><a href="#QoS-1-至少分发一次" class="headerlink" title="QoS 1: 至少分发一次"></a>QoS 1: 至少分发一次</h3><p> QoS 1 的 PUBLISH 报文的可变报头中包含一个报文标识符，需要 PUBACK报文确认。  </p>
+<p>发送者：</p>
+<ul>
+<li><p>每次发送新的应用消息都必须分配一个未使用的报文标识符。  </p>
+</li>
+<li><p>发送的PUBLISH报文必须包含报文标识符且QoS等于1，DUP等于0。  </p>
+</li>
+<li><p><strong>必须将这个PUBLISH报文看作是 未确认的 ，直到从接收者那收到对应的PUBACK报文。</strong></p>
+<p>接收者 ：</p>
+</li>
+<li><p><strong>响应的PUBACK报文必须包含一个报文标识符</strong>，这个标识符来自接收到的、已经接受所有权的 PUBLISH报文。  </p>
+</li>
+<li><p>发送了PUBACK报文之后，接收者必须将任何包含相同报文标识符的入站PUBLISH报文当作一 个新的消息，并忽略它的DUP标志的值。</p>
+</li>
+</ul>
+<h2 id="QoS-2-仅分发一次"><a href="#QoS-2-仅分发一次" class="headerlink" title="QoS 2: 仅分发一次"></a>QoS 2: 仅分发一次</h2><p> 消息丢失和重复都是不可接受的。  </p>
+<p>发送者：</p>
+<ul>
+<li>必须给要发送的新应用消息分配一个未使用的报文标识符。  </li>
+<li>发送的PUBLISH报文必须包含报文标识符且报文的QoS等于2,，DUP等于0。  </li>
+<li>**必须将这个PUBLISH报文看作是 未确认的 ，直到从接收者那收到对应的PUBREC报文。  **</li>
+<li>收到PUBREC报文后必须发送一个PUBREL报文。PUBREL报文必须包含与原始PUBLISH报文 相同的报文标识符。  </li>
+<li>**必须将这个PUBREL报文看作是 未确认的 ，直到从接收者那收到对应的PUBCOMP报文。  **</li>
+<li>** 一旦发送了对应的PUBREL报文就不能重发这个PUBLISH报文。**</li>
+</ul>
+<p>响应者：</p>
+<ul>
+<li>响应的PUBREC报文必须包含报文标识符，这个标识符来自接收到的、已经接受所有权的 PUBLISH报文。  </li>
+<li>在收<strong>到对应的PUBREL报文之前，接收者必须发送PUBREC报文确认任何后续的具有相同标识符 的PUBLISH报文。</strong> **在这种情况下，它不能重复分发消息给任何后续的接收者。  **</li>
+<li>** **响应PUBREL报文的PUBCOMP报文必须包含与PUBREL报文相同的标识符。  </li>
+<li>发送PUBCOMP报文之后，接收者必须将包含相同报文标识符的任何后续PUBLISH报文当作一 个新的发布。</li>
+</ul>
+<h2 id="消息分发重试"><a href="#消息分发重试" class="headerlink" title="消息分发重试"></a>消息分发重试</h2><p> 客户端和服务端必须使用原始的报文标识符重发 任何未确认的PUBLISH报文（如果QoS&gt;0）和PUBREL报文 。 这是唯一要求客户端或 服务端重发消息的情况。  </p>
+<h2 id="主题名和主体过滤器"><a href="#主题名和主体过滤器" class="headerlink" title="主题名和主体过滤器"></a>主题名和主体过滤器</h2><h3 id="主题通配符"><a href="#主题通配符" class="headerlink" title="主题通配符"></a>主题通配符</h3><p> 斜杠（‘&#x2F;’ U+002F）用于分割主题的每个层级，为主题名提供一个分层结构。  </p>
+<h3 id="多层通配符"><a href="#多层通配符" class="headerlink" title="多层通配符"></a>多层通配符</h3><p> 数字标志（‘#’ U+0023）是用于匹配主题中任意层级的通配符。  </p>
+<h3 id="单层通配符"><a href="#单层通配符" class="headerlink" title="单层通配符"></a>单层通配符</h3><p>加号  (‘+’ U+002B) 是只能用于单个主题层级匹配的通配符。 </p>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2026/02/26/tech/Vue2%E6%80%BB%E7%BB%93/"><span class="item-link">Vue2总结</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2022/04/02/tech/pca/"><span class="item-link">奇异值分解（SVD）、主成分分析（PCA）和独立成分分析（ICA）</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/linen-theme/css/photoswipe.css?v=undefined" />
+<link rel="stylesheet" href="/linen-theme/css/photoswipe-dynamic-caption-plugin.css?v=undefined" />
+<script type="module" defer>
+  import PhotoSwipeLightbox from '/linen-theme/js/photoswipe/photoswipe-lightbox.esm.min.js?v=undefined';
+  import PhotoSwipe from '/linen-theme/js/photoswipe/photoswipe.esm.min.js?v=undefined';
+  import PhotoSwipeDynamicCaption from '/linen-theme/js/photoswipe/photoswipe-dynamic-caption-plugin.esm.js?v=undefined';
+  let isPswpOpening = false;
+  let hdrAssetsPrefix = '';
+  const getSafeAreaHeight = () => {
+    const el = document.getElementById('safe-area-test');
+    const height = window.getComputedStyle(el).height;
+    return parseInt(height) ?? 0
+  }
+  const smallScreenPadding = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  };
+  const largeScreenPadding = {
+    top: 30,
+    bottom: 30 + getSafeAreaHeight(),
+    left: 0,
+    right: 0
+  };
+  const isHDRScreen = window.screen.colorDepth >= 30;
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#post',
+    children: 'a.gallery-item',
+    bgOpacity: 1,
+    pswpModule: PhotoSwipe,
+    paddingFn: (viewportSize) => {
+      return viewportSize.x < 700 ? smallScreenPadding : largeScreenPadding
+    },
+  });
+
+  const getExif = (element) => {
+    const exifString = element?.dataset?.pspwExif || '';
+    const locationString = element?.dataset?.pspwLocation || '';
+    const matches = [...exifString.matchAll(/\{([^}]*)\}/g)].map(match => match[1])
+    if (matches?.length) {
+      const locationMatches = [...locationString.matchAll(/\{([^}]*)\}/g)].map(match => match[1]);
+      const keys = ['camera', 'lens', 'iso', 'focusLength', 'ev', 'aperture', 'shutterSpeed', 'hdr'];
+      const [camera, iso, focusLength, aperture, shutterSpeed, ev, lens, isHDR] = matches;
+      const isHDRActive = (isHDRScreen && (!!isHDR || element?.href?.includes(hdrAssetsPrefix)) && window.hdrEnabled) ? 'HDR' : ''
+      const exifObj = {
+        camera,
+        iso,
+        focusLength,
+        aperture,
+        shutterSpeed,
+        ev,
+        lens,
+        hdr: isHDRActive,
+        location: locationMatches?.length === 2 ? {
+          url: locationMatches[0],
+          title: locationMatches[1]
+        } : null
+      }
+      const altTextMap = {
+        camera: 'Camera',
+        iso: 'ISO',
+        focusLength: "Focus Length",
+        aperture: 'Aperture',
+        shutterSpeed: 'Shutter Speed',
+        ev: 'Exposure Value',
+        lens: 'Lens',
+        hdr: 'HDR Photo',
+        location: 'Location'
+      }
+      return `<div class="img-exif">${keys.map(key=>exifObj[key]?`<span class="${key}" title="${altTextMap[key]}">${typeof exifObj[key] === 'boolean' ? '' : exifObj[key]}</span>`: '').join('')}${exifObj.location ? `<a href="${exifObj.location.url}"><span class="location">${exifObj.location.title}</span></a>`: ''}</div>`
+    }
+    return ''
+  }
+  const captionPlugin = new PhotoSwipeDynamicCaption(lightbox, {
+    type: 'auto',
+  });
+
+  lightbox.addFilter('placeholderSrc', (placeholderSrc, content) => {
+    const thumbnail = content?.slide?.data?.msrc || ''
+    return thumbnail || placeholderSrc;
+  });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el, pswp) => {
+        lightbox.pswp.on('change', () => {
+          const currSlideElement = lightbox.pswp.currSlide.data.element;
+          let captionHTML = '';
+          if (currSlideElement) {
+            const gap = (window.innerHeight - lightbox.pswp.currSlide.data.height / lightbox.pswp.currSlide.data.width * window.innerWidth) / 2;
+            captionHTML = getExif(lightbox.pswp.currSlide.data?.element) || ''
+            if (window.innerWidth <= 600) {
+              el.style.top = `${gap}px`;
+              el.classList.add('mobile');
+            } else {
+              el.style.top = 'unset';
+              el.classList.remove('mobile');
+            }
+          }
+          el.innerHTML = captionHTML || '';
+        });
+      }
+    });
+  });
+
+  lightbox.on('beforeOpen', () => {
+    isPswpOpening = true;
+  });
+
+  lightbox.on('change', (e) => {
+    if (isPswpOpening) {
+      return isPswpOpening = false;
+    }
+    const currentImage = lightbox?.pswp?.currSlide?.data?.element;
+    currentImage && currentImage.scrollIntoView({
+      block: 'center',
+      behavior: 'instant'
+    })
+  });
+  lightbox.init();
+</script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

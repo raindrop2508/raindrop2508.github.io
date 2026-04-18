@@ -1,0 +1,533 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Java总结</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Java总结">
+<meta property="og:url" content="/2026/02/26/tech/Java%E6%80%BB%E7%BB%93/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="java基础" href="#java基础">java基础</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="lists" href="#lists">lists</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="测试" href="#测试">测试</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="继承和实现" href="#继承和实现">继承和实现</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="泛型与包装" href="#泛型与包装">泛型与包装</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="异常，迭代与对象方法" href="#异常，迭代与对象方法">异常，迭代与对象方法</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="包，访问控制及特性" href="#包，访问控制及特性">包，访问控制及特性</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="访问控制" href="#访问控制">访问控制</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="引用及资源" href="#引用及资源">引用及资源</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">Java总结</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2026-02-26T02:23:51.000Z">
+      2 月 26 日，2026
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>15</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>4502</small>
+
+  <small>个字</small>
+
+  <small>，</small>
+
+  <small>2</small>
+
+  <small>张图片</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h2 id="java基础"><a href="#java基础" class="headerlink" title="java基础"></a><font style="color:rgb(51, 51, 51);">java基础</font></h2><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://cdn.nlark.com/yuque/0/2026/svg/40667138/1770296441939-771a3983-d975-4865-9d12-94356a805f61.svg" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://cdn.nlark.com/yuque/0/2026/svg/40667138/1770296441939-771a3983-d975-4865-9d12-94356a805f61.svg"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fcdn.nlark.com%2Fyuque%2F0%2F2026%2Fsvg%2F40667138%2F1770296441939-771a3983-d975-4865-9d12-94356a805f61.svg%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">类：类的成员（方法和变量）。</font></li>
+<li><font style="color:rgb(51, 51, 51);">静态语言与动态语言的区别</font><ol>
+<li><font style="color:rgb(51, 51, 51);">类型检查时机</font></li>
+<li><font style="color:rgb(51, 51, 51);">变量类型是否可变</font></li>
+</ol>
+</li>
+<li><font style="color:rgb(51, 51, 51);">类的实例化（对象）</font></li>
+<li><font style="color:rgb(51, 51, 51);">实例变量,构造器（决定如何实例化类）</font></li>
+<li><font style="color:rgb(51, 51, 51);">静态方法与非静态方法及其区别（调用）</font></li>
+<li><font style="color:rgb(51, 51, 51);">private、this关键词</font></li>
+</ul>
+<p><font style="color:rgb(51, 51, 51);">对于变量对应的是变量的值，对象和数组对应的是内存位置的指针。</font></p>
+<p><font style="color:rgb(51, 51, 51);">Java中使用变量必须实现声明；变量的定义和声明可以用一条语句实现。对于对象和数组需要进行实例化，通过定义将内存中的数据与对象（数组名）连接。</font></p>
+<h2 id="lists"><a href="#lists" class="headerlink" title="lists"></a><font style="color:rgb(51, 51, 51);">lists</font></h2><blockquote>
+<p>主要讲的是 LinkedList 的实现</p>
+</blockquote>
+<p><font style="color:rgb(51, 51, 51);">首先使用类构建一个单向的链表，每个数据单元保存找该单元的值和下一个单元位置的指针（内存地址）。之后引入sllist，这个类通过嵌套类的方法再原先链表的基础上加入一个中间层操作链表，方便用户调用定义，参数（之前的链表每次加入新的值都需要加入一个指针指向原来首个单元的地址）。并且通过将来的类以及一些变量设置为private，形成一个黑盒，从而避免用户访问而造成错误。</font></p>
+<p><font style="color:rgb(51, 51, 51);">通过递归或者是迭代来实现get，size以及addfirst，addlast等方法。但无论是使用使用迭代还是递归有的方法都需要遍历整个链表来实现，这会使得计算的速度随着链表数据的增多而线性增加。然而显然对于这些方法显然有更好的实现方式。对于size方法可以在中间层维护一个size变量每次链表数据长度产生变化便进行记录。虽然其他方法时间会略微延长（几乎可以忽略），但使得size方法的速度大大加快（只用返回一个数就可以）。</font></p>
+<p><font style="color:rgb(51, 51, 51);">对于addlast方法根据原来链表书是否有数据需要分情况讨论？在这里可以引入一个</font><strong><font style="color:rgb(51, 51, 51);">哨兵节点</font></strong><font style="color:rgb(51, 51, 51);">使得所有的方法统一。在编写代码中要尽可能地减少特殊情况，less is more 。哨兵节点永远位于链表地最前端，并指向第一个数据哨兵节点内地值可以忽略，添加数据都从器后面添加。</font></p>
+<p><font style="color:rgb(51, 51, 51);">要</font><strong><font style="color:rgb(51, 51, 51);">加快addlast方法的访问速度可以使用结合前面的sllist双向链表</font></strong><font style="color:rgb(51, 51, 51);">，为了避免bug可以在尾部再添加一个哨兵节点（它一直位于最后）。</font><strong><font style="color:rgb(51, 51, 51);">进一步节点只用一个哨兵节点即使开头也是结尾，是整个双向链表构成一个环形。</font></strong></p>
+<p><font style="color:rgb(51, 51, 51);">为了实现链表的</font><strong><font style="color:rgb(51, 51, 51);">泛型</font></strong><font style="color:rgb(51, 51, 51);">功能，可以在定义类时在类名字后面加入&lt; &gt;其中写入默认储存的类型。在实际声明时可以在进行指定（实例化的地方可写可不写）。需要注意的是: </font><strong><font style="color:rgb(51, 51, 51);">泛型仅适用于引用类型。</font></strong></p>
+<p><font style="color:rgb(51, 51, 51);">最后结合数组来实现这些上面类的方法。同时介绍了二维数组。二维数组中实际时是由多个一维数组组成的。数组名指向的时一个储存着各个一维数组的地址。这些一维数组的地址才指向数据。接着介绍了数组和类调用参数和成员的区别。</font></p>
+<p><font style="color:rgb(51, 51, 51);">结合数组使用中间层（bureaucracy）构建</font><strong><font style="color:rgb(51, 51, 51);">Alist</font></strong><font style="color:rgb(51, 51, 51);">;设置固定的数组长度，</font><strong><font style="color:rgb(51, 51, 51);">删除末尾的数据只需要将保存的size值减少不去索引末尾的值即可。从用户层面看就是删去了。</font></strong></p>
+<p><font style="color:rgb(51, 51, 51);">当内部数组储存的数据慢了之后要再添加数据就需要新建更长的数组复制原数据以及加入新数据。但这种如果加一个数据就延长一次当添加数据量大（现实中这种情况还是存在的）时需要多次创建新的数组，使得速度下降。每次数组慢时直接多增加几个格子并不能完全解决问题。实际解决方案是</font><strong><font style="color:rgb(51, 51, 51);">在原数据长度的基础上倍增数组长度</font></strong><font style="color:rgb(51, 51, 51);">。</font></p>
+<p>泛型方法与sllist相似，但是定义数据时需要使用不同语法或者是Java 不允许我们创建一个泛型对象数组）在删除数据是因为泛型后如果仅减少size值但原格子中数据不删除的的话会造成内存的浪费，因此需要替换为null。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a><font style="color:rgb(51, 51, 51);">测试</font></h2><div id="gitalk-initiator"></div><p><font style="color:rgb(51, 51, 51);">在现实中面对大型的工程文件一次debug是需要花费很长的时间的，但可以通过编写测试代码对各个单元（就是其中的各个方法）进行测试。使用Java中的JUnit库可以减少许多的比较之类的重复代码。结合这个库不需要再测试文件中加入主方法，只需要再每个测试方法前加入@org.junit.Test。运行与运行代码略微有些区别。与python类似，通过import语句看以减少调用函数时重复语句的书写。</font></p>
+<p><font style="color:rgb(51, 51, 51);">课程中结合选择排序及其测试进行展开。选择排序每次都寻找最小值并于开头交换最后完成排序（概略）。结合测试产生了一种编写程序的方法，测试驱动开发（TDD）。先写测试代码再写各个环节的函数通过测试代码测试程序不断改进，这个方法有利有弊。</font></p>
+<h2 id="继承和实现"><a href="#继承和实现" class="headerlink" title="继承和实现"></a><font style="color:rgb(51, 51, 51);">继承和实现</font></h2><p><strong><font style="color:rgb(51, 51, 51);">重载指的是同一个方法名但输入输出参数不同。</font></strong><font style="color:rgb(51, 51, 51);">通过interface可以避免多次重载（overload）。</font><strong><font style="color:rgb(51, 51, 51);">interface 命名作为上位词，其中包括了各子类（下位词）共同拥有的方法，只需表示方法不需要实现。在interface实现方法并加入default关键词。在子类中实现在这些方法时可以在方法上加入@Override标签。</font></strong><font style="color:rgb(51, 51, 51);">（重写标识，便于寻找bug）当子类中没有该实现方法时便使用interface中的实现。静态类型（编译时类型）是变量声明时确定的，实例化时决定变量的动态类型（运行时类型）。动态类型决定动态方法的选择。这种方法的动态选择实际比较复杂， 大概就是现在对象下的方法中寻找，寻找参数最准确的（下位词参数比上位词精准）。</font></p>
+<p><font style="color:rgb(51, 51, 51);">子类可以通过</font><strong><font style="color:rgb(51, 51, 51);">extend</font></strong><font style="color:rgb(51, 51, 51);">关键字继承其上级类的方法，同时可以在子类中重写方法@override以及定义新方法。extend表示子类与上类之间地关系是</font><strong><font style="color:rgb(51, 51, 51);">is a</font></strong><font style="color:rgb(51, 51, 51);">。通过extend可以继承上一级类中的所有方法、实例和静态变量以及嵌套类（不包括私有），但类的构造方法并不会继承。实现子类的构造方法时会自动地隐式地继承其上级类地构造方法（也可以显式地添加super语句）。但如果要向上级传入参数则比喻通过super()语句。</font></p>
+<h5 id="接口继承与类继承之间的关系"><a href="#接口继承与类继承之间的关系" class="headerlink" title="接口继承与类继承之间的关系"></a><font style="color:rgb(51, 51, 51);">接口继承与类继承之间的关系</font></h5><p><strong><font style="color:rgb(51, 51, 51);">接口继承 has a,类继承 is a</font></strong></p>
+<p><font style="color:rgb(51, 51, 51);">类继承：核心是代码复用 + 类型归属。子类继承父类的属性和方法（非 private），体现 “is-a” 的关系（比如 Dog is a Animal）。</font></p>
+<p><font style="color:rgb(51, 51, 51);">接口继承：核心是行为约定 + 多态扩展。接口只定义方法签名（JDK8 + 支持默认方法 &#x2F; 静态方法），不关注实现，体现 “can-do” 的关系（比如 Dog can do Runnable）。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">动态类型与静态类型</font></strong></p>
+<p><strong><font style="color:rgb(51, 51, 51);">静态类型（Static Type）</font></strong><font style="color:rgb(51, 51, 51);">：也叫编译时类型，是变量在声明时被显式指定的类型，这个类型在编译阶段就确定，且无法改变。编译阶段就会根据静态类型检查方法 &#x2F; 属性是否存在，不存在则直接报错。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">动态类型（Dynamic Type）</font></strong><font style="color:rgb(51, 51, 51);">：也叫运行时类型，是变量实际指向的对象的类型，这个类型只有在程序运行时才确定。</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 声明变量时，明确指定的类型就是「静态类型」—— Animal</span><br><span class="line">Animal animal = new Dog();</span><br><span class="line">//                ↑↑↑↑</span><br><span class="line">//                实际new出来的对象类型是「动态类型」—— Dog</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><font style="color:rgb(51, 51, 51);">当 Java 运行一个被覆盖的方法时，它会在其动态类型中搜索适当的方法签名并运行它。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">对象类</font></strong></p>
+<p><strong><font style="color:rgb(51, 51, 51);">java中所有的类都是对象类的子类。所以每个类都继承对象类的equal等等方法。</font></strong></p>
+<p><font style="color:rgb(51, 51, 51);">而有的类也是接口地实际实现。封装：下层地实现对上层不可见，上层调用下层地类或者方法是不需要关注它是如何实现的，减少大量工程的复杂度。但是</font><strong><font style="color:rgb(51, 51, 51);">继承有时会打破封装</font></strong><font style="color:rgb(51, 51, 51);">产生bug。</font></p>
+<p><font style="color:rgb(51, 51, 51);">new右边的类代表了变量的动态类型（运行时类型）而等号的左边或声明语句定义了类的静态类型（编译时类型）。编译器检查时会看编译时类型而动态方法选择会看变量的动态类型。子类动态类型可以赋予给父类但不可以反过来。</font></p>
+<p><font style="color:rgb(51, 51, 51);">通过（）中定义类型可以使得该语句跳过类型检查。但这并不会改变原变量的类型（动态或静态），只是让编译器将后面的作为括号中的类。</font></p>
+<p><font style="color:rgb(51, 51, 51);">Java中需要调用通过重写接口方法类实现高级函数（将函数作为参数）。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">多态性 Polymorphism</font></strong></p>
+<p><strong><font style="color:rgb(51, 51, 51);">「一个接口，多种实现」</font></strong><font style="color:rgb(51, 51, 51);"> 或者 </font><strong><font style="color:rgb(51, 51, 51);">「调用同一个方法，不同对象有不同的表现」</font></strong><font style="color:rgb(51, 51, 51);">。</font></p>
+<p><font style="color:rgb(51, 51, 51);">从如何泛型max函数讲起。通过设置定义接口在每个类中继承并实现比较的方法。也可以通过Java中自带的一个接口Comparable</font><font style="color:rgb(167, 167, 167);"><T></font><font style="color:rgb(51, 51, 51);">，但具有泛型的功能。同时在Java中还有一个Comparator的类可以实现按类特定的属性排序。通过在类中定义Comparator子类来实现比较方法。</font></p>
+<p><font style="color:rgb(51, 51, 51);">后边讲了Java中的图和集合。相比于python中定义字典和集合只需要使用{ }即可。在Java中则需要准确定义集合或是字典键值对应的类型，同时需要选择其中的实现方式。语法相对复杂但也正因如此自定义程度更高，也能够根据需要选择合适的实现方式，提高效率。抽象数据类型与介于接口和具体的类之间，在抽象数据类型中的方法默认需要书写其实现通过abstract语句可以不用编写实现，方法可以是私有的但同样不能被实例化。最后介绍了引用Java中的包。</font></p>
+<h2 id="泛型与包装"><a href="#泛型与包装" class="headerlink" title="泛型与包装"></a><font style="color:rgb(51, 51, 51);">泛型与包装</font></h2><p><strong><font style="color:rgb(51, 51, 51);">java中的每个基本类型的变量都对应一个包装类（wrapper calss）也称为引用类</font></strong><font style="color:rgb(51, 51, 51);">，比如在对于一些泛型的类和方法我们在使用的时候会根据需要定义其类型（如Integer）。这些就是包装类。两者其实可以换转换。Java语法可以自动将基本类转换为引用类（int→Integer）也可以将引用类转换为基本类。但对于数组是无法自动包装和解包装。但实际上使用引用类会占用更多的内存，两者之间的转换会影响性能。</font></p>
+<p><font style="color:rgb(51, 51, 51);">同时Java也会自动拓宽（Widening）根据情况需要原变量。比如将一个int的变量输入给函数，但该函数需要的是double型。但反过来就需要手动转换。</font></p>
+<p><font style="color:rgb(51, 51, 51);">可变的数据类型诸如之前定义的数组是可以使用方法对其进行更改。在Java中使用final关键词可以定义恒定值，无法被修改。但对于类等数据，在其声明时加入关键词智能保证其对应的变量名内存地址不变。</font></p>
+<p><font style="color:rgb(51, 51, 51);">后面构建的map类型，类似于字典具有键值对应的关系。但对于其泛型类型，由于键和值的组合对应在编写map中的一些方法时需要进行一些改变。例如：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;K,V&gt; V get(Map61B&lt;K,V&gt; map, K key) &#123;</span><br><span class="line">    if map.containsKey(key) &#123;</span><br><span class="line">        return map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><font style="color:rgb(51, 51, 51);">同时为了比较键的需要，需要对应的泛型带有比较方法。</font></p>
+<p>public static &lt;K extends Comparable<K>, V&gt; K maxKey(Map61B&lt;K, V&gt; map) {…}</p>
+<h2 id="异常，迭代与对象方法"><a href="#异常，迭代与对象方法" class="headerlink" title="异常，迭代与对象方法"></a><font style="color:rgb(51, 51, 51);">异常，迭代与对象方法</font></h2><p><font style="color:rgb(51, 51, 51);">使用import语句可以调用Java中提供的数组接口及其对应的实现，同样也包括集合。使用throw关键词可以返回带有错误信息的语句并使得程序停止运行（不过课程里面的代码使用throw更多一些）。使用try catch语句也可以实现一场捕获。</font></p>
+<p><font style="color:rgb(51, 51, 51);">要对用户构造的类实现类似for (String city : s)的迭代操作。借助迭代器的接口在类实现时嵌套对应迭代器类的实现来实现上述功能。相关接口包括</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public interface Iterable&lt;T&gt; &#123;</span><br><span class="line">    Iterator&lt;T&gt; iterator();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface Iterator&lt;T&gt; &#123;</span><br><span class="line">    boolean hasNext();</span><br><span class="line">    T next();</span><br><span class="line">&#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><font style="color:rgb(51, 51, 51);">使用</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public Iterator&lt;T&gt; iterator() &#123;</span><br><span class="line">        return new ArraySetIterator();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class ArraySetIterator implements Iterator&lt;T&gt; &#123;</span><br><span class="line">        private int wizPos;</span><br><span class="line"></span><br><span class="line">        public ArraySetIterator() &#123;</span><br><span class="line">            wizPos = 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public boolean hasNext() &#123;</span><br><span class="line">            return wizPos &lt; size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public T next() &#123;</span><br><span class="line">            T returnItem = items[wizPos];</span><br><span class="line">            wizPos += 1;</span><br><span class="line">            return returnItem;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><font style="color:rgb(51, 51, 51);">所有的类都是继承对象类的方法(Object Methods)，但对于自定义的一些类（数组等）其继承的方法不一定适用，可以通过一些重构来实现。</font></p>
+<h2 id="包，访问控制及特性"><a href="#包，访问控制及特性" class="headerlink" title="包，访问控制及特性"></a><font style="color:rgb(51, 51, 51);">包，访问控制及特性</font></h2><p><font style="color:rgb(51, 51, 51);">包是组织一系列类和接口的命名空间。声明和调用类时需要完整的包名和类名字可以通过在代码开头添加import语句来省略。通过intelliJ可以直接创建包。报名字中的.符号的分割会以文件目录的形成创建层次文件夹。（将.看作\）；</font></p>
+<p><font style="color:rgb(51, 51, 51);">如果在编写类时没有在代码开头写明包，则会自动归类到默认包中默认包中的类无法被在其他包中调用。JAR文件是一种类似压缩包的东西，可以将包中的Java文件打包到一块。</font></p>
+<h3 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a><font style="color:rgb(51, 51, 51);">访问控制</font></h3><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://cdn.nlark.com/yuque/0/2026/png/40667138/1770296441397-0cb1b3b4-f37d-4504-9bc9-efde0b48ed81.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://cdn.nlark.com/yuque/0/2026/png/40667138/1770296441397-0cb1b3b4-f37d-4504-9bc9-efde0b48ed81.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fcdn.nlark.com%2Fyuque%2F0%2F2026%2Fpng%2F40667138%2F1770296441397-0cb1b3b4-f37d-4504-9bc9-efde0b48ed81.png%22%3E" ><span class="placeholder" ></span></span></a></span></p>
+<p><font style="color:rgb(119, 119, 119);">回过头来再看自己学习的时候做的笔记，虽然确实有些细节已经记的不太清楚，但却不知不觉发现已经走了很远了。</font></p>
+<h2 id="引用及资源"><a href="#引用及资源" class="headerlink" title="引用及资源"></a><font style="color:rgb(51, 51, 51);">引用及资源</font></h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://joshhug.gitbooks.io/hug61b/content/"><font style="color:rgb(65, 131, 196);">课程阅读材料</font></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://sp18.datastructur.es/"><font style="color:rgb(65, 131, 196);">CS61B Sp18课程表</font></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://csdiy.wiki/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/CS61B/"><font style="color:rgb(65, 131, 196);">CS自学指南对CS61B的介绍</font></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qt411W7dh"><font style="color:rgb(65, 131, 196);">bilibili英文字幕搬运视频</font></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.mcatin.com/course/15"><font style="color:rgb(65, 131, 196);">mcatin中文字幕视频</font></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://qiushao-e.github.io/2024/08/19/CS61B_Notes/#Week-1"><font style="color:rgb(65, 131, 196);">CS61B 笔记 - Home</font></a></p>
+</li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2026/02/26/tech/Kotlin%E6%80%BB%E7%BB%93/"><span class="item-link">Kotlin总结</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2026/02/26/tech/H5%E4%B8%8EJS%E6%80%BB%E7%BB%93/"><span class="item-link">H5与JS总结</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/linen-theme/css/photoswipe.css?v=undefined" />
+<link rel="stylesheet" href="/linen-theme/css/photoswipe-dynamic-caption-plugin.css?v=undefined" />
+<script type="module" defer>
+  import PhotoSwipeLightbox from '/linen-theme/js/photoswipe/photoswipe-lightbox.esm.min.js?v=undefined';
+  import PhotoSwipe from '/linen-theme/js/photoswipe/photoswipe.esm.min.js?v=undefined';
+  import PhotoSwipeDynamicCaption from '/linen-theme/js/photoswipe/photoswipe-dynamic-caption-plugin.esm.js?v=undefined';
+  let isPswpOpening = false;
+  let hdrAssetsPrefix = '';
+  const getSafeAreaHeight = () => {
+    const el = document.getElementById('safe-area-test');
+    const height = window.getComputedStyle(el).height;
+    return parseInt(height) ?? 0
+  }
+  const smallScreenPadding = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  };
+  const largeScreenPadding = {
+    top: 30,
+    bottom: 30 + getSafeAreaHeight(),
+    left: 0,
+    right: 0
+  };
+  const isHDRScreen = window.screen.colorDepth >= 30;
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#post',
+    children: 'a.gallery-item',
+    bgOpacity: 1,
+    pswpModule: PhotoSwipe,
+    paddingFn: (viewportSize) => {
+      return viewportSize.x < 700 ? smallScreenPadding : largeScreenPadding
+    },
+  });
+
+  const getExif = (element) => {
+    const exifString = element?.dataset?.pspwExif || '';
+    const locationString = element?.dataset?.pspwLocation || '';
+    const matches = [...exifString.matchAll(/\{([^}]*)\}/g)].map(match => match[1])
+    if (matches?.length) {
+      const locationMatches = [...locationString.matchAll(/\{([^}]*)\}/g)].map(match => match[1]);
+      const keys = ['camera', 'lens', 'iso', 'focusLength', 'ev', 'aperture', 'shutterSpeed', 'hdr'];
+      const [camera, iso, focusLength, aperture, shutterSpeed, ev, lens, isHDR] = matches;
+      const isHDRActive = (isHDRScreen && (!!isHDR || element?.href?.includes(hdrAssetsPrefix)) && window.hdrEnabled) ? 'HDR' : ''
+      const exifObj = {
+        camera,
+        iso,
+        focusLength,
+        aperture,
+        shutterSpeed,
+        ev,
+        lens,
+        hdr: isHDRActive,
+        location: locationMatches?.length === 2 ? {
+          url: locationMatches[0],
+          title: locationMatches[1]
+        } : null
+      }
+      const altTextMap = {
+        camera: 'Camera',
+        iso: 'ISO',
+        focusLength: "Focus Length",
+        aperture: 'Aperture',
+        shutterSpeed: 'Shutter Speed',
+        ev: 'Exposure Value',
+        lens: 'Lens',
+        hdr: 'HDR Photo',
+        location: 'Location'
+      }
+      return `<div class="img-exif">${keys.map(key=>exifObj[key]?`<span class="${key}" title="${altTextMap[key]}">${typeof exifObj[key] === 'boolean' ? '' : exifObj[key]}</span>`: '').join('')}${exifObj.location ? `<a href="${exifObj.location.url}"><span class="location">${exifObj.location.title}</span></a>`: ''}</div>`
+    }
+    return ''
+  }
+  const captionPlugin = new PhotoSwipeDynamicCaption(lightbox, {
+    type: 'auto',
+  });
+
+  lightbox.addFilter('placeholderSrc', (placeholderSrc, content) => {
+    const thumbnail = content?.slide?.data?.msrc || ''
+    return thumbnail || placeholderSrc;
+  });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el, pswp) => {
+        lightbox.pswp.on('change', () => {
+          const currSlideElement = lightbox.pswp.currSlide.data.element;
+          let captionHTML = '';
+          if (currSlideElement) {
+            const gap = (window.innerHeight - lightbox.pswp.currSlide.data.height / lightbox.pswp.currSlide.data.width * window.innerWidth) / 2;
+            captionHTML = getExif(lightbox.pswp.currSlide.data?.element) || ''
+            if (window.innerWidth <= 600) {
+              el.style.top = `${gap}px`;
+              el.classList.add('mobile');
+            } else {
+              el.style.top = 'unset';
+              el.classList.remove('mobile');
+            }
+          }
+          el.innerHTML = captionHTML || '';
+        });
+      }
+    });
+  });
+
+  lightbox.on('beforeOpen', () => {
+    isPswpOpening = true;
+  });
+
+  lightbox.on('change', (e) => {
+    if (isPswpOpening) {
+      return isPswpOpening = false;
+    }
+    const currentImage = lightbox?.pswp?.currSlide?.data?.element;
+    currentImage && currentImage.scrollIntoView({
+      block: 'center',
+      behavior: 'instant'
+    })
+  });
+  lightbox.init();
+</script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

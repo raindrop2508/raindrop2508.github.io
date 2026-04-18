@@ -1,0 +1,338 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>奇异值分解（SVD）、主成分分析（PCA）和独立成分分析（ICA）</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="奇异值分解（SVD）、主成分分析（PCA）和独立成分分析（ICA）">
+<meta property="og:url" content="/2022/04/02/tech/pca/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="奇异值分解（SVD）" href="#奇异值分解（SVD）">奇异值分解（SVD）</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="矩阵SVD分解" href="#矩阵SVD分解">矩阵SVD分解</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="主成分分析（PCA）" href="#主成分分析（PCA）">主成分分析（PCA）</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="PCA的应用流程" href="#PCA的应用流程">PCA的应用流程</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="独立成分分析（ICA）" href="#独立成分分析（ICA）">独立成分分析（ICA）</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">奇异值分解（SVD）、主成分分析（PCA）和独立成分分析（ICA）</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2022-04-02T00:59:52.000Z">
+      4 月 2 日，2022
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>4</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>1666</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h2 id="奇异值分解（SVD）"><a href="#奇异值分解（SVD）" class="headerlink" title="奇异值分解（SVD）"></a>奇异值分解（SVD）</h2><p>奇异值分解是将矩阵分解为奇异向量（singular vector）和奇异值（singular value）。奇异值分解将原矩阵$A$分解为三个矩阵的乘积：</p>
+<p>$A_{mn}&#x3D;U_{mm}D_{mn}V_{nn}^{T}$</p>
+<p>其中矩阵$U$和$V$为正交矩阵，$D$为对角矩阵。$D$对角线上的元素称为$A$的奇异值，$U$的列向量被称为左奇异向量，$V$的列向量被称为右奇异向量。$A$的左奇异向量是$AA^{T}$的特征向量，$A$的右奇异向量是$A^{T}A$的特征向量。</p>
+<p>设$r(D)&#x3D;k$,$r(A)\leqslant r(D)&#x3D;k$,若切割矩阵$A$取$m$行$k$列,$D$取$k$行$k$列,$V^{T}$取$k$行$n$列，则$A_{mn}&#x3D;UDV^{T}$</p>
+<p>对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。即$A_{mn}&#x3D;U_{mm}D_{mn}V_{nn}^{T}\approx U_{mk}D_{kk}V_{kn}^T$</p>
+<h2 id="矩阵SVD分解"><a href="#矩阵SVD分解" class="headerlink" title="矩阵SVD分解"></a>矩阵SVD分解</h2><p>$$(A^{T}A)V_i&#x3D;\lambda_i V_i$$<br>$$(AA^{T})U_j&#x3D;\lambda_j U_j$$</p>
+<p>由$V$正交，得$AV&#x3D;UDV^TV&#x3D;UD$，所以有$Av_i&#x3D;\sigma_i u_i$。由此可以得到矩阵$D$</p>
+<h2 id="主成分分析（PCA）"><a href="#主成分分析（PCA）" class="headerlink" title="主成分分析（PCA）"></a>主成分分析（PCA）</h2><div id="gitalk-initiator"></div><p>主成分分析主作为一种降维方法，将高维数据映射到低维上，并被整在低的每个轴上的方差最大。</p>
+<p>推导的思路是：</p>
+<blockquote>
+<ul>
+<li><p>假设$Z&#x3D;DX$;$Z$为pca降维之后的数据，$X$为原数据</p>
+</li>
+<li><p>限制条件：$Z$中各行方差尽可能大(保证最大可分性)同时$D$中各行正交。（D可以理解为将原数据从一个空间投影到另一个空间的轴，各轴之间应保持正交。而原数据转移到另一个空间在每个轴上的方差也应尽可能大。）</p>
+</li>
+<li><p>要保证$Var(Z)&#x3D;\frac{1}{N}\sum{tr(ZZ^T)}$最大，即$D^T\frac{1}{N}\sum{(x-\bar{x})(x-\bar{x})^T}D&#x3D;D^TCov(x)D&#x3D;D^TSD$即使得$(D)^TSD$最大【（$x-\bar{x})(x-\bar{x})^T$对数据中心化】。  </p>
+</li>
+<li><p>经过推导利用拉格朗日乘子法最终可以得到$XX^TD&#x3D;D\Lambda$即$XX^Td_i&#x3D;\lambda d_i$。通过对$X$进行SVD可以代替特征值分解。抽取其中几维即可实现降维。  </p>
+</li>
+<li><p>为了使得$ZD^T$更接近$X$可以尽可能选择较大的特征值。</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="PCA的应用流程"><a href="#PCA的应用流程" class="headerlink" title="PCA的应用流程"></a>PCA的应用流程</h3><p>1.对输入的数据中心化处理<br>2.对于中心化的数据$X$,对$XX^T$做特征值分解<br>3.选择最大的的特征值对应的特征向量即为PCA降维后的数据</p>
+<p>对于输入中心化的数据X也可通过SVD分解的形式得到降维后的数据。</p>
+<h2 id="独立成分分析（ICA）"><a href="#独立成分分析（ICA）" class="headerlink" title="独立成分分析（ICA）"></a>独立成分分析（ICA）</h2><p>独立成分分析属于盲源分离的范畴。</p>
+<p>大多是根据“鸡尾酒会问题”来推导。鸡尾酒会问题假设会场上同时发言的任务与麦克风的数量相同。为了通过麦克风录制的声音分理处不同发言者的声音（这有点类似于分离出音乐中不同声部的声音）。</p>
+<p>主要思路是：</p>
+<blockquote>
+<ul>
+<li>假设个声音（信号）源相互独立，对数据分布指定CDF(概率累计函数，概率密度函数是概率累计函数的导数)</li>
+<li>使用似然估计和梯度上升推导出解混矩阵</li>
+</ul>
+</blockquote>
+<p>具体可以参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/376408679">ICA 独立成分分析</a></p>
+<p>注意：<br>1.无法恢复高斯信号（若信号源分布旋转对称，则无法恢复）；<br>2.“麦克风”数量不能少于“声源数量”；<br>3.假设各信号相互独立。</p>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html">李宏毅《机器学习》课程</a></li>
+<li><a target="_blank" rel="noopener" href="https://item.jd.com/11867803.html">周志华《机器学习》</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Mh411e7VU?p=14">【吃瓜教程】《机器学习公式详解》（南瓜书）与西瓜书公式推导直播合集</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/376408679">ICA 独立成分分析</a></li>
+<li><a target="_blank" rel="noopener" href="http://cs229.stanford.edu/syllabus-autumn2018.html">CS229-2018秋:吴恩达,机器学习，第十六课</a></li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2026/02/26/tech/MQTT3.1.1%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90/"><span class="item-link">MQTT3.1.1协议解析</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2021/08/30/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B07/"><span class="item-link">算法笔记7-图</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

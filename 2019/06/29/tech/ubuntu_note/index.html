@@ -1,0 +1,322 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Ubuntu笔记</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Ubuntu笔记">
+<meta property="og:url" content="/2019/06/29/tech/ubuntu_note/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="复制一个文件到指定目录" href="#复制一个文件到指定目录">复制一个文件到指定目录</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">Ubuntu笔记</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2019-06-29T19:00:55.000Z">
+      6 月 30 日，2019
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>2</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>961</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><blockquote>
+<p>这篇笔记会根据情况隔段时间更新一次</p>
+</blockquote>
+<h1 id="终端操作"><a href="#终端操作" class="headerlink" title="终端操作"></a>终端操作</h1><blockquote>
+<p>cd+文件夹名  进入文件夹 可以使用TAB键进行自动补全或选择 <br><br>cd   ..( 退出几层就加几个..)  退出到上n层路径<br>ls 显示文件夹中的目录<br>pwd 显示当前路径<br>gedit 使用文本编辑器编辑文件<br>cat 在终端中查看文件（多用做文本文件）<br>sudo  进入管理员模式（超级用户)<br>sudo su 进入根用户<br>nvidia-smi  查看显卡运行状态（A卡没有试过）</p>
+</blockquote>
+<p>在ubuntu中一些文件被写保护，需要更高级权限才能修改，可以在命令前加sudo  </p>
+<h2 id="复制一个文件到指定目录"><a href="#复制一个文件到指定目录" class="headerlink" title="复制一个文件到指定目录"></a>复制一个文件到指定目录</h2><blockquote>
+<p>(1) 在桌面上打开终端，输入sudo su<br>(2) 输入密码，就切换到root用户下<br>(3) 切换到桌面 命令输入为 cd 桌面<br>(4) 然后输入复制命令行 cp -r studio.zip &#x2F;home&#x2F;androidstudio<br>(5) 回车 大功告成 可以看看&#x2F;home&#x2F;androidstudio目录下是否有studio.zip  </p>
+</blockquote>
+<p>作者：飞奔的小付<br>来源：CSDN<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/feibendexiaoma/article/details/73739319">原文</a> </p>
+<p>移动文件（假设现在在该文件的目录下）</p>
+<blockquote>
+<p>sudo mv xxx.xx 新的位置的路径  </p>
+</blockquote>
+<p>解压文件 </p>
+<blockquote>
+<p>sudo unzip opencv-3.3.0.zip  </p>
+</blockquote>
+<p>重命名文件 </p>
+<blockquote>
+<p>sudo cp 原文件名 新文件名  </p>
+</blockquote>
+<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><p>软件安装前一般要先更新软件目录</p>
+<blockquote>
+<p>sudo apt-get update  </p>
+</blockquote>
+<p>升级已有软件</p>
+<blockquote>
+<p>sudo apt-get upgrade<br>常用软件安装<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f44e1ae080a5">https://www.jianshu.com/p/f44e1ae080a5</a></p>
+</blockquote>
+<p>下载好网易云音乐安装完成后可能会遇到问题打不开。可以在终端中使用</p>
+<blockquote>
+<p>sudo netease  TAb(自动补全)  </p>
+</blockquote>
+<p>当下在好软件安装包后，也可以在本地安装</p>
+<blockquote>
+<p>sudo sh xxx.sh<br>dpkg -i xxx.deb</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://jingyan.baidu.com/article/335530da98061b19cb41c31d.html">google浏览器安装</a>  </p>
+<h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sannerlittle/article/details/77479656">没有声音解决办法</a><br>具体情况是：可以调节音量，但却没有声音<br> 这个问题到现在，我仍旧是每次开机仍要打开文章中所说的软件修改一次<br>ubuntu和win双系统中无法访问win中的磁盘分区  </p>
+<blockquote>
+<p>sudo ntfsfix &#x2F;dev&#x2F;磁盘号<br>如sudo ntfsfix &#x2F;dev&#x2F;sda6</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010801439/article/details/79485914">ubuntu中python2和3共存</a> </p>
+<blockquote>
+<p>source activate  [要激活的环境名称]<br>source deactivate  </p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://linux.cn/article-5409-1.html">如何修复 apt-get update 无法添加新的 CD-ROM 的错误</a></p>
+<p><strong>侵权即删</strong></p>
+<div id="gitalk-initiator"></div></div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2019/08/17/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%BF%EF%BC%91/"><span class="item-link">Yolo学习笔记＿１</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

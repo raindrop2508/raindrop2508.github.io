@@ -1,0 +1,408 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>算法笔记6-树</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="算法笔记6-树">
+<meta property="og:url" content="/2021/08/30/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B06/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="树的实现" href="#树的实现">树的实现</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="嵌套列表实现" href="#嵌套列表实现">嵌套列表实现</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="树的链表实现" href="#树的链表实现">树的链表实现</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="应用" href="#应用">应用</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="树的遍历-Tree-Traversals" href="#树的遍历-Tree-Traversals">树的遍历(Tree Traversals)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="优先队列与二叉堆" href="#优先队列与二叉堆">优先队列与二叉堆</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="二叉堆（Binary-Heap）实现优先队列" href="#二叉堆（Binary-Heap）实现优先队列">二叉堆（Binary Heap）实现优先队列</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="二叉堆" href="#二叉堆">二叉堆</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="二叉堆操作的实现" href="#二叉堆操作的实现">二叉堆操作的实现</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="二叉查找树（Binary-Search-Tree）" href="#二叉查找树（Binary-Search-Tree）">二叉查找树（Binary Search Tree）</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="二叉搜索树的实现" href="#二叉搜索树的实现">二叉搜索树的实现</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="平衡二叉树（AVL-Tree）" href="#平衡二叉树（AVL-Tree）">平衡二叉树（AVL Tree）</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="重新平衡" href="#重新平衡">重新平衡</a></li>
+              
+            </ul>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">算法笔记6-树</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2021-08-30T19:53:11.000Z">
+      8 月 31 日，2021
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>8</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>1888</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><ul>
+<li>非线性数据结构；</li>
+<li>包括根，枝，叶三部分；也可以说由节点(node)和边(edge)组成；</li>
+<li>层次化，各个子节点之间独立每个叶节点具有唯一性；</li>
+<li>树中所有节点的最大曾经称为树的高度<strong>根节点所在的层级为0</strong>。</li>
+</ul>
+<h2 id="树的实现"><a href="#树的实现" class="headerlink" title="树的实现"></a>树的实现</h2><h3 id="嵌套列表实现"><a href="#嵌套列表实现" class="headerlink" title="嵌套列表实现"></a>嵌套列表实现</h3><p>子树结构与树相同，是一种<strong>递归</strong>数据结构。</p>
+<blockquote>
+<p><code>atree=[&#39;a&#39;,[&#39;left&#39;,[],[]],[&#39;right&#39;,[],[]]]</code></p>
+</blockquote>
+<p>插入方法的实现(以插入左树为例)。</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">insertLeft</span>(<span class="params">root,newBranch</span>):</span><br><span class="line">  t = root.pop(<span class="number">1</span>)  </span><br><span class="line">  <span class="comment">#提取左子节点</span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">len</span>(t) &gt; <span class="number">1</span>:</span><br><span class="line">  <span class="comment">#如果左子节点存在，则需要先插入新节点再将原来的节点作为其左子节点   </span></span><br><span class="line">    root.insert(<span class="number">1</span>,[newBranch,t,[]])</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    root.insert(<span class="number">1</span>,[newBranch,[],[]])</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h3 id="树的链表实现"><a href="#树的链表实现" class="headerlink" title="树的链表实现"></a>树的链表实现</h3><ul>
+<li>节点链表法：链表中每个节点保存节点的数据项以及左右子树的链接。</li>
+</ul>
+<p>插入方法：加入中间变量，将插入节点与原先节点相连接。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>树表示表达式</li>
+</ul>
+<h2 id="树的遍历-Tree-Traversals"><a href="#树的遍历-Tree-Traversals" class="headerlink" title="树的遍历(Tree Traversals)"></a>树的遍历(Tree Traversals)</h2><div id="gitalk-initiator"></div><p>遍历(Traversals)：对数据集中所有数据进行访问。对于线性数据结构，按顺序访问即可。</p>
+<p>树的遍历包括：前序遍历（根–左–右），中序遍历（左–根–右）和后序遍历（左–右–根）。</p>
+<h2 id="优先队列与二叉堆"><a href="#优先队列与二叉堆" class="headerlink" title="优先队列与二叉堆"></a>优先队列与二叉堆</h2><p>优先队列：先入先出，内部次序由优先级确定</p>
+<h3 id="二叉堆（Binary-Heap）实现优先队列"><a href="#二叉堆（Binary-Heap）实现优先队列" class="headerlink" title="二叉堆（Binary Heap）实现优先队列"></a>二叉堆（Binary Heap）实现优先队列</h3><p>入队和出队的复杂度均为O（log n）。如果使操作始终保持再对数量级上，二叉树必须保持平衡。可以通过完全二叉树近似实现平衡。</p>
+<p>完全二叉树：叶节点最多只出现在最底层和次底层；最底层的叶节点集中在左边（最多由有一个节点例外）。</p>
+<p>性质：若节点下表为p,则其左子节点下标为2p，右子节点下标为2p+1。所以可以使用非嵌套列表表示完全二叉树。</p>
+<p>堆次序（Heap Order）：父节点的key小于其子节点。</p>
+<h3 id="二叉堆"><a href="#二叉堆" class="headerlink" title="二叉堆"></a>二叉堆</h3><p>二叉堆的性质：</p>
+<ul>
+<li>完全二叉树：可以用非嵌套数组表示</li>
+<li>堆：任意路径为有序数列。</li>
+</ul>
+<h3 id="二叉堆操作的实现"><a href="#二叉堆操作的实现" class="headerlink" title="二叉堆操作的实现"></a>二叉堆操作的实现</h3><p>列表保存堆数据，列表中下标为0项不用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinHeap</span>:</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">__init__</span>():</span><br><span class="line">    <span class="variable language_">self</span>.heapList = [<span class="number">0</span>]</span><br><span class="line">    <span class="variable language_">self</span>.currentsize = <span class="number">0</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<ul>
+<li><p><code>insert（key）</code></p>
+<p>为了保证二叉堆中堆的性质，需要将插入key上浮至正确的位置。插入时先添加到末尾并改变二叉树currentsize的值，之后进行上浮操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#上浮(i 二叉树节点数)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">perUp</span>(<span class="params">self,i</span>):</span><br><span class="line">  <span class="keyword">while</span> i // <span class="number">2</span> &gt; <span class="number">0</span>:  <span class="comment">#到根节点j结束循环</span></span><br><span class="line">    <span class="comment">#与父节点比较</span></span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>.heapList[i] &lt; <span class="variable language_">self</span>.heapList[i//<span class="number">2</span>]:   </span><br><span class="line">      <span class="comment">#与父节点交换位置</span></span><br><span class="line">      i = i // <span class="number">2</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+</li>
+<li><p><code>delMin()</code></p>
+<p>删除堆中最小的key，即根节点。最后一个节点代替根节点并下沉。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下沉</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">percDown</span>(<span class="params">self,i</span>):</span><br><span class="line">  <span class="comment"># 是否存在左节点</span></span><br><span class="line">  <span class="keyword">while</span> (i * <span class="number">2</span>) &lt;= <span class="variable language_">self</span>.currentSize:</span><br><span class="line">    mc = <span class="variable language_">self</span>.minChild(i) <span class="comment"># 返回子节点的较小值的位置</span></span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>.heapList[i] &gt; <span class="variable language_">self</span>.heapList[mc]:</span><br><span class="line">      <span class="comment"># 交换下沉</span></span><br><span class="line">      ......</span><br><span class="line">    i = mc</span><br></pre></td></tr></table><div class="copy-btn"></div></figure></li>
+<li><p><code>buildHeap(lst)</code></p>
+<p>利用下沉法从无序表生成堆。从最后一个节点的父节点处开始下沉（<code>len(list)//2</code>处），并不断迭代；为保证完全二叉树的性质，需要在无序表前端插入一个空值。</p>
+</li>
+</ul>
+<h2 id="二叉查找树（Binary-Search-Tree）"><a href="#二叉查找树（Binary-Search-Tree）" class="headerlink" title="二叉查找树（Binary Search Tree）"></a>二叉查找树（Binary Search Tree）</h2><p>二叉查找树比父节点大key的在右子树，比父节点小的key在左子树。</p>
+<h3 id="二叉搜索树的实现"><a href="#二叉搜索树的实现" class="headerlink" title="二叉搜索树的实现"></a>二叉搜索树的实现</h3><ul>
+<li><p><code>put(key,val)</code></p>
+<p>插入key构造BST。若无节点直接将插入节点作为根节点否则调用函数<code>_put(key,val,root)</code>来放至key。在该辅助函数中，若key比当前节点小，则放到左子树；若比当前节点大则放到右子树。索引赋值与插入方法相同，对于此类特殊方法需要前后加双下划线。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38608897/article/details/103834936">二叉树是一种动态查找表。特点是，树的结构不是一次生成的，而是在查找过程中，当树中不存在关键字等于给定值的结点时再进行插入。新插入的结点一定是一个新添加的叶子结点，并且是查找不成功时查找路径上访问的最后一个结点的左孩子或右孩子结点。</a></p>
+</blockquote>
+</li>
+<li><p><code>get(self,key)</code>  </p>
+<p>若根节点不存在返回空值，否则调用调用函数<code>_get(self,key,currentNode)</code>。在该函数中若找当对应的key则返回，否则比较key与树中key的大小，对其左、右子树递归调用函数。</p>
+</li>
+<li><p>迭代器<code>__iter__(self)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">  <span class="keyword">if</span> <span class="variable language_">self</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>.hasLeftChild():</span><br><span class="line">      <span class="keyword">for</span> elem <span class="keyword">in</span> <span class="variable language_">self</span>.leftChild:</span><br><span class="line">        <span class="comment"># in在这里相当于递归</span></span><br><span class="line">        <span class="keyword">yield</span> elem</span><br><span class="line">    <span class="keyword">yield</span> <span class="variable language_">self</span>.key</span><br><span class="line">    ......</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+</li>
+<li><p><code>delete(self,key)</code><br>先用_get方法找到要删除的节点之后执行删除<code>self.remove(nodeToRemove)</code>。删除节点时的情况：</p>
+<ol>
+<li>该节点无子节点（叶节点）—直接执行删除。</li>
+<li>该节点有一个子节点—删除后将其子节点与其父节点连接，并对“删除节点是父节点的左&#x2F;右节点？删除节点唯一子节点是其左&#x2F;右节点？被删节点为根节点？”进行讨论。</li>
+<li>该节点有两个子节点—将被删节点右子树最小的节点（根据BST的性质该节点有右子节点或为叶节点）替换被删节点。</li>
+</ol>
+</li>
+</ul>
+<p>二叉查找树的性能受到插入顺序的影响。</p>
+<h2 id="平衡二叉树（AVL-Tree）"><a href="#平衡二叉树（AVL-Tree）" class="headerlink" title="平衡二叉树（AVL Tree）"></a>平衡二叉树（AVL Tree）</h2><p>在实现过程中，与 BST差别在于需要对每个节点加入平衡因子。平衡因子是左右子树的高度差，大于0为左重，小于0为右重。平衡树的每个节点的平衡因子在-1到1之间。AVL树的搜索时间复杂度为O（log n）。</p>
+<p>在插入方法中需要接入更新平衡因子的函数，自下而上更新每个节点的平衡因子。</p>
+<h3 id="重新平衡"><a href="#重新平衡" class="headerlink" title="重新平衡"></a>重新平衡</h3><p>将不平衡的子树进行旋转实现，左重右旋，右重左旋，左旋挂右，右旋挂左。在旋转过程中，只有新根节点和就根节点的平衡因子发生了变化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rotateLeft</span>(<span class="params">self,rotRoot</span>):</span><br><span class="line">  newRoot = rotRoot.rightChild</span><br><span class="line">  rotRoot.rightChild = newRoot.leftChild</span><br><span class="line">  <span class="comment"># 新根左子节点，挂到旧根的右子节点,父与子相连。左旋挂右。</span></span><br><span class="line">  <span class="keyword">if</span> newRoot.leftChild != <span class="literal">None</span>:</span><br><span class="line">    newRoot.leftChild.parent = rotRoot </span><br><span class="line">    <span class="comment"># 子与父相连</span></span><br><span class="line">    ... ...</span><br><span class="line">    <span class="comment"># 整理节点之间关系</span></span><br><span class="line">    ... ...</span><br><span class="line">    rotRoot.blanceFactor = rotRoot.balanceFactor + <span class="number">1</span> - <span class="built_in">min</span>(newRoot.balanceFactor,<span class="number">0</span>)</span><br><span class="line">    newRoot.blanceFactor = newRoot.balanceFactor + <span class="number">1</span> + <span class="built_in">max</span>(newRoot.balanceFactor,<span class="number">0</span>)</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>在左旋要检查右子节点的因子，若右子节点左重则应先右旋在左旋。同样，右旋也需要进行类似操作。</p>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/PKU-1206307812">数据结构与算法Python版_中国大学MOOC(慕课)</a></li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2021/08/30/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B07/"><span class="item-link">算法笔记7-图</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2021/06/18/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B05/"><span class="item-link">算法笔记5_排序与查找</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

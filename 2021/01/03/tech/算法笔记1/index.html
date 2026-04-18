@@ -1,0 +1,476 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>算法笔记1</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="算法笔记1">
+<meta property="og:url" content="/2021/01/03/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B01/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="算法和算法复杂性" href="#算法和算法复杂性">算法和算法复杂性</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="程序与算法的区别" href="#程序与算法的区别">程序与算法的区别</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="数量级的计算" href="#数量级的计算">数量级的计算</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="暴力法" href="#暴力法">暴力法</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="计数比较" href="#计数比较">计数比较</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="list和dict" href="#list和dict">list和dict</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="pop的复杂度" href="#pop的复杂度">pop的复杂度</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">算法笔记1</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2021-01-03T21:09:08.000Z">
+      1 月 4 日，2021
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>6</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>859</small>
+
+  <small>个字</small>
+
+  <small>，</small>
+
+  <small>1</small>
+
+  <small>张图片</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h1 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h1><h2 id="算法和算法复杂性"><a href="#算法和算法复杂性" class="headerlink" title="算法和算法复杂性"></a>算法和算法复杂性</h2><p>可计算的问题：  </p>
+<ul>
+<li>what：分类问题——树状判定分支</li>
+<li>why： 证明问题——公式序列解决</li>
+<li>how： 或称问题——算法流程解决</li>
+</ul>
+<p>欧几里得算法的python实现  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">alg</span>(<span class="params">a,b</span>):</span><br><span class="line">    <span class="keyword">if</span> b==<span class="number">0</span> :</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line">    <span class="built_in">print</span>(a)</span><br><span class="line">    c=a%b</span><br><span class="line">    alg(b,c)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():   <span class="comment">#a,b为要计算的两个数</span></span><br><span class="line">    a=<span class="number">15</span></span><br><span class="line">    b=<span class="number">9</span></span><br><span class="line">    <span class="built_in">print</span>(alg(a,b))</span><br><span class="line">main()</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>计算复杂性研究的是问题的难度，算法实在资源约束的情况下寻找最优方案。  </p>
+<p>不可计算问题  </p>
+<ul>
+<li>停机问题</li>
+<li>几乎所有无理数都无法通过算法找出任意一位精确数</li>
+</ul>
+<h2 id="程序与算法的区别"><a href="#程序与算法的区别" class="headerlink" title="程序与算法的区别"></a>程序与算法的区别</h2><p>算法是描述问题解决的分布步骤而程序则是通过某种编程语言实现的算法。<br>算法分析主要是从计算机资源消耗的角度来评判和比较算法。评判的两个标准有两种：算法执行时间和空间（内存或存储空间）。  </p>
+<p>利用python的time库中 <code>time.time()</code>函数可以计算算法的执行时间。  </p>
+<blockquote>
+<figure class="highlight plaintext"><figcaption><span>是计算从1970到现在的时长，并将值返回。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">对于算法运行时间的检测也收到语言性能、机器的性能的影响。  </span><br><span class="line"></span><br><span class="line">## 大O表示法</span><br><span class="line"></span><br><span class="line">一个算法所实施的操作数量或步骤可作为独立于程序/机器的度量指标。  </span><br><span class="line">程序设计语言中除与计算资源无关的定义语句外，主要是三种控制流语句和赋值语句。  </span><br><span class="line"></span><br><span class="line">**一个赋值语句包含了（表达式）计算和（变量）存储两个基本资源。而控制流语句仅起组织语句的作用，并不涉及处理。**</span><br><span class="line"></span><br><span class="line">算法分析的目标是找出问题规模如何影响执行时间</span><br><span class="line"></span><br><span class="line">### 数量级函数</span><br><span class="line"></span><br><span class="line">数量级函数描述了T（n）中随着n增加而增加速度最快的主导部分。称作大O表示法记作O(f(n)),其中f(n)表示T(n)中的主导部分。</span><br><span class="line"></span><br><span class="line">T(n)=5n^2+27n+1005   </span><br><span class="line">当n越来越大起主导作用的是5*n^2,其中系数5对n^2的增长速度无影响。因此可以表示为O(n^2)</span><br><span class="line"></span><br><span class="line">具体数据也会影响算法运行时间，如排序算法。此时分为最好，最差和平均状况，主要还是通过平均状况分析性能。  </span><br><span class="line"></span><br><span class="line">![](https://s2.ax1x.com/2020/02/03/10fUJO.png)</span><br><span class="line"></span><br><span class="line">大O表示所有上限中最小的那个上限  </span><br><span class="line">大Ω表示所有下限中最大的那个下限  </span><br><span class="line">如果上下限相同用Θ大表示  </span><br><span class="line"></span><br><span class="line">## 变位词</span><br><span class="line"></span><br><span class="line">写一个布尔函数，一两个此作为参数，返回两个词是否为变位词</span><br><span class="line"></span><br><span class="line">- 将每一个单词逐个检查  </span><br><span class="line"></span><br><span class="line">课程给的代码示例：</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">def solu1_example(s1,s2):</span><br><span class="line">   alist = list(s2)</span><br><span class="line">   pos1 = 0</span><br><span class="line">   stillok = True</span><br><span class="line">   while pos1 &lt; len(s1) and stillok: #只要字符中有一个没找到就可以通过32行退出</span><br><span class="line">       pos2 = 0</span><br><span class="line">       found =False</span><br><span class="line">       while pos2 &lt; len(alist) and not found:     </span><br><span class="line">           if s1[pos2] ==  alist[pos2]:</span><br><span class="line">               found = True</span><br><span class="line">           else:</span><br><span class="line">               pos2 = pos2 + 1</span><br><span class="line">           if found:</span><br><span class="line">               alist[pos2] = None</span><br><span class="line">           else:</span><br><span class="line">               stillok = False</span><br><span class="line">       pos1 = pos1 + 1</span><br><span class="line">   return stillok   </span><br></pre></td></tr></table><div class="copy-btn"></div></figure></blockquote>
+<p>如果将自己一个一个对比，要注意同一个字符在字符串中可能会出现很多次。因此，在判断是找到一个相同时必须要设置为none</p>
+<h3 id="数量级的计算"><a href="#数量级的计算" class="headerlink" title="数量级的计算"></a>数量级的计算</h3><p>两层循环，外层循环为n次，每次到内层每次循环查找次数为1–n之间。因此总和为：1&#x2F;2*(n^2)+1&#x2F;2*n。所以数量级为O(n^2)</p>
+<ul>
+<li>排序比较：先将字符串按字母顺序排好，再一一对比</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">solu2</span>(<span class="params">s1,s2</span>):</span><br><span class="line">    alist1 = <span class="built_in">list</span>(s1)</span><br><span class="line">    alist2 = <span class="built_in">list</span>(s2)</span><br><span class="line"></span><br><span class="line">    alist1.sort()    <span class="comment">#列表排序函数</span></span><br><span class="line">    alist2.sort()</span><br><span class="line">    pos=<span class="number">0</span></span><br><span class="line">    matches = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">while</span> pos &lt; <span class="built_in">len</span>(s1) <span class="keyword">and</span> matches:</span><br><span class="line">        <span class="keyword">if</span> alist1[pos] == alist2[pos]:</span><br><span class="line">            pos = pos + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            matches = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> matches</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>看似很简单仅有一个循环，但在两个数组排序过程消耗的时间不可忽视。时间运算数量级为O(nlog n)</p>
+<h3 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h3><p>将S1中的字符进行全排列，然后查看S2是否在其中。<br>用暴力算法解决时，数量级会以N!的方式增长。</p>
+<h3 id="计数比较"><a href="#计数比较" class="headerlink" title="计数比较"></a>计数比较</h3><p>检查26个字母在字符中出现的情况，若两者相同则输出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">T(n)=2n + 26;  </span><br><span class="line">因此数量级为O(n);相比之下，该项算法性能较优，然而该算法需要的内存空间较大。  </span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">def solu4(s1,s2):</span><br><span class="line">    c1 = [0] * 26</span><br><span class="line">    c2 = [0] * 26</span><br><span class="line">    for i in range(len(s1)):</span><br><span class="line">        pos = ord(s1[i]) - ord(&#x27;a&#x27;)   #返回一个字符的uincode编码</span><br><span class="line">        c1[pos] = c1[pos] + 1</span><br><span class="line">    for i in range(len(s2)):</span><br><span class="line">        pos = ord(s2[i]) - ord(&#x27;a&#x27;)</span><br><span class="line">        c2[pos] = c2[pos] + 1</span><br><span class="line">    j = 0</span><br><span class="line">    stillok = True</span><br><span class="line">    while j &lt; 26 and stillok:</span><br><span class="line">        if c1[j] == c2[j]:</span><br><span class="line">            j = j + 1</span><br><span class="line">        else:</span><br><span class="line">            stillok = False</span><br><span class="line">        return stillok</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h1 id="Python数据类型的性能"><a href="#Python数据类型的性能" class="headerlink" title="Python数据类型的性能"></a>Python数据类型的性能</h1><h2 id="list和dict"><a href="#list和dict" class="headerlink" title="list和dict"></a>list和dict</h2><div id="gitalk-initiator"></div><p><span class="lazyload-outer-wrap" style="width: 100%;"><a class="gallery-item" href="https://s2.ax1x.com/2020/03/02/3WYNM6.png" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280"  data-cropped="true" target="_blank" rel="noopener"  ><noscript><img src="https://s2.ax1x.com/2020/03/02/3WYNM6.png" alt="3WYNM6.png"></noscript><span class="lazyload-wrap" data-content="%3Cimg%20src%3D%22https%3A%2F%2Fs2.ax1x.com%2F2020%2F03%2F02%2F3WYNM6.png%22%20alt%3D%223WYNM6.png%22%3E" ><span class="placeholder" ></span></span></a><span class="caption" >3WYNM6.png</span></span></p>
+<p>按索引取值和赋值：由于列表的随机访问特性，均为O(1)  </p>
+<p>列表添加append()和_add_()”+”  </p>
+<ul>
+<li>list.append(v)–O(1),lst&#x3D; lst+ [v]  </li>
+<li>实行时间为O(n+k),k为所加列表长度</li>
+</ul>
+<h2 id="pop的复杂度"><a href="#pop的复杂度" class="headerlink" title="pop的复杂度"></a>pop的复杂度</h2><p>从尾部移除数组的元素是复杂度为O(1),移除数组中某一元素为O(N)；原因是移除中间元素需要将这个元素后面的元素前移。这是为了保证按索引取值和赋值速度的妥协。</p>
+<p>在列表中in操作复杂度为O(N),字典中为O(1)。</p>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/PKU-1206307812">数据结构与算法Python版_中国大学MOOC(慕课)</a></li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2021/01/03/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B02/"><span class="item-link">算法笔记2</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2021/01/03/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B00/"><span class="item-link">算法笔记0</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/linen-theme/css/photoswipe.css?v=undefined" />
+<link rel="stylesheet" href="/linen-theme/css/photoswipe-dynamic-caption-plugin.css?v=undefined" />
+<script type="module" defer>
+  import PhotoSwipeLightbox from '/linen-theme/js/photoswipe/photoswipe-lightbox.esm.min.js?v=undefined';
+  import PhotoSwipe from '/linen-theme/js/photoswipe/photoswipe.esm.min.js?v=undefined';
+  import PhotoSwipeDynamicCaption from '/linen-theme/js/photoswipe/photoswipe-dynamic-caption-plugin.esm.js?v=undefined';
+  let isPswpOpening = false;
+  let hdrAssetsPrefix = '';
+  const getSafeAreaHeight = () => {
+    const el = document.getElementById('safe-area-test');
+    const height = window.getComputedStyle(el).height;
+    return parseInt(height) ?? 0
+  }
+  const smallScreenPadding = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  };
+  const largeScreenPadding = {
+    top: 30,
+    bottom: 30 + getSafeAreaHeight(),
+    left: 0,
+    right: 0
+  };
+  const isHDRScreen = window.screen.colorDepth >= 30;
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#post',
+    children: 'a.gallery-item',
+    bgOpacity: 1,
+    pswpModule: PhotoSwipe,
+    paddingFn: (viewportSize) => {
+      return viewportSize.x < 700 ? smallScreenPadding : largeScreenPadding
+    },
+  });
+
+  const getExif = (element) => {
+    const exifString = element?.dataset?.pspwExif || '';
+    const locationString = element?.dataset?.pspwLocation || '';
+    const matches = [...exifString.matchAll(/\{([^}]*)\}/g)].map(match => match[1])
+    if (matches?.length) {
+      const locationMatches = [...locationString.matchAll(/\{([^}]*)\}/g)].map(match => match[1]);
+      const keys = ['camera', 'lens', 'iso', 'focusLength', 'ev', 'aperture', 'shutterSpeed', 'hdr'];
+      const [camera, iso, focusLength, aperture, shutterSpeed, ev, lens, isHDR] = matches;
+      const isHDRActive = (isHDRScreen && (!!isHDR || element?.href?.includes(hdrAssetsPrefix)) && window.hdrEnabled) ? 'HDR' : ''
+      const exifObj = {
+        camera,
+        iso,
+        focusLength,
+        aperture,
+        shutterSpeed,
+        ev,
+        lens,
+        hdr: isHDRActive,
+        location: locationMatches?.length === 2 ? {
+          url: locationMatches[0],
+          title: locationMatches[1]
+        } : null
+      }
+      const altTextMap = {
+        camera: 'Camera',
+        iso: 'ISO',
+        focusLength: "Focus Length",
+        aperture: 'Aperture',
+        shutterSpeed: 'Shutter Speed',
+        ev: 'Exposure Value',
+        lens: 'Lens',
+        hdr: 'HDR Photo',
+        location: 'Location'
+      }
+      return `<div class="img-exif">${keys.map(key=>exifObj[key]?`<span class="${key}" title="${altTextMap[key]}">${typeof exifObj[key] === 'boolean' ? '' : exifObj[key]}</span>`: '').join('')}${exifObj.location ? `<a href="${exifObj.location.url}"><span class="location">${exifObj.location.title}</span></a>`: ''}</div>`
+    }
+    return ''
+  }
+  const captionPlugin = new PhotoSwipeDynamicCaption(lightbox, {
+    type: 'auto',
+  });
+
+  lightbox.addFilter('placeholderSrc', (placeholderSrc, content) => {
+    const thumbnail = content?.slide?.data?.msrc || ''
+    return thumbnail || placeholderSrc;
+  });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el, pswp) => {
+        lightbox.pswp.on('change', () => {
+          const currSlideElement = lightbox.pswp.currSlide.data.element;
+          let captionHTML = '';
+          if (currSlideElement) {
+            const gap = (window.innerHeight - lightbox.pswp.currSlide.data.height / lightbox.pswp.currSlide.data.width * window.innerWidth) / 2;
+            captionHTML = getExif(lightbox.pswp.currSlide.data?.element) || ''
+            if (window.innerWidth <= 600) {
+              el.style.top = `${gap}px`;
+              el.classList.add('mobile');
+            } else {
+              el.style.top = 'unset';
+              el.classList.remove('mobile');
+            }
+          }
+          el.innerHTML = captionHTML || '';
+        });
+      }
+    });
+  });
+
+  lightbox.on('beforeOpen', () => {
+    isPswpOpening = true;
+  });
+
+  lightbox.on('change', (e) => {
+    if (isPswpOpening) {
+      return isPswpOpening = false;
+    }
+    const currentImage = lightbox?.pswp?.currSlide?.data?.element;
+    currentImage && currentImage.scrollIntoView({
+      block: 'center',
+      behavior: 'instant'
+    })
+  });
+  lightbox.init();
+</script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

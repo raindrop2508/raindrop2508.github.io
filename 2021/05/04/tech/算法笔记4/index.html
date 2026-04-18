@@ -1,0 +1,324 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>算法笔记4_递归Recursion</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="算法笔记4_递归Recursion">
+<meta property="og:url" content="/2021/05/04/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B04/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="开头的碎碎念" href="#开头的碎碎念">开头的碎碎念</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="递归的应用" href="#递归的应用">递归的应用</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="动态规划" href="#动态规划">动态规划</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="递归可视化" href="#递归可视化">递归可视化</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">算法笔记4_递归Recursion</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2021-05-04T04:54:38.000Z">
+      5 月 4 日，2021
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>3</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>693</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h2 id="开头的碎碎念"><a href="#开头的碎碎念" class="headerlink" title="开头的碎碎念"></a>开头的碎碎念</h2><p>个人认为，递归算法是一种十分优美的算法。它总是能够用十分短小的代码长度来解决许多复杂的问题。前端实际，在看快速傅里叶变换(FFT)时，看到递归算法仅用极小的代码量即可实现复杂的理论，内心感到十分的震撼。</p>
+<hr>
+<p>将一个分问题不断拆分成更小的相同问题，其在算法上的特点就是<strong>调用自身</strong>。</p>
+<ol>
+<li>结束条件</li>
+<li>减小规模</li>
+<li>调用自身</li>
+</ol>
+<p>递归调用的实现：函数每次调用将现场数据压入系统调用栈，当函数返回时则从栈顶返回恢复现场。</p>
+<blockquote>
+<p>现场数据：栈保存的一个函数调用所需要维护的信息。<br>每次调用，压入栈的现场数据成为栈帧。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#python中递归深度的设置(默认为1000)</span></span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    sys.getrecursionlimit()</span><br><span class="line">    sys.setrecursion(<span class="number">3000</span>)</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h2 id="递归的应用"><a href="#递归的应用" class="headerlink" title="递归的应用"></a>递归的应用</h2><ul>
+<li>递归数列求和：将问题拆分成两个数相加，当列表长度为1时结束。</li>
+<li>0-16任意进制的转换：设置<code>convertstring = &quot;0123456789ABCDEF&quot;</code> 通过除以整除<code>\\</code>进制基<code>base</code>以及对进制基求余数来将整数拆开。当数小于进制基时结束。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">convertstring = <span class="string">&quot;0123456789ABCDEF&quot;</span></span><br><span class="line">......</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> toStr(n//base,base) + convertstring[n%base]</span><br><span class="line">    <span class="comment">#字符串连接；n//base表示整除</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<ul>
+<li><p>迷宫：在原位置先向北走一步，如果找不到出口则按北南西东的顺序尝试。（这个实际上随意设置也行）；为了防止艳茹无限递归的死循环，需要加入之前的路径。</p>
+</li>
+<li><p>找零兑换：求兑换最少数量的硬币  </p>
+<ol>
+<li>贪心策略：从允许最多数量最大面值的硬币开始，余额则用下一最大面值硬币尽可能多的数量分解。由此直到到达最小面值或余额为0。为了减少算法中的重复计算，可以将中间结果保存在表中。递归之前查表，直接返回。<br>2.动态规划法</li>
+</ol>
+</li>
+</ul>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><div id="gitalk-initiator"></div><p><strong>动态规划</strong>：从问题的最小规模的最优解开始，逐步扩大问题规模到要解决的问题。</p>
+<p>最优化问题能用动态规划解决的必要条件：<strong>问题最优解包含和更小规模子问题的最优解</strong>。</p>
+<h2 id="递归可视化"><a href="#递归可视化" class="headerlink" title="递归可视化"></a>递归可视化</h2><p>分形树，谢尔宾斯基三角形，汉诺塔</p>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/PKU-1206307812">数据结构与算法Python版_中国大学MOOC(慕课)</a></li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    <a class="post-nav-item prev" target="_self" href="/2021/06/18/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B05/"><span class="item-link">算法笔记5_排序与查找</span><span class="nav-indicator-text">上一篇</span></a>
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2021/03/31/tech/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B03/"><span class="item-link">算法笔记3</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>
