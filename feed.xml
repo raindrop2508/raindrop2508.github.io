@@ -5,7 +5,7 @@
   <title>Raindrop Blog</title>
   <link>https://raindrop2508.github.io</link>
   <description>Mark 的技术与生活记录</description>
-  <lastBuildDate>Sat, 18 Apr 2026 14:08:27 GMT</lastBuildDate>
+  <lastBuildDate>Sat, 18 Apr 2026 14:11:55 GMT</lastBuildDate>
   <image>
       <url>https://raindrop2508.github.io/icons/avatar.png</url>
       <title>Raindrop Blog</title>
@@ -13,17 +13,11 @@
     </image>
   
     <item>
-      <title></title>
+      <title>Hexo + GitHub Pages + GitHub Actions：源码私有、站点公开的 CI/CD 教程</title>
       <link>https://raindrop2508.github.io/2026/04/18/tech/Hexo_GitHub_Pages_Actions_CICD/</link>
       <guid>https://raindrop2508.github.io/2026/04/18/tech/Hexo_GitHub_Pages_Actions_CICD/</guid>
       <pubDate>4 月 18 日，2026</pubDate>
-      <description><![CDATA[<hr>
-<p>title: Hexo + GitHub Pages + GitHub Actions：源码私有、站点公开的 CI&#x2F;CD 教程<br>date: “2026-04-18T12:00:00+08:00”<br>excerpt: 用一个仓库存源码（可私有），另一个仓库存静态产物（公开 Pages），并用 Actions 自动构建与部署<br>cover: &#x2F;linen-theme&#x2F;img&#x2F;pattern-randomized.jpg<br>categories:</p>
-<ul>
-<li>tech</li>
-</ul>
-<hr>
-<blockquote>
+      <description><![CDATA[<blockquote>
 <p>最近正好想要使用HEXO在部署一次自己的博客，但每次都要受到提交运行太麻烦了，好在GitHub Actions可以帮助我们自动化这个过程，而且目前还是免费的。</p>
 </blockquote>
 <h2 id="最终目标"><a href="#最终目标" class="headerlink" title="最终目标"></a>最终目标</h2><ul>
