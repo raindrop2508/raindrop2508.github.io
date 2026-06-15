@@ -1,0 +1,374 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常">
+<meta property="og:url" content="/2026/06/15/tech/zip_extract_permission_fix/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="1-问题现象-The-Problem" href="#1-问题现象-The-Problem">1. 问题现象 (The Problem)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="2-抽丝剥茧：深入-ZIP-底层属性-Investigation" href="#2-抽丝剥茧：深入-ZIP-底层属性-Investigation">2. 抽丝剥茧：深入 ZIP 底层属性 (Investigation)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis" href="#3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis">3. 根因分析：被忽视的 ZIP 底层属性 (Root Cause Analysis)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="4-失败的尝试：事后补救-The-Pitfall" href="#4-失败的尝试：事后补救-The-Pitfall">4. 失败的尝试：事后补救 (The Pitfall)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution" href="#5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution">5. 完美解法：放弃自动解压，改用流式手动拷贝 (The Solution)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip" href="#6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip">6. 额外补充：关于 ZIP 中的中文乱码 (Bonus Tip)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing" href="#7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing">7. 进阶思考：未来适配 RAR 和 7Z 等格式该怎么办？ (Future Proofing)</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="总结" href="#总结">总结</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2026-06-15T13:28:35.000Z">
+      6 月 15 日，2026
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/tech/">tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>9</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>2680</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h2 id="1-问题现象-The-Problem"><a href="#1-问题现象-The-Problem" class="headerlink" title="1. 问题现象 (The Problem)"></a>1. 问题现象 (The Problem)</h2><p>在开发 Android 应用的“数据备份与恢复”功能时，我们需要在本地解压用户导入的 ZIP 压缩包。但测试时发现了一个诡异的现象：<br><strong>部分 ZIP 包可以完美解压，而另一部分 ZIP 包在解压时会稳定引发崩溃</strong>，报错日志如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java.io.FileNotFoundException: /data/user/0/com.xxx.app/cache/temp_import_12345/images/cabinet_bg.png: open failed: EACCES (Permission denied) </span><br><span class="line">Caused by: android.system.ErrnoException: open failed: EACCES (Permission denied)</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><strong>初步排查</strong>：</p>
+<ul>
+<li>报错的路径属于 App 的内部沙盒缓存目录（<code>getCacheDir()</code>），App 理应拥有绝对的读写权限。</li>
+<li>只有<strong>在 Windows 系统下打包</strong>的 ZIP 才会报错，而在 macOS 上打包的 ZIP 完全正常。</li>
+</ul>
+<h2 id="2-抽丝剥茧：深入-ZIP-底层属性-Investigation"><a href="#2-抽丝剥茧：深入-ZIP-底层属性-Investigation" class="headerlink" title="2. 抽丝剥茧：深入 ZIP 底层属性 (Investigation)"></a>2. 抽丝剥茧：深入 ZIP 底层属性 (Investigation)</h2><p>为了找出这两个压缩包的差异，我使用 Python 脚本读取了 ZIP 文件的底层元数据（Metadata）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> zipfile</span><br><span class="line"></span><br><span class="line">z = zipfile.ZipFile(<span class="string">&#x27;error_windows.zip&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> z.infolist():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;i.filename&#125;</span> | sys: <span class="subst">&#123;i.create_system&#125;</span> | ext: <span class="subst">&#123;<span class="built_in">hex</span>(i.external_attr)&#125;</span> | oct: <span class="subst">&#123;<span class="built_in">oct</span>(i.external_attr &gt;&gt; <span class="number">16</span>)&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p><strong>对比结果</strong>发现：</p>
+<p><strong>正常的压缩包 (macOS 打包)</strong>：</p>
+<ul>
+<li><code>create_system</code>: 3 (UNIX&#x2F;macOS)</li>
+<li><code>external_attr</code> (转八进制): <code>0o100664</code>（标准 UNIX 权限 <code>-rw-rw-r--</code>）</li>
+</ul>
+<p><strong>报错的压缩包 (Windows 打包)</strong>：</p>
+<ul>
+<li><code>create_system</code>: 0 (Windows&#x2F;FAT)</li>
+<li><code>external_attr</code> (转八进制): <code>0o20</code>（文件）或 <code>0o30</code>（目录）</li>
+<li>在 UNIX 权限体系（UNIX Permissions）中，<code>0o30</code> 对应的权限是 <code>----wx---</code>，<strong>这意味着文件的所有者（Owner）没有任何读、写权限！</strong></li>
+</ul>
+<h2 id="3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis"><a href="#3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis" class="headerlink" title="3. 根因分析：被忽视的 ZIP 底层属性 (Root Cause Analysis)"></a>3. 根因分析：被忽视的 ZIP 底层属性 (Root Cause Analysis)</h2><div id="gitalk-initiator"></div><p>在 ZIP 文件格式规范（ZIP File Format Specification）中，每个被打包的文件或目录都会生成一个<strong>中央目录文件头（Central Directory File Header）</strong>。其中有两个关键的元数据字段导致了我们的 Bug：</p>
+<ol>
+<li><strong><code>create_system</code> (创建系统)</strong>：记录打包时的操作系统环境。常见值 <code>0</code> 为 Windows&#x2F;DOS，<code>3</code> 为 UNIX&#x2F;macOS。</li>
+<li><strong><code>external_attr</code> (外部文件属性)</strong>：记录文件打包时的属性状态。<ul>
+<li>如果是 Windows (<code>create_system == 0</code>)，它存储的是 MS-DOS 属性（如只读、隐藏、归档）。</li>
+<li>如果是 UNIX (<code>create_system == 3</code>)，它的高 16 位存储的是标准的八进制 POSIX 权限（如 <code>0o100664</code>）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>致命的跨平台解析：</strong><br>Android 底层是基于 Linux 的。当 <code>zip4j</code> 提取文件和目录时，它试图“尽职”地还原压缩包内记录的原始文件权限。但它<strong>忽略了检查 <code>create_system</code> 是否为 0 (Windows)</strong>。<br>它把 Windows 记录的 MS-DOS 属性，硬生生地按照 Linux 的 UNIX 权限去解析，结果歪打正着解析成了一个极低的权限（例如目录变成了 <code>0o30</code>，文件变成了 <code>0o20</code>）。</p>
+<p>导致崩溃的完整连锁反应如下：</p>
+<ol>
+<li><code>zip4j</code> 的 <code>extractAll()</code> 首先解压出了 <code>images/</code> 目录。</li>
+<li>它将错误解析的 <code>0o30</code> 权限强加给了该目录，导致该目录变得<strong>对 App 自身不可读写</strong>。</li>
+<li>紧接着，<code>zip4j</code> 尝试将 <code>images/cabinet_bg.png</code> 写入该目录，内核层瞬间拦截，直接抛出 <code>EACCES (Permission denied)</code>！</li>
+</ol>
+<h2 id="4-失败的尝试：事后补救-The-Pitfall"><a href="#4-失败的尝试：事后补救-The-Pitfall" class="headerlink" title="4. 失败的尝试：事后补救 (The Pitfall)"></a>4. 失败的尝试：事后补救 (The Pitfall)</h2><p>一开始，我试图在 <code>zf.extractAll()</code> 执行完毕后，增加一个<strong>权限兜底方法</strong>，递归遍历解压出来的文件并调用 <code>file.setReadable(true); file.setWritable(true);</code>。</p>
+<p><strong>结果：依然崩溃。</strong><br>因为异常是抛在 <code>extractAll()</code> 内部的。在解压子文件时，父目录权限已经被破坏导致抛出异常，代码直接中断，事后补救逻辑根本没有机会执行。</p>
+<h2 id="5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution"><a href="#5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution" class="headerlink" title="5. 完美解法：放弃自动解压，改用流式手动拷贝 (The Solution)"></a>5. 完美解法：放弃自动解压，改用流式手动拷贝 (The Solution)</h2><p>既然根源在于解压库错误地还原了文件权限，我们要做的就是<strong>切断权限属性的传递</strong>。放弃使用库自带的 <code>extractAll</code>，改用原生的 Java I&#x2F;O 流进行手动拷贝。</p>
+<p>这样做的好处是：通过 <code>File.mkdirs()</code> 和 <code>FileOutputStream</code> 创建的目录与文件，将<strong>天然继承 Android 应用沙盒（App Sandbox）默认的最高读写权限</strong>，完全无视 ZIP 内部携带的垃圾权限数据。</p>
+<p><strong>核心修复代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> net.lingala.zip4j.ZipFile;</span><br><span class="line"><span class="keyword">import</span> net.lingala.zip4j.model.FileHeader;</span><br><span class="line"><span class="comment">// ... 其他 import</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">extractZipToDirSafe</span><span class="params">(File zipFile, File destDir, Charset charset)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">ZipFile</span> <span class="variable">zf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZipFile</span>(zipFile);</span><br><span class="line">        zf.setCharset(charset); <span class="comment">// 解决中文文件名乱码的关键</span></span><br><span class="line">        List&lt;FileHeader&gt; headers = zf.getFileHeaders();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1. 安全校验：防止 Zip Slip 路径穿越漏洞</span></span><br><span class="line">        validateZipEntries(destDir, headers);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 手动流式解压：规避 zip4j 还原错误权限导致的 EACCES 问题</span></span><br><span class="line">        <span class="keyword">for</span> (FileHeader header : headers) &#123;</span><br><span class="line">            <span class="keyword">if</span> (header == <span class="literal">null</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="type">File</span> <span class="variable">outFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(destDir, header.getFileName());</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 遇到目录直接创建，继承沙盒默认权限</span></span><br><span class="line">            <span class="keyword">if</span> (header.isDirectory()) &#123;</span><br><span class="line">                outFile.mkdirs();</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 确保文件的父目录存在</span></span><br><span class="line">            <span class="type">File</span> <span class="variable">parentDir</span> <span class="operator">=</span> outFile.getParentFile();</span><br><span class="line">            <span class="keyword">if</span> (parentDir != <span class="literal">null</span> &amp;&amp; !parentDir.exists()) &#123;</span><br><span class="line">                parentDir.mkdirs();</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 纯粹的流拷贝，丢弃 ZIP 内部的文件属性</span></span><br><span class="line">            <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> zf.getInputStream(header);</span><br><span class="line">                 <span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(outFile)) &#123;</span><br><span class="line">                <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">8192</span>];</span><br><span class="line">                <span class="type">int</span> readLen;</span><br><span class="line">                <span class="keyword">while</span> ((readLen = is.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                    fos.write(buffer, <span class="number">0</span>, readLen);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IOException</span>(<span class="string">&quot;解压失败&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h2 id="6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip"><a href="#6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip" class="headerlink" title="6. 额外补充：关于 ZIP 中的中文乱码 (Bonus Tip)"></a>6. 额外补充：关于 ZIP 中的中文乱码 (Bonus Tip)</h2><p>在重构这段代码时，有一点必须保留：<strong>对 <code>Charset</code>（字符集）的支持</strong>。<br>Windows 下默认的压缩工具通常采用 <code>GBK</code> 编码来存储文件名，而 Android&#x2F;macOS 默认使用 <code>UTF-8</code>。如果不做处理，包含中文的文件名（如 <code>images/背景.png</code>）解压后会变成乱码，导致后续业务逻辑报 <code>FileNotFound</code>。</p>
+<p><strong>最佳实践</strong>：采用“GBK 优先，UTF-8 兜底”的策略。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 优先尝试 GBK，兼容大部分国内 Windows 压缩包</span></span><br><span class="line">    extractZipToDirSafe(tempZipFile, tempRoot, Charset.forName(<span class="string">&quot;GBK&quot;</span>));</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException unzipEx) &#123;</span><br><span class="line">    <span class="comment">// 如果失败，回退到 UTF-8 重新解压</span></span><br><span class="line">    extractZipToDirSafe(tempZipFile, tempRoot, StandardCharsets.UTF_8);</span><br><span class="line">&#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h2 id="7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing"><a href="#7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing" class="headerlink" title="7. 进阶思考：未来适配 RAR 和 7Z 等格式该怎么办？ (Future Proofing)"></a>7. 进阶思考：未来适配 RAR 和 7Z 等格式该怎么办？ (Future Proofing)</h2><p>在解决了 ZIP 的问题后，自然会引出一个疑问：<strong>如果后续业务需要支持 RAR 或 7Z 格式，是否需要针对每种格式去单独研究它的属性字段并做平台适配？</strong></p>
+<p><strong>答案是：不需要。</strong></p>
+<p>虽然 RAR 的文件头包含 <code>Host OS</code> 字段，7Z 也通过复杂的 <code>Attributes</code> 来记录操作系统特征，但只要我们坚持上述修复方案中的<strong>核心防御策略：只取数据，不取属性（Stream-Only Extraction）</strong>，就可以一劳永逸。</p>
+<p>无论未来引入的是解压 RAR 的 <code>junrar</code>，还是解压 7Z 的 <code>SevenZipJBinding</code>，在编写解压代码时，<strong>绝对不要调用库提供的类似 <code>extractAll(destPath)</code> 的高级一键封装方法</strong>。</p>
+<p><strong>通用的解压防污染范式：</strong></p>
+<ol>
+<li>遍历压缩包条目（Entries）。</li>
+<li>文件夹条目 -&gt; 调用 <code>new File(dir).mkdirs()</code>。</li>
+<li>文件条目 -&gt; 获取该条目的 <code>InputStream</code>。</li>
+<li>手动通过 <code>FileOutputStream</code> 写入数据。</li>
+</ol>
+<p>因为只要你是通过 Java 原生的 <code>FileOutputStream</code> 和 <code>File.mkdirs()</code> 在 Android 沙盒中新建文件，底层内核（VFS）就会<strong>自动赋予当前 App 默认的最高读写权限</strong>。这就彻底屏蔽了任何压缩格式、在任何操作系统间穿梭所带来的权限异常风险。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>不要盲目信任第三方库的一键解压方法</strong>（如 <code>extractAll</code>），在跨平台（Windows -&gt; Linux&#x2F;Android）场景下，底层文件系统权限差异容易埋雷。</li>
+<li>遇到 <code>Permission denied</code> 时，如果目录属于 App 自身沙盒，优先怀疑<strong>文件创建时的初始权限配置</strong>是否被外部输入（如 ZIP 属性）污染。</li>
+<li><strong>原生 I&#x2F;O 流是隔离脏元数据最简单有效的方法</strong>。</li>
+</ol>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2026/04/18/tech/Hexo_GitHub_Pages_Actions_CICD/"><span class="item-link">Hexo + GitHub Pages + GitHub Actions：源码私有、站点公开的 CI/CD 教程</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>

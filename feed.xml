@@ -5,13 +5,141 @@
   <title>Raindrop Blog</title>
   <link>https://raindrop2508.github.io</link>
   <description>Mark 的技术与生活记录</description>
-  <lastBuildDate>Sat, 18 Apr 2026 14:11:55 GMT</lastBuildDate>
+  <lastBuildDate>Mon, 15 Jun 2026 13:45:26 GMT</lastBuildDate>
   <image>
       <url>https://raindrop2508.github.io/icons/avatar.png</url>
       <title>Raindrop Blog</title>
       <link>https://raindrop2508.github.io</link>
     </image>
   
+    <item>
+      <title>Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常</title>
+      <link>https://raindrop2508.github.io/2026/06/15/tech/zip_extract_permission_fix/</link>
+      <guid>https://raindrop2508.github.io/2026/06/15/tech/zip_extract_permission_fix/</guid>
+      <pubDate>6 月 15 日，2026</pubDate>
+      <description><![CDATA[<h2 id="1-问题现象-The-Problem"><a href="#1-问题现象-The-Problem" class="headerlink" title="1. 问题现象 (The Problem)"></a>1. 问题现象 (The Problem)</h2><p>在开发 Android 应用的“数据备份与恢复”功能时，我们需要在本地解压用户导入的 ZIP 压缩包。但测试时发现了一个诡异的现象：<br><strong>部分 ZIP 包可以完美解压，而另一部分 ZIP 包在解压时会稳定引发崩溃</strong>，报错日志如下：</p>
+<pre><code class="language-text">java.io.FileNotFoundException: /data/user/0/com.xxx.app/cache/temp_import_12345/images/cabinet_bg.png: open failed: EACCES (Permission denied) 
+Caused by: android.system.ErrnoException: open failed: EACCES (Permission denied)
+</code></pre>
+<p><strong>初步排查</strong>：</p>
+<ul>
+<li>报错的路径属于 App 的内部沙盒缓存目录（<code>getCacheDir()</code>），App 理应拥有绝对的读写权限。</li>
+<li>只有<strong>在 Windows 系统下打包</strong>的 ZIP 才会报错，而在 macOS 上打包的 ZIP 完全正常。</li>
+</ul>
+<h2 id="2-抽丝剥茧：深入-ZIP-底层属性-Investigation"><a href="#2-抽丝剥茧：深入-ZIP-底层属性-Investigation" class="headerlink" title="2. 抽丝剥茧：深入 ZIP 底层属性 (Investigation)"></a>2. 抽丝剥茧：深入 ZIP 底层属性 (Investigation)</h2><p>为了找出这两个压缩包的差异，我使用 Python 脚本读取了 ZIP 文件的底层元数据（Metadata）：</p>
+<pre><code class="language-python">import zipfile
+
+z = zipfile.ZipFile(&#39;error_windows.zip&#39;)
+for i in z.infolist():
+    print(f&#39;{i.filename} | sys: {i.create_system} | ext: {hex(i.external_attr)} | oct: {oct(i.external_attr &gt;&gt; 16)}&#39;)
+</code></pre>
+<p><strong>对比结果</strong>发现：</p>
+<p><strong>正常的压缩包 (macOS 打包)</strong>：</p>
+<ul>
+<li><code>create_system</code>: 3 (UNIX&#x2F;macOS)</li>
+<li><code>external_attr</code> (转八进制): <code>0o100664</code>（标准 UNIX 权限 <code>-rw-rw-r--</code>）</li>
+</ul>
+<p><strong>报错的压缩包 (Windows 打包)</strong>：</p>
+<ul>
+<li><code>create_system</code>: 0 (Windows&#x2F;FAT)</li>
+<li><code>external_attr</code> (转八进制): <code>0o20</code>（文件）或 <code>0o30</code>（目录）</li>
+<li>在 UNIX 权限体系（UNIX Permissions）中，<code>0o30</code> 对应的权限是 <code>----wx---</code>，<strong>这意味着文件的所有者（Owner）没有任何读、写权限！</strong></li>
+</ul>
+<h2 id="3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis"><a href="#3-根因分析：被忽视的-ZIP-底层属性-Root-Cause-Analysis" class="headerlink" title="3. 根因分析：被忽视的 ZIP 底层属性 (Root Cause Analysis)"></a>3. 根因分析：被忽视的 ZIP 底层属性 (Root Cause Analysis)</h2><p>在 ZIP 文件格式规范（ZIP File Format Specification）中，每个被打包的文件或目录都会生成一个<strong>中央目录文件头（Central Directory File Header）</strong>。其中有两个关键的元数据字段导致了我们的 Bug：</p>
+<ol>
+<li><strong><code>create_system</code> (创建系统)</strong>：记录打包时的操作系统环境。常见值 <code>0</code> 为 Windows&#x2F;DOS，<code>3</code> 为 UNIX&#x2F;macOS。</li>
+<li><strong><code>external_attr</code> (外部文件属性)</strong>：记录文件打包时的属性状态。<ul>
+<li>如果是 Windows (<code>create_system == 0</code>)，它存储的是 MS-DOS 属性（如只读、隐藏、归档）。</li>
+<li>如果是 UNIX (<code>create_system == 3</code>)，它的高 16 位存储的是标准的八进制 POSIX 权限（如 <code>0o100664</code>）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>致命的跨平台解析：</strong><br>Android 底层是基于 Linux 的。当 <code>zip4j</code> 提取文件和目录时，它试图“尽职”地还原压缩包内记录的原始文件权限。但它<strong>忽略了检查 <code>create_system</code> 是否为 0 (Windows)</strong>。<br>它把 Windows 记录的 MS-DOS 属性，硬生生地按照 Linux 的 UNIX 权限去解析，结果歪打正着解析成了一个极低的权限（例如目录变成了 <code>0o30</code>，文件变成了 <code>0o20</code>）。</p>
+<p>导致崩溃的完整连锁反应如下：</p>
+<ol>
+<li><code>zip4j</code> 的 <code>extractAll()</code> 首先解压出了 <code>images/</code> 目录。</li>
+<li>它将错误解析的 <code>0o30</code> 权限强加给了该目录，导致该目录变得<strong>对 App 自身不可读写</strong>。</li>
+<li>紧接着，<code>zip4j</code> 尝试将 <code>images/cabinet_bg.png</code> 写入该目录，内核层瞬间拦截，直接抛出 <code>EACCES (Permission denied)</code>！</li>
+</ol>
+<h2 id="4-失败的尝试：事后补救-The-Pitfall"><a href="#4-失败的尝试：事后补救-The-Pitfall" class="headerlink" title="4. 失败的尝试：事后补救 (The Pitfall)"></a>4. 失败的尝试：事后补救 (The Pitfall)</h2><p>一开始，我试图在 <code>zf.extractAll()</code> 执行完毕后，增加一个<strong>权限兜底方法</strong>，递归遍历解压出来的文件并调用 <code>file.setReadable(true); file.setWritable(true);</code>。</p>
+<p><strong>结果：依然崩溃。</strong><br>因为异常是抛在 <code>extractAll()</code> 内部的。在解压子文件时，父目录权限已经被破坏导致抛出异常，代码直接中断，事后补救逻辑根本没有机会执行。</p>
+<h2 id="5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution"><a href="#5-完美解法：放弃自动解压，改用流式手动拷贝-The-Solution" class="headerlink" title="5. 完美解法：放弃自动解压，改用流式手动拷贝 (The Solution)"></a>5. 完美解法：放弃自动解压，改用流式手动拷贝 (The Solution)</h2><p>既然根源在于解压库错误地还原了文件权限，我们要做的就是<strong>切断权限属性的传递</strong>。放弃使用库自带的 <code>extractAll</code>，改用原生的 Java I&#x2F;O 流进行手动拷贝。</p>
+<p>这样做的好处是：通过 <code>File.mkdirs()</code> 和 <code>FileOutputStream</code> 创建的目录与文件，将<strong>天然继承 Android 应用沙盒（App Sandbox）默认的最高读写权限</strong>，完全无视 ZIP 内部携带的垃圾权限数据。</p>
+<p><strong>核心修复代码：</strong></p>
+<pre><code class="language-java">import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+// ... 其他 import
+
+private void extractZipToDirSafe(File zipFile, File destDir, Charset charset) throws IOException {
+    try {
+        ZipFile zf = new ZipFile(zipFile);
+        zf.setCharset(charset); // 解决中文文件名乱码的关键
+        List&lt;FileHeader&gt; headers = zf.getFileHeaders();
+        
+        // 1. 安全校验：防止 Zip Slip 路径穿越漏洞
+        validateZipEntries(destDir, headers);
+        
+        // 2. 手动流式解压：规避 zip4j 还原错误权限导致的 EACCES 问题
+        for (FileHeader header : headers) {
+            if (header == null) continue;
+            File outFile = new File(destDir, header.getFileName());
+            
+            // 遇到目录直接创建，继承沙盒默认权限
+            if (header.isDirectory()) {
+                outFile.mkdirs();
+                continue;
+            }
+            
+            // 确保文件的父目录存在
+            File parentDir = outFile.getParentFile();
+            if (parentDir != null &amp;&amp; !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            
+            // 纯粹的流拷贝，丢弃 ZIP 内部的文件属性
+            try (InputStream is = zf.getInputStream(header);
+                 FileOutputStream fos = new FileOutputStream(outFile)) {
+                byte[] buffer = new byte[8192];
+                int readLen;
+                while ((readLen = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, readLen);
+                }
+            }
+        }
+    } catch (Exception e) {
+        throw new IOException(&quot;解压失败&quot;, e);
+    }
+}
+</code></pre>
+<h2 id="6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip"><a href="#6-额外补充：关于-ZIP-中的中文乱码-Bonus-Tip" class="headerlink" title="6. 额外补充：关于 ZIP 中的中文乱码 (Bonus Tip)"></a>6. 额外补充：关于 ZIP 中的中文乱码 (Bonus Tip)</h2><p>在重构这段代码时，有一点必须保留：<strong>对 <code>Charset</code>（字符集）的支持</strong>。<br>Windows 下默认的压缩工具通常采用 <code>GBK</code> 编码来存储文件名，而 Android&#x2F;macOS 默认使用 <code>UTF-8</code>。如果不做处理，包含中文的文件名（如 <code>images/背景.png</code>）解压后会变成乱码，导致后续业务逻辑报 <code>FileNotFound</code>。</p>
+<p><strong>最佳实践</strong>：采用“GBK 优先，UTF-8 兜底”的策略。</p>
+<pre><code class="language-java">try {
+    // 优先尝试 GBK，兼容大部分国内 Windows 压缩包
+    extractZipToDirSafe(tempZipFile, tempRoot, Charset.forName(&quot;GBK&quot;));
+} catch (IOException unzipEx) {
+    // 如果失败，回退到 UTF-8 重新解压
+    extractZipToDirSafe(tempZipFile, tempRoot, StandardCharsets.UTF_8);
+}
+</code></pre>
+<h2 id="7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing"><a href="#7-进阶思考：未来适配-RAR-和-7Z-等格式该怎么办？-Future-Proofing" class="headerlink" title="7. 进阶思考：未来适配 RAR 和 7Z 等格式该怎么办？ (Future Proofing)"></a>7. 进阶思考：未来适配 RAR 和 7Z 等格式该怎么办？ (Future Proofing)</h2><p>在解决了 ZIP 的问题后，自然会引出一个疑问：<strong>如果后续业务需要支持 RAR 或 7Z 格式，是否需要针对每种格式去单独研究它的属性字段并做平台适配？</strong></p>
+<p><strong>答案是：不需要。</strong></p>
+<p>虽然 RAR 的文件头包含 <code>Host OS</code> 字段，7Z 也通过复杂的 <code>Attributes</code> 来记录操作系统特征，但只要我们坚持上述修复方案中的<strong>核心防御策略：只取数据，不取属性（Stream-Only Extraction）</strong>，就可以一劳永逸。</p>
+<p>无论未来引入的是解压 RAR 的 <code>junrar</code>，还是解压 7Z 的 <code>SevenZipJBinding</code>，在编写解压代码时，<strong>绝对不要调用库提供的类似 <code>extractAll(destPath)</code> 的高级一键封装方法</strong>。</p>
+<p><strong>通用的解压防污染范式：</strong></p>
+<ol>
+<li>遍历压缩包条目（Entries）。</li>
+<li>文件夹条目 -&gt; 调用 <code>new File(dir).mkdirs()</code>。</li>
+<li>文件条目 -&gt; 获取该条目的 <code>InputStream</code>。</li>
+<li>手动通过 <code>FileOutputStream</code> 写入数据。</li>
+</ol>
+<p>因为只要你是通过 Java 原生的 <code>FileOutputStream</code> 和 <code>File.mkdirs()</code> 在 Android 沙盒中新建文件，底层内核（VFS）就会<strong>自动赋予当前 App 默认的最高读写权限</strong>。这就彻底屏蔽了任何压缩格式、在任何操作系统间穿梭所带来的权限异常风险。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>不要盲目信任第三方库的一键解压方法</strong>（如 <code>extractAll</code>），在跨平台（Windows -&gt; Linux&#x2F;Android）场景下，底层文件系统权限差异容易埋雷。</li>
+<li>遇到 <code>Permission denied</code> 时，如果目录属于 App 自身沙盒，优先怀疑<strong>文件创建时的初始权限配置</strong>是否被外部输入（如 ZIP 属性）污染。</li>
+<li><strong>原生 I&#x2F;O 流是隔离脏元数据最简单有效的方法</strong>。</li>
+</ol>
+]]></description>
+    </item>
     <item>
       <title>Hexo + GitHub Pages + GitHub Actions：源码私有、站点公开的 CI/CD 教程</title>
       <link>https://raindrop2508.github.io/2026/04/18/tech/Hexo_GitHub_Pages_Actions_CICD/</link>
@@ -5011,63 +5139,6 @@ main()
 <p><a href="https://www.cnblogs.com/wuliytTaotao/p/9560205.html">残差网络</a>　　作者：wuliytTaotao</p>
 <p><a href="https://blog.csdn.net/zijin0802034/article/details/77685438">边框回归(Bounding Box Regression)详解</a>　　作者：南有乔木NTU</p>
 <p><a href="https://blog.csdn.net/xd1723138323/article/details/82532973">目标检测之YOLO系列-V1至V3改进详解</a>　　作者：xd1723138323</p>
-]]></description>
-    </item>
-    <item>
-      <title>Ubuntu笔记</title>
-      <link>https://raindrop2508.github.io/2019/06/29/tech/ubuntu_note/</link>
-      <guid>https://raindrop2508.github.io/2019/06/29/tech/ubuntu_note/</guid>
-      <pubDate>6 月 29 日，2019</pubDate>
-      <description><![CDATA[<blockquote>
-<p>这篇笔记会根据情况隔段时间更新一次</p>
-</blockquote>
-<h1 id="终端操作"><a href="#终端操作" class="headerlink" title="终端操作"></a>终端操作</h1><blockquote>
-<p>cd+文件夹名  进入文件夹 可以使用TAB键进行自动补全或选择 <br><br>cd   ..( 退出几层就加几个..)  退出到上n层路径<br>ls 显示文件夹中的目录<br>pwd 显示当前路径<br>gedit 使用文本编辑器编辑文件<br>cat 在终端中查看文件（多用做文本文件）<br>sudo  进入管理员模式（超级用户)<br>sudo su 进入根用户<br>nvidia-smi  查看显卡运行状态（A卡没有试过）</p>
-</blockquote>
-<p>在ubuntu中一些文件被写保护，需要更高级权限才能修改，可以在命令前加sudo  </p>
-<h2 id="复制一个文件到指定目录"><a href="#复制一个文件到指定目录" class="headerlink" title="复制一个文件到指定目录"></a>复制一个文件到指定目录</h2><blockquote>
-<p>(1) 在桌面上打开终端，输入sudo su<br>(2) 输入密码，就切换到root用户下<br>(3) 切换到桌面 命令输入为 cd 桌面<br>(4) 然后输入复制命令行 cp -r studio.zip &#x2F;home&#x2F;androidstudio<br>(5) 回车 大功告成 可以看看&#x2F;home&#x2F;androidstudio目录下是否有studio.zip  </p>
-</blockquote>
-<p>作者：飞奔的小付<br>来源：CSDN<br><a href="https://blog.csdn.net/feibendexiaoma/article/details/73739319">原文</a> </p>
-<p>移动文件（假设现在在该文件的目录下）</p>
-<blockquote>
-<p>sudo mv xxx.xx 新的位置的路径  </p>
-</blockquote>
-<p>解压文件 </p>
-<blockquote>
-<p>sudo unzip opencv-3.3.0.zip  </p>
-</blockquote>
-<p>重命名文件 </p>
-<blockquote>
-<p>sudo cp 原文件名 新文件名  </p>
-</blockquote>
-<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><p>软件安装前一般要先更新软件目录</p>
-<blockquote>
-<p>sudo apt-get update  </p>
-</blockquote>
-<p>升级已有软件</p>
-<blockquote>
-<p>sudo apt-get upgrade<br>常用软件安装<br><a href="https://www.jianshu.com/p/f44e1ae080a5">https://www.jianshu.com/p/f44e1ae080a5</a></p>
-</blockquote>
-<p>下载好网易云音乐安装完成后可能会遇到问题打不开。可以在终端中使用</p>
-<blockquote>
-<p>sudo netease  TAb(自动补全)  </p>
-</blockquote>
-<p>当下在好软件安装包后，也可以在本地安装</p>
-<blockquote>
-<p>sudo sh xxx.sh<br>dpkg -i xxx.deb</p>
-</blockquote>
-<p><a href="https://jingyan.baidu.com/article/335530da98061b19cb41c31d.html">google浏览器安装</a>  </p>
-<h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><p><a href="https://blog.csdn.net/sannerlittle/article/details/77479656">没有声音解决办法</a><br>具体情况是：可以调节音量，但却没有声音<br> 这个问题到现在，我仍旧是每次开机仍要打开文章中所说的软件修改一次<br>ubuntu和win双系统中无法访问win中的磁盘分区  </p>
-<blockquote>
-<p>sudo ntfsfix &#x2F;dev&#x2F;磁盘号<br>如sudo ntfsfix &#x2F;dev&#x2F;sda6</p>
-</blockquote>
-<p><a href="https://blog.csdn.net/u010801439/article/details/79485914">ubuntu中python2和3共存</a> </p>
-<blockquote>
-<p>source activate  [要激活的环境名称]<br>source deactivate  </p>
-</blockquote>
-<p><a href="https://linux.cn/article-5409-1.html">如何修复 apt-get update 无法添加新的 CD-ROM 的错误</a></p>
-<p><strong>侵权即删</strong></p>
 ]]></description>
     </item>
 </channel>
