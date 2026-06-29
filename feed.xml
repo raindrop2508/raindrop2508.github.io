@@ -5,13 +5,172 @@
   <title>Raindrop Blog</title>
   <link>https://raindrop2508.github.io</link>
   <description>Mark 的技术与生活记录</description>
-  <lastBuildDate>Mon, 15 Jun 2026 13:45:26 GMT</lastBuildDate>
+  <lastBuildDate>Mon, 29 Jun 2026 14:49:50 GMT</lastBuildDate>
   <image>
       <url>https://raindrop2508.github.io/icons/avatar.png</url>
       <title>Raindrop Blog</title>
       <link>https://raindrop2508.github.io</link>
     </image>
   
+    <item>
+      <title>Material Design 3 高度叠加层（Elevation Overlay）技术详解</title>
+      <link>https://raindrop2508.github.io/2026/06/29/tech/material_design_3_elevation_overlay_technical_details/</link>
+      <guid>https://raindrop2508.github.io/2026/06/29/tech/material_design_3_elevation_overlay_technical_details/</guid>
+      <pubDate>6 月 29 日，2026</pubDate>
+      <description><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>Elevation Overlay（高度叠加层）</strong> 是 Material Design 3（M3）中用于表现界面元素空间层级的核心视觉机制。它通过动态改变表面颜色而非仅依赖阴影来体现不同高度的视觉差异，解决了在不同背景下阴影辨识度不高的问题。</p>
+<h2 id="产生背景"><a href="#产生背景" class="headerlink" title="产生背景"></a>产生背景</h2><p>在 Material Design 2（M2）中，视觉层级主要通过<strong>阴影</strong>来表现。但存在以下局限：</p>
+<ol>
+<li><strong>深色模式下阴影不明显</strong>：深色背景中的阴影对比度低，难以清晰感知高度差异</li>
+<li><strong>纯静态阴影无法体现场景差异</strong>：在浅色或深色背景下，相同高度的视觉感受应当不同</li>
+<li><strong>缺乏颜色语义</strong>：无法通过颜色快速感知元素的突出程度</li>
+</ol>
+<p>Material Design 3 引入<strong>动态表面着色</strong>机制，通过<strong>主色叠加</strong>的方式强化高度感知。</p>
+<hr>
+<h2 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h2><h3 id="1-绝对高度（Absolute-Elevation）计算"><a href="#1-绝对高度（Absolute-Elevation）计算" class="headerlink" title="1. 绝对高度（Absolute Elevation）计算"></a>1. 绝对高度（Absolute Elevation）计算</h3><p>高度叠加层的触发基于<strong>绝对高度</strong>而非单个视图的 <code>elevation</code> 属性。</p>
+<pre><code class="language-text">绝对高度 = 视图自身 elevation + 所有父级容器的 elevation 累加
+</code></pre>
+<h4 id="实际案例分析（本项目中的现象）"><a href="#实际案例分析（本项目中的现象）" class="headerlink" title="实际案例分析（本项目中的现象）"></a>实际案例分析（本项目中的现象）</h4><p>本项目中出现的 <code>#F3E8FF</code> 现象正是由于这一点：</p>
+<ul>
+<li><strong>Activity 中卡片正常</strong>：<code>MaterialCardView</code> 直接在普通 Activity 根视图中，父级 elevation 为 0，绝对高度 &#x3D; 0dp -&gt; 无叠加</li>
+<li><strong>BottomSheet 中卡片偏紫</strong>：<code>BottomSheetDialog</code> 自身带有约 8dp 的基础高度，虽然卡片自身设置了 <code>app:cardElevation=&quot;0dp&quot;</code>，但绝对高度 &#x3D; 0 + 8 &#x3D; 8dp -&gt; 触发叠加</li>
+</ul>
+<h3 id="2-混合公式"><a href="#2-混合公式" class="headerlink" title="2. 混合公式"></a>2. 混合公式</h3><p>当绝对高度 &gt; 0 时，系统会自动将主题主色（<code>colorPrimary</code>）叠加到表面色（<code>colorSurface</code>）上：</p>
+<pre><code class="language-text">最终颜色 = 主色 × 不透明度 + 表面色 × (1 - 不透明度)
+</code></pre>
+<p>不透明度与绝对高度正相关：</p>
+<table>
+<thead>
+<tr>
+<th>绝对高度</th>
+<th>主色叠加 Alpha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1dp</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>3dp</td>
+<td>~7%</td>
+</tr>
+<tr>
+<td>8dp</td>
+<td>~9%</td>
+</tr>
+<tr>
+<td>16dp</td>
+<td>~11%</td>
+</tr>
+<tr>
+<td>24dp</td>
+<td>~12%</td>
+</tr>
+</tbody></table>
+<h3 id="3-颜色推演"><a href="#3-颜色推演" class="headerlink" title="3. 颜色推演"></a>3. 颜色推演</h3><p>本项目中颜色变换的数学计算：</p>
+<ul>
+<li><strong>主色</strong>（<code>colorPrimary</code>）：<code>#4F46E5</code>（深紫色）</li>
+<li><strong>表面色</strong>（<code>colorSurface</code>）：<code>#FFFFFF</code>（纯白）</li>
+<li><strong>叠加 Alpha</strong>：约 8%</li>
+</ul>
+<pre><code class="language-text">R: 255 × (1-0.08) + 79 × 0.08 ≈ 243
+G: 255 × (1-0.08) + 70 × 0.08 ≈ 232
+B: 255 × (1-0.08) + 229 × 0.08 ≈ 255
+</code></pre>
+<p>最终得到 <strong><code>#F3E8FF</code></strong>，即本项目中 BottomSheet 里卡片出现的浅紫色。</p>
+<hr>
+<h2 id="控制机制"><a href="#控制机制" class="headerlink" title="控制机制"></a>控制机制</h2><h3 id="全局开关"><a href="#全局开关" class="headerlink" title="全局开关"></a>全局开关</h3><p>在主题中全局关闭高度叠加（不推荐，会破坏 M3 整体视觉语言）：</p>
+<pre><code class="language-xml">&lt;style name=&quot;Base.Theme.MyPotato&quot; parent=&quot;Theme.Material3.Light.NoActionBar&quot;&gt;
+    &lt;!-- ... 其他配置 ... --&gt;
+    &lt;item name=&quot;elevationOverlayEnabled&quot;&gt;false&lt;/item&gt;
+&lt;/style&gt;
+</code></pre>
+<h3 id="局部-Theme-Overlay（推荐方案）"><a href="#局部-Theme-Overlay（推荐方案）" class="headerlink" title="局部 Theme Overlay（推荐方案）"></a>局部 Theme Overlay（推荐方案）</h3><p>针对特定组件局部关闭，保留全局设计规范：</p>
+<pre><code class="language-xml">&lt;!-- res/values/themes.xml --&gt;
+&lt;style name=&quot;ThemeOverlay.MyPotato.CardNoTint&quot; parent=&quot;&quot;&gt;
+    &lt;item name=&quot;elevationOverlayEnabled&quot;&gt;false&lt;/item&gt;
+&lt;/style&gt;
+</code></pre>
+<p>在布局中应用：</p>
+<pre><code class="language-xml">&lt;com.google.android.material.card.MaterialCardView
+    android:theme=&quot;@style/ThemeOverlay.MyPotato.CardNoTint&quot;
+    app:cardBackgroundColor=&quot;?attr/colorSurface&quot;
+    ... /&gt;
+</code></pre>
+<h3 id="直接设置固定颜色"><a href="#直接设置固定颜色" class="headerlink" title="直接设置固定颜色"></a>直接设置固定颜色</h3><p>直接通过 <code>cardBackgroundColor</code> 设置具体色值（而非主题属性）也可绕过叠加，但会影响深色模式适配：</p>
+<pre><code class="language-xml">&lt;!-- 不推荐：硬编码颜色会破坏主题一致性 --&gt;
+app:cardBackgroundColor=&quot;@color/card_bg_white&quot;
+</code></pre>
+<hr>
+<h2 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h2><h3 id="1-MaterialShapeDrawable"><a href="#1-MaterialShapeDrawable" class="headerlink" title="1. MaterialShapeDrawable"></a>1. MaterialShapeDrawable</h3><p>核心渲染类，负责处理：</p>
+<ul>
+<li>形状裁剪</li>
+<li>边框绘制</li>
+<li><strong>高度叠加色计算与混合</strong></li>
+<li>阴影生成</li>
+</ul>
+<h3 id="2-ElevationOverlayProvider"><a href="#2-ElevationOverlayProvider" class="headerlink" title="2. ElevationOverlayProvider"></a>2. ElevationOverlayProvider</h3><p>负责根据绝对高度计算叠加色的接口。默认实现 <code>MaterialElevationOverlayProvider</code> 中：</p>
+<pre><code class="language-kotlin">// 核心逻辑伪代码
+fun compositeOverlayIfNeeded(
+    backgroundColor: Color,
+    absoluteElevation: Float
+): Color {
+    if (!elevationOverlayEnabled) {
+        return backgroundColor
+    }
+
+    val overlayAlpha = calculateOverlayAlpha(absoluteElevation)
+    val overlayColor = overlayColor.withAlpha(overlayAlpha)
+
+    return blendColors(overlayColor, backgroundColor)
+}
+</code></pre>
+<h3 id="3-父级高度累加链"><a href="#3-父级高度累加链" class="headerlink" title="3. 父级高度累加链"></a>3. 父级高度累加链</h3><p><code>MaterialCardView</code> 在绘制时会向上遍历父视图树，累加所有祖先的 <code>elevation</code>：</p>
+<pre><code class="language-text">MaterialCardView (0dp)
+    ↓
+FrameLayout (BottomSheet 内部容器，2dp)
+    ↓
+BottomSheetDialog 根容器 (6dp)
+    ↓
+总体：0 + 2 + 6 = 8dp
+</code></pre>
+<hr>
+<h2 id="常见问题与解决方案"><a href="#常见问题与解决方案" class="headerlink" title="常见问题与解决方案"></a>常见问题与解决方案</h2><h3 id="Q1-BottomSheet-中的卡片背景为什么会变色？"><a href="#Q1-BottomSheet-中的卡片背景为什么会变色？" class="headerlink" title="Q1: BottomSheet 中的卡片背景为什么会变色？"></a>Q1: BottomSheet 中的卡片背景为什么会变色？</h3><p><strong>A</strong>: BottomSheet 容器自身带有 elevation，导致卡片绝对高度 &gt; 0。</p>
+<p><strong>解决</strong>: 为卡片应用 <code>elevationOverlayEnabled=false</code> 的 Theme Overlay。</p>
+<h3 id="Q2-为什么不同设备上叠加程度看起来不一样？"><a href="#Q2-为什么不同设备上叠加程度看起来不一样？" class="headerlink" title="Q2: 为什么不同设备上叠加程度看起来不一样？"></a>Q2: 为什么不同设备上叠加程度看起来不一样？</h3><p><strong>A</strong>: 叠加系数受以下因素影响：</p>
+<ul>
+<li>主题的 <code>elevationOverlayColor</code>（默认是 <code>colorPrimary</code>）</li>
+<li>当前系统是否开启”强制深色”或其他辅助功能</li>
+<li>Material Components 库版本</li>
+</ul>
+<h3 id="Q3-如何自定义叠加色而不是用-colorPrimary？"><a href="#Q3-如何自定义叠加色而不是用-colorPrimary？" class="headerlink" title="Q3: 如何自定义叠加色而不是用 colorPrimary？"></a>Q3: 如何自定义叠加色而不是用 colorPrimary？</h3><p><strong>A</strong>: 在主题中覆盖 <code>elevationOverlayColor</code>：</p>
+<pre><code class="language-xml">&lt;item name=&quot;elevationOverlayColor&quot;&gt;@color/my_custom_overlay&lt;/item&gt;
+</code></pre>
+<hr>
+<h2 id="项目中的应用"><a href="#项目中的应用" class="headerlink" title="项目中的应用"></a>项目中的应用</h2><p>在 <code>MyPotato</code> 项目中，我们采用局部 Theme Overlay 的方案：</p>
+<ol>
+<li><p><strong>文件变更</strong>：</p>
+<ul>
+<li><code>res/values/themes.xml</code>：新增 <code>ThemeOverlay.MyPotato.CardNoTint</code></li>
+<li><code>res/layout/bottom_sheet_add_task_placeholder.xml</code>：应用主题覆盖</li>
+<li><code>res/layout/activity_task_detail.xml</code>：应用主题覆盖（保持一致性）</li>
+</ul>
+</li>
+<li><p><strong>效果</strong>：</p>
+<ul>
+<li>BottomSheet 中的长任务步骤卡片现在保持纯白背景</li>
+<li>不影响其他组件的 Material Design 3 标准视觉效果</li>
+<li>代码符合 Android 资源隔离规范</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://m3.material.io/styles/elevation/overview">Material Design 3 官方文档 - Elevation</a></li>
+<li><a href="https://github.com/material-components/material-components-android/blob/master/docs/theming/ElevationOverlay.md">Material Components Android - Elevation Overlay</a></li>
+<li><a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/MaterialTheme.kt">MaterialShapeDrawable 源码</a></li>
+</ul>
+]]></description>
+    </item>
     <item>
       <title>Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常</title>
       <link>https://raindrop2508.github.io/2026/06/15/tech/zip_extract_permission_fix/</link>
@@ -5075,70 +5234,6 @@ main()
 <p>我拼命的寻找，</p>
 <p>却仿佛从未出现。</p>
 <hr>
-]]></description>
-    </item>
-    <item>
-      <title>Yolo学习笔记＿１</title>
-      <link>https://raindrop2508.github.io/2019/08/17/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%BF%EF%BC%91/</link>
-      <guid>https://raindrop2508.github.io/2019/08/17/tech/yolo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%BF%EF%BC%91/</guid>
-      <pubDate>8 月 17 日，2019</pubDate>
-      <description><![CDATA[<h1 id="yolov3学习笔记"><a href="#yolov3学习笔记" class="headerlink" title="yolov3学习笔记"></a>yolov3学习笔记</h1><h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p><strong>下采样</strong>即图像缩小；将x*x个像素点取均值换算为一个。<br><strong>上采样</strong>即图像放大，利用插值算法。</p>
-<p><strong>ground truth</strong>即监督学习中数据标注的正确的范围。也就是标准答案的意思。<br><strong>IOU</strong>预测的范围（bounding box）与ground truth的交集&#x2F;两者并集</p>
-<p><strong>bounding box(bbox)</strong> 在目标检测中不仅要知道目标的类别还要知道它的位置。在木变检测中常用<strong>边界框</strong>来描述目标位置。<br><strong>anchor box</strong>目标检测算法通常会在输入图像中采样大量的区域，然后判断这些区域中是否包含我们感兴趣的目标，并调整区域边缘从而更准确地预测目标的真实边界框（ground-truth bounding box）。不同的模型使用的区域采样方法可能不同。这里我们介绍其中的一种方法：它以每个像素为中心生成多个大小和宽高比（aspect ratio）不同的边界框。这些边界框被称为<strong>锚框（anchor box）</strong>。(<strong>——动手做深度学习</strong>)</p>
-<p><strong>精确率与召回率</strong>实际上非常简单，精确率是针对我们预测结果而言的，它表示的是预测为正的样本中有多少是真正的正样本。那么预测为正就有两种可能了，一种就是把正类预测为正类(TP)，另一种就是把负类预测为正类(FP)，也就是<br>P&#x3D;TP&#x2F;(TP+FP)<br>而召回率是针对我们原来的样本而言的，它表示的是样本中的正例有多少被预测正确了。那也有两种可能，一种是把原来的正类预测成正类(TP)，另一种就是把原来的正类预测为负类(FN)。<br>R&#x3D;TP&#x2F;TP+FN</p>
-<p><strong>非极大值抑制</strong>简称为NMS算法，思想是搜索局部最大值，抑制极大值。<br>流程如下：  </p>
-<blockquote>
-<p>根据置信度得分进行排序<br>选择置信度最高的比边界框添加到最终输出列表中，将其从边界框列表中删除<br>计算所有边界框的面积<br>计算置信度最高的边界框与其它候选框的IoU。<br>删除IoU大于阈值的边界框<br>重复上述过程，直至边界框列表为空。  </p>
-</blockquote>
-<p>**批标准化(batch normalization)**将分散的数据统一的做法，便与神经网络的学习和优化。normalization 预处理, 使得输入的 x 变化范围不会太大, 让输入值经过激励函数的敏感部分。BN实在每个全连接层之间都进行批数据标准化。(作者：<br><img loading="lazy" src="https://pic3.zhimg.com/80/v2-083ca0bcd0749fd0f236a690b50442e6_hd.png" alt="BN"></p>
-<h2 id="聚类算法"><a href="#聚类算法" class="headerlink" title="聚类算法"></a><a href="https://zhuanlan.zhihu.com/p/21387568">聚类算法</a></h2><p>聚类算法是根据样本之间的距离来将他们归为一类的，这个距离不是普通的距离，理论上叫做欧氏距离。<br>一般面向大量的，同时维度在2个或两个以上的样本群。</p>
-<blockquote>
-<p>1、在样本中随机选择K个点，作为每个类别的初始中心点，这K是自己定的，假如你想将样本分成3个类K就等于3,4个类K就等于4；<br>2、计算所有样本离这K个初始中心点的距离并分别进行比较，选出其中最近的距离并把这个样本归到这个初始中心点的类别里，即总共划分成K个类别；<br>3、舍弃原来的初始中心点，在划分好的K个类别里分别计算出新的中心点，使得这些中心点距离他类别里的所有样本的距离之和最小；<br>4、判断新获得的中心点是否与旧中心点一样，如不一样则回到第2步，重新计算所有样本离这K个新的中心点的距离并进行比较，选出其中最近的距离并归到这个新的中心点的类别里，继续下面的步奏；如一样则完成，即收敛。</p>
-</blockquote>
-<h2 id="残差网络"><a href="#残差网络" class="headerlink" title="残差网络"></a><a href="https://www.cnblogs.com/wuliytTaotao/p/9560205.html">残差网络</a></h2><h3 id="残差"><a href="#残差" class="headerlink" title="残差"></a>残差</h3><p>残差：实际观测值与估计值（拟合值）之间的差。如果回归模型正确则残差可以看做误差的观测值。</p>
-<p>理论上，可以训练一个 shallower 网络，然后在这个训练好的 shallower 网络上堆几层 identity mapping（恒等映射） 的层，即输出等于输入的层，构建出一个 deeper 网络。这两个网络（shallower 和 deeper）得到的结果应该是一模一样的.</p>
-<h3 id="退化问题"><a href="#退化问题" class="headerlink" title="退化问题"></a>退化问题</h3><p>为什么属于随着层数的增多<strong>训练集</strong>上的效果变差？</p>
-<p>原因是随着网络越来越深，训练变得原来越难，网络的优化变得越来越难。理论上，越深的网络，效果应该更好；但实际上，由于训练难度，过深的网络会产生退化问题，效果反而不如相对较浅的网络。而残差网络就可以解决这个问题的，残差网络越深，训练集上的效果会越好。（测试集上的效果可能涉及过拟合问题。过拟合问题指的是测试集上的效果和训练集上的效果之间有差距。）<strong>这里要注意到过拟合与退化问题之间的区别</strong></p>
-<h3 id="残差块"><a href="#残差块" class="headerlink" title="残差块"></a>残差块</h3><p>残差网络是通过加入shortcut connections,变得更容易被优化。包含一个shortcut connection的几层网络被称为一个残差块。shortcut即图中x到<br>⨁的箭头。</p>
-<p><img loading="lazy" src="https://img2018.cnblogs.com/blog/1351564/201809/1351564-20180914164307733-889668964.png" alt="残差块"></p>
-<h3 id="残差块（residual-block）"><a href="#残差块（residual-block）" class="headerlink" title="残差块（residual block）"></a>残差块（residual block）</h3><p>𝑥 表示输入，𝐹(𝑥) 表示残差块在第二层激活函数之前的输出，即 𝐹(𝑥)&#x3D;𝑊2𝜎(𝑊1𝑥)，其中 𝑊1 和 𝑊2 表示第一层和第二层的权重，𝜎 表示 ReLU 激活函数。（这里省略了 bias。）最后残差块的输出是 𝜎(𝐹(𝑥)+𝑥)。</p>
-<p><strong>激活函数</strong>：上层节点的输出与下层节点的输入之间的函数关系。<br>常用的激活函数有：sigmoid函数，tanh函数，relu函数（这个比较常用）… …</p>
-<p>残差块中的网络可以使全连接层也可以是卷积层。</p>
-<blockquote>
-<p>设第二层网络在激活函数之前的输出为 𝐻(𝑥)。如果在该 2 层网络中，最优的输出就是输入 𝑥，那么对于没有 shortcut connection 的网络，就需要将其优化成 𝐻(𝑥)&#x3D;𝑥；对于有 shortcut connection 的网络，即残差块，最优输出是 𝑥，则只需要将 𝐹(𝑥)&#x3D;𝐻(𝑥)−𝑥 优化为 0 即可。后者的优化会比前者简单。这也是残差这一叫法的由来。</p>
-</blockquote>
-<p>上面相当于优化了恒等映射。残差网络可以不是神经网络，用全连接层也可以。</p>
-<h3 id="为什么残差网络会work"><a href="#为什么残差网络会work" class="headerlink" title="为什么残差网络会work"></a>为什么残差网络会work</h3><p>我们给一个网络不论在中间还是末尾加上一个残差块，并给残差块中的 weights 加上 L2 regularization（weight decay），这样图 1 中 𝐹(𝑥)&#x3D;0 是很容易的。这种情况下加上一个残差块和不加之前的效果会是一样，所以加上残差块不会使得效果变得差。如果残差块中的隐藏单元学到了一些有用信息，那么它可能比 identity mapping（即 𝐹(𝑥)&#x3D;0）表现的更好。</p>
-<h2 id="边界框回归"><a href="#边界框回归" class="headerlink" title="边界框回归"></a><a href="https://blog.csdn.net/zijin0802034/article/details/77685438">边界框回归</a></h2><p>对于窗口一般使用四维向量(x,y,w,h) 来表示， 分别表示窗口的中心点坐标和宽高。 对于图 2, 红色的框 P 代表原始的Proposal, 绿色的框 G 代表目标的 Ground Truth， 我们的目标是寻找一种关系使得输入原始的窗口 P 经过映射得到一个跟真实窗口 G 更接近的回归窗口Ĝ。</p>
-<p><img loading="lazy" src="https://img-blog.csdn.net/20170831205020797?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemlqaW4wODAyMDM0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="图2"></p>
-<p>边框回归的目的既是：给定(Px,Py,Pw,Ph)(Px,Py,Pw,Ph)寻找一种映射ff， 使得f(Px,Py,Pw,Ph)&#x3D;(Gx^,Gy^,Gw^,Gh^)f(Px,Py,Pw,Ph)&#x3D;(Gx^,Gy^,Gw^,Gh^) 并且(Gx^,Gy^,Gw^,Gh^)≈(Gx,Gy,Gw,Gh)</p>
-<p><strong>边框回归的方法：平移+尺度缩放</strong></p>
-<h1 id="yolov1-yolov3"><a href="#yolov1-yolov3" class="headerlink" title="yolov1-yolov3"></a><a href="https://blog.csdn.net/xd1723138323/article/details/82532973">yolov1-yolov3</a></h1><h2 id="yolov1"><a href="#yolov1" class="headerlink" title="yolov1"></a>yolov1</h2><h3 id="检测处理理想"><a href="#检测处理理想" class="headerlink" title="检测处理理想"></a>检测处理理想</h3><p>将输入图片划分为S * S的格子（逻辑区域），如果物体的中心坐标落在某个格子中，那么这个格子就负责检测这个物体（包括bounding box的坐标和类别概率）。每个格子预测B个bounding boxes和B个置信度，这个置信度表示这个格子预测的bounding  boxes包含物体的可信程度，论文作者将置信度定义为 Pr(Object)* IOU。Pr(Object)的值为0或者1，表示存不存在目标物体。</p>
-<p>每一个bounding box包括五个元素，x，y，w，h，confidence。坐标(x，y)表示的是box的中心坐标，并且是相对于格子的边界而言，w和h也是相对于整张图片的宽度和高度而言。置信度预测的值表示预测框和真实框的IOU值。虽然每个格子预测B个bounding box，但是每个格子只预测一组类条件概率，注意这里不是anchor，因为多个bounding box共用了一组class probability(表示的是<strong>先验概率</strong>)。所以网络架构的最后一层实际预测了B个bouding box和一组类别概率，注意这只是针对于一个格子，所以在不考虑batch size的情况下，实际预测输出长度为S* S*（B*5+C)</p>
-<h3 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h3><p>对于前面所说bounding box，作者也做了一些处理，将bounding box的w,h除以训练图像的宽度和高度（448*448），使其值在0-1之间。至于bouding box的x,y的实际值意义，作者认为不是相对于整张图片的中心坐标值，而是相对于的对应格子坐标左上边界偏移值，所以x,y的值也在0-1之间，这个地方有些难以理解。</p>
-<p>通过置信度为每一个各自从B个bounding box中筛选一个最终的bounding box。于是每个各自的坐标为（0+x，0+y），（0+x, 1+y）…….</p>
-<p>通过我们设定的置信度阈值使用非极大值抑制方法从这49个bounding box中筛选；还有一种做法就是直接从98个bounding boxes使用非极大值抑制方法筛选。从图片的全局性来考虑，第一种方法更能体现图片的整体性。确定完bounding boxes后，用bounding box坐标值乘以与原图的比例值就可以在原图中框出相应的物体。</p>
-<h2 id="yolov2"><a href="#yolov2" class="headerlink" title="yolov2"></a>yolov2</h2><p>1.对数据进行批标准化处理。</p>
-<p>2.High Resolution Classifier:低分辨率训练分类网络，高分辨率训练检测网络，在两个过程见了一个适应性微调。</p>
-<p>3.Convolutional With Anchor Boxes（锚框卷积）：作者去掉了YOLOv1的全连接层，使用anchor boxes来预测bounding boxes，同时也去掉了最后池化层使得最后feature maps的分辨率大一些。与YOLOv1不同的是，YOLOv2为每一个bounding box预测一个类条件概率【YOLOv1中B个bounding box共用一个类条件概率】。在YOLOv1中bounding boxes数目为：S* S*(5* B+C)，而在YOLOv2中bounding box数目为S * S*B（5+C）。使用anchor box没有使精度提升，提高了召回率。</p>
-<p>4.作者采用维度聚类的方法对数据集的真实标签的bounding box进行聚类分析从而确定B的取值。如果用欧式距离来衡量K-means的距离，会使得大的bounding box比小的bounding box产生更大的误差，于是作者调整距离计算公式为：<br><img loading="lazy" src="https://private.codecogs.com/gif.latex?%5Cdpi%7B120%7D%20%5Csmall%20d(box,centroid)=1-IOU(box,centroid)"></p>
-<p>5.13* 13的feature map可以提供足够信息预测较大的物体，但是对于小物体而言提供的信息仍然不够，所以作者提供了一个passthrough层，利用26*26的feature map来预测小物体（可能是受SSD的启发，不同大小的特征图检测不同大小的物体）。</p>
-<p>6.YOLOv2的网络只有卷积层和池化层，所以就可以在训练进行的过程改变feature maps的shape。 为了使得YOLOv2更具鲁棒性，我们让模型能够对不同大小的图片进行训练。在训练过程中，每10个batch就换一组新尺度的图片（这里的新图片指大小不同，图片的其他属性是一样的）。</p>
-<blockquote>
-<p>作者提出了一种将分类数据集和检测数据集联合训练的方法，在训练的过程，我们将这两类数据集混合，当输入的检测数据集时，反向传播全部的误差损失（YOLOv2的loss），当遇到分类数据集时，只反向传播分类误差损失。</p>
-</blockquote>
-<h2 id="yolov3"><a href="#yolov3" class="headerlink" title="yolov3"></a>yolov3</h2><h3 id="1-边界框预测"><a href="#1-边界框预测" class="headerlink" title="1.边界框预测"></a>1.边界框预测</h3><blockquote>
-<p>YOLOv3中引入一个<strong>Objectness score</strong>概念，使用logistic regression为每一个bounding box预测一个Objectness score。将预测的bounding boxes中与真实bounding box重叠最大的bounding box的Objectness score赋值为1，如果这个bounding box与真实bounding box重叠值达到设定的阈值0.5，这个bounding box的损失为0，其同一格子里面的其他bounding box只计算置信度损失，忽略坐标损失和类别损失。(可以认为0.5表示预测的边界框已经能很好地标记框出物体，所以不用计算它的损失。每一个格子中的object由一个预测的bounding box预测。既然已经找到了较好地bounding box，所以同一个格子里面的其他bounding box没有必要计算坐标误差和分类误差，只需要计算置信度误差，用来调整置信度，最理想的效果是这些bounding box的置信度值更新为0）。<br>这里bounding box是指网络模型预测的confidence，bx，by，bw，bh，计算置信度误差时，用真实标签坐标和预测坐标（bx，by，bw，bh）计算IOU，Objectness score相当于Pr(Object)，所以最终的置信度计算为IOU*Pr（Object）</p>
-</blockquote>
-<h3 id="2-类别预测"><a href="#2-类别预测" class="headerlink" title="2.类别预测"></a>2.类别预测</h3><p>类别预测使用了多标签分类（多分类），没有使用softmax，而是对每一个类各自对立地使用了logistic分类器，用binary cross-entroy loss替代softmax loss，这样能较好地处理标签重叠（包含）关系（例如：女人和人）。</p>
-<h3 id="3-交叉尺度-多尺度-预测"><a href="#3-交叉尺度-多尺度-预测" class="headerlink" title="3.交叉尺度(多尺度)预测"></a>3.交叉尺度(多尺度)预测</h3><p>YOLOv3预测三种不同尺度的box，每一种尺度预测三个anchor boxes，即N<em>N</em>(3*(4+1+80))，所以最终的输出是3*【N<em>N</em>(3*(4+1+80))】，最前面的3表示三种尺度。3种尺度，3个anchor box，是由聚类数为9决定的，按照一定的顺序（面积从小到大）将这个聚蔟box分配给不同尺度。在YOLOv2中，为了加强对小物体的检测，引入了passthrough层，假设最后提取的feature map的size是13<em>13，passthrough层的作用是将上层26</em>26的feature map和最后层13*13的feature map连接，作为网络最后的输出。</p>
-<p>YOLOv3是采用了低分辨率feature map上采用和高分辨率feature map做融合，形成新的feature map层，对新的feature map层单独做预测。这样就是多尺度预测。如果YOLOv3最后一层也是13<em>13的话，那么三个尺度的大小为（13</em>13，26<em>26，52</em>52），第三个尺度只用第二个尺度上采样并做融合。值得说明的是：YOLOv2中的多尺度指输入图像的大小不同，YOLOv3的多尺度是指用不同的分辨率的feature map做预测。</p>
-<hr>
-<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p><a href="https://zhuanlan.zhihu.com/p/24810318">什么是批标准化</a>　　作者：莫烦</p>
-<p><a href="https://zhuanlan.zhihu.com/p/21387568">聚类算法</a>　　作者：挖数</p>
-<p><a href="https://www.cnblogs.com/wuliytTaotao/p/9560205.html">残差网络</a>　　作者：wuliytTaotao</p>
-<p><a href="https://blog.csdn.net/zijin0802034/article/details/77685438">边框回归(Bounding Box Regression)详解</a>　　作者：南有乔木NTU</p>
-<p><a href="https://blog.csdn.net/xd1723138323/article/details/82532973">目标检测之YOLO系列-V1至V3改进详解</a>　　作者：xd1723138323</p>
 ]]></description>
     </item>
 </channel>

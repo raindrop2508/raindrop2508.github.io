@@ -1,0 +1,468 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Material Design 3 高度叠加层（Elevation Overlay）技术详解</title>
+  <link rel="icon" type="image/x-icon" href="/icons/avatar.png" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+  <meta name="description" content="Mark 的技术与生活记录" />
+  
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Material Design 3 高度叠加层（Elevation Overlay）技术详解">
+<meta property="og:url" content="/2026/06/29/tech/material_design_3_elevation_overlay_technical_details/">
+<meta property="og:site_name" content="Raindrop Blog">
+<meta property="og:description" content="">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="/linen-theme/img/pattern-randomized.jpg"> 
+  
+  <link rel="stylesheet" href="/linen-theme/css/linkcard.css?v=undefined" />
+  
+  <!-- stylesheets list from _config.yml -->
+  
+  <link rel="stylesheet" href="/linen-theme/css/linen.css?v=undefined" />
+  
+  <link rel="stylesheet" href="/linen-theme/css/mediaquery.css?v=undefined" />
+   
+  
+  <link rel="stylesheet" href="/linen-theme/css/lazyload.css?v=undefined" />
+  
+  
+  
+<meta name="generator" content="Hexo 8.1.1"><script>var $lazyload = {
+    intersectionRatio: 0.25,
+    preloadCount: 5, 
+    keepPlaceholder: false}</script></head>
+
+<body>
+  <div id="page-top"></div>
+  
+
+
+<div class="nav-header-pleaceholder"></div>
+
+<div class="nav-header is-post">
+  <div class="header-inner">
+    <a class="title" href="/" title="index" style="background-image: url(/icons/logo.png);aspect-ratio: 1/1"></a>
+    <div class="right">
+      <div class="navItems">
+        
+        <a class="navItem active" href="/">首页</a>
+        
+        <a class="navItem" href="/archives/">归档</a>
+        
+        <a class="navItem" href="/about/">关于</a>
+        
+      </div>
+      <div class="buttonSet">
+        
+        
+        
+        <a class="button github" href="https://github.com/raindrop2508" target="_blank" title="github"></a>
+        
+        
+          <a class="button rss" href="/feed.xml" target="_blank" title="rss"></a>
+        
+        
+        <div id="toc-toggle" class="button toc"></div>
+        
+      </div>
+    </div>
+  </div>
+</div> 
+  <div class="banner-bg"></div>
+  
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body">
+    <div class="side-content">
+      
+      <div id="toc" class="toc">
+        <div class="toc-title"></div>
+        <div class="toc-items">
+          
+          <div class="toc-item-wrap active">
+            <a class="toc-item-link" data-id="概述" href="#概述">概述</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="产生背景" href="#产生背景">产生背景</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="核心原理" href="#核心原理">核心原理</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="1-绝对高度（Absolute-Elevation）计算" href="#1-绝对高度（Absolute-Elevation）计算">1. 绝对高度（Absolute Elevation）计算</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="2-混合公式" href="#2-混合公式">2. 混合公式</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="3-颜色推演" href="#3-颜色推演">3. 颜色推演</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="控制机制" href="#控制机制">控制机制</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="全局开关" href="#全局开关">全局开关</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="局部-Theme-Overlay（推荐方案）" href="#局部-Theme-Overlay（推荐方案）">局部 Theme Overlay（推荐方案）</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="直接设置固定颜色" href="#直接设置固定颜色">直接设置固定颜色</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="技术架构" href="#技术架构">技术架构</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="1-MaterialShapeDrawable" href="#1-MaterialShapeDrawable">1. MaterialShapeDrawable</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="2-ElevationOverlayProvider" href="#2-ElevationOverlayProvider">2. ElevationOverlayProvider</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="3-父级高度累加链" href="#3-父级高度累加链">3. 父级高度累加链</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="常见问题与解决方案" href="#常见问题与解决方案">常见问题与解决方案</a>
+            
+            <ul class="toc-sub-item-wrap">
+              
+              <li><a class="toc-sub-item-link" data-id="Q1-BottomSheet-中的卡片背景为什么会变色？" href="#Q1-BottomSheet-中的卡片背景为什么会变色？">Q1: BottomSheet 中的卡片背景为什么会变色？</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="Q2-为什么不同设备上叠加程度看起来不一样？" href="#Q2-为什么不同设备上叠加程度看起来不一样？">Q2: 为什么不同设备上叠加程度看起来不一样？</a></li>
+              
+              <li><a class="toc-sub-item-link" data-id="Q3-如何自定义叠加色而不是用-colorPrimary？" href="#Q3-如何自定义叠加色而不是用-colorPrimary？">Q3: 如何自定义叠加色而不是用 colorPrimary？</a></li>
+              
+            </ul>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="项目中的应用" href="#项目中的应用">项目中的应用</a>
+            
+          </div>
+          
+          <div class="toc-item-wrap">
+            <a class="toc-item-link" data-id="参考资料" href="#参考资料">参考资料</a>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="side-content">
+      
+    </div>
+    <div id="content-outer" class="post-outer">
+      <div id="content-inner">
+        
+
+<article id="post" class="article">
+  <h1 class="post-title">Material Design 3 高度叠加层（Elevation Overlay）技术详解</h1>
+  <div class="post-meta">
+    
+    <time class="date" datetime="2026-06-29T14:42:17.000Z">
+      6 月 29 日，2026
+    </time>
+    
+    
+      <div class="categories">
+        
+        <a class="category-item" href="/categories/Tech/">Tech</a>
+        
+      </div>
+    
+    <div class="read-time">
+
+  <span>约</span>
+
+  <span>6</span>
+
+  <span>分钟阅读</span>
+
+
+  <small>(</small>
+
+  <small>1895</small>
+
+  <small>个字</small>
+
+  <small>)</small>
+</div>
+    <div class="page-pv">阅读<span id="busuanzi_value_page_pv"></span></div>
+    
+  </div>
+  
+  <div id="page-content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>Elevation Overlay（高度叠加层）</strong> 是 Material Design 3（M3）中用于表现界面元素空间层级的核心视觉机制。它通过动态改变表面颜色而非仅依赖阴影来体现不同高度的视觉差异，解决了在不同背景下阴影辨识度不高的问题。</p>
+<h2 id="产生背景"><a href="#产生背景" class="headerlink" title="产生背景"></a>产生背景</h2><p>在 Material Design 2（M2）中，视觉层级主要通过<strong>阴影</strong>来表现。但存在以下局限：</p>
+<ol>
+<li><strong>深色模式下阴影不明显</strong>：深色背景中的阴影对比度低，难以清晰感知高度差异</li>
+<li><strong>纯静态阴影无法体现场景差异</strong>：在浅色或深色背景下，相同高度的视觉感受应当不同</li>
+<li><strong>缺乏颜色语义</strong>：无法通过颜色快速感知元素的突出程度</li>
+</ol>
+<p>Material Design 3 引入<strong>动态表面着色</strong>机制，通过<strong>主色叠加</strong>的方式强化高度感知。</p>
+<hr>
+<h2 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h2><div id="gitalk-initiator"></div><h3 id="1-绝对高度（Absolute-Elevation）计算"><a href="#1-绝对高度（Absolute-Elevation）计算" class="headerlink" title="1. 绝对高度（Absolute Elevation）计算"></a>1. 绝对高度（Absolute Elevation）计算</h3><p>高度叠加层的触发基于<strong>绝对高度</strong>而非单个视图的 <code>elevation</code> 属性。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">绝对高度 = 视图自身 elevation + 所有父级容器的 elevation 累加</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h4 id="实际案例分析（本项目中的现象）"><a href="#实际案例分析（本项目中的现象）" class="headerlink" title="实际案例分析（本项目中的现象）"></a>实际案例分析（本项目中的现象）</h4><p>本项目中出现的 <code>#F3E8FF</code> 现象正是由于这一点：</p>
+<ul>
+<li><strong>Activity 中卡片正常</strong>：<code>MaterialCardView</code> 直接在普通 Activity 根视图中，父级 elevation 为 0，绝对高度 &#x3D; 0dp -&gt; 无叠加</li>
+<li><strong>BottomSheet 中卡片偏紫</strong>：<code>BottomSheetDialog</code> 自身带有约 8dp 的基础高度，虽然卡片自身设置了 <code>app:cardElevation=&quot;0dp&quot;</code>，但绝对高度 &#x3D; 0 + 8 &#x3D; 8dp -&gt; 触发叠加</li>
+</ul>
+<h3 id="2-混合公式"><a href="#2-混合公式" class="headerlink" title="2. 混合公式"></a>2. 混合公式</h3><p>当绝对高度 &gt; 0 时，系统会自动将主题主色（<code>colorPrimary</code>）叠加到表面色（<code>colorSurface</code>）上：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最终颜色 = 主色 × 不透明度 + 表面色 × (1 - 不透明度)</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>不透明度与绝对高度正相关：</p>
+<table>
+<thead>
+<tr>
+<th>绝对高度</th>
+<th>主色叠加 Alpha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1dp</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>3dp</td>
+<td>~7%</td>
+</tr>
+<tr>
+<td>8dp</td>
+<td>~9%</td>
+</tr>
+<tr>
+<td>16dp</td>
+<td>~11%</td>
+</tr>
+<tr>
+<td>24dp</td>
+<td>~12%</td>
+</tr>
+</tbody></table>
+<h3 id="3-颜色推演"><a href="#3-颜色推演" class="headerlink" title="3. 颜色推演"></a>3. 颜色推演</h3><p>本项目中颜色变换的数学计算：</p>
+<ul>
+<li><strong>主色</strong>（<code>colorPrimary</code>）：<code>#4F46E5</code>（深紫色）</li>
+<li><strong>表面色</strong>（<code>colorSurface</code>）：<code>#FFFFFF</code>（纯白）</li>
+<li><strong>叠加 Alpha</strong>：约 8%</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">R: 255 × (1-0.08) + 79 × 0.08 ≈ 243</span><br><span class="line">G: 255 × (1-0.08) + 70 × 0.08 ≈ 232</span><br><span class="line">B: 255 × (1-0.08) + 229 × 0.08 ≈ 255</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>最终得到 <strong><code>#F3E8FF</code></strong>，即本项目中 BottomSheet 里卡片出现的浅紫色。</p>
+<hr>
+<h2 id="控制机制"><a href="#控制机制" class="headerlink" title="控制机制"></a>控制机制</h2><h3 id="全局开关"><a href="#全局开关" class="headerlink" title="全局开关"></a>全局开关</h3><p>在主题中全局关闭高度叠加（不推荐，会破坏 M3 整体视觉语言）：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">&quot;Base.Theme.MyPotato&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;Theme.Material3.Light.NoActionBar&quot;</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="comment">&lt;!-- ... 其他配置 ... --&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;elevationOverlayEnabled&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h3 id="局部-Theme-Overlay（推荐方案）"><a href="#局部-Theme-Overlay（推荐方案）" class="headerlink" title="局部 Theme Overlay（推荐方案）"></a>局部 Theme Overlay（推荐方案）</h3><p>针对特定组件局部关闭，保留全局设计规范：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- res/values/themes.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">&quot;ThemeOverlay.MyPotato.CardNoTint&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;&quot;</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;elevationOverlayEnabled&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<p>在布局中应用：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">com.google.android.material.card.MaterialCardView</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:theme</span>=<span class="string">&quot;@style/ThemeOverlay.MyPotato.CardNoTint&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">app:cardBackgroundColor</span>=<span class="string">&quot;?attr/colorSurface&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">...</span> /&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h3 id="直接设置固定颜色"><a href="#直接设置固定颜色" class="headerlink" title="直接设置固定颜色"></a>直接设置固定颜色</h3><p>直接通过 <code>cardBackgroundColor</code> 设置具体色值（而非主题属性）也可绕过叠加，但会影响深色模式适配：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 不推荐：硬编码颜色会破坏主题一致性 --&gt;</span></span><br><span class="line">app:cardBackgroundColor=&quot;@color/card_bg_white&quot;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<hr>
+<h2 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h2><h3 id="1-MaterialShapeDrawable"><a href="#1-MaterialShapeDrawable" class="headerlink" title="1. MaterialShapeDrawable"></a>1. MaterialShapeDrawable</h3><p>核心渲染类，负责处理：</p>
+<ul>
+<li>形状裁剪</li>
+<li>边框绘制</li>
+<li><strong>高度叠加色计算与混合</strong></li>
+<li>阴影生成</li>
+</ul>
+<h3 id="2-ElevationOverlayProvider"><a href="#2-ElevationOverlayProvider" class="headerlink" title="2. ElevationOverlayProvider"></a>2. ElevationOverlayProvider</h3><p>负责根据绝对高度计算叠加色的接口。默认实现 <code>MaterialElevationOverlayProvider</code> 中：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核心逻辑伪代码</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">compositeOverlayIfNeeded</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    backgroundColor: <span class="type">Color</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    absoluteElevation: <span class="type">Float</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: Color &#123;</span><br><span class="line">    <span class="keyword">if</span> (!elevationOverlayEnabled) &#123;</span><br><span class="line">        <span class="keyword">return</span> backgroundColor</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> overlayAlpha = calculateOverlayAlpha(absoluteElevation)</span><br><span class="line">    <span class="keyword">val</span> overlayColor = overlayColor.withAlpha(overlayAlpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> blendColors(overlayColor, backgroundColor)</span><br><span class="line">&#125;</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<h3 id="3-父级高度累加链"><a href="#3-父级高度累加链" class="headerlink" title="3. 父级高度累加链"></a>3. 父级高度累加链</h3><p><code>MaterialCardView</code> 在绘制时会向上遍历父视图树，累加所有祖先的 <code>elevation</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MaterialCardView (0dp)</span><br><span class="line">    ↓</span><br><span class="line">FrameLayout (BottomSheet 内部容器，2dp)</span><br><span class="line">    ↓</span><br><span class="line">BottomSheetDialog 根容器 (6dp)</span><br><span class="line">    ↓</span><br><span class="line">总体：0 + 2 + 6 = 8dp</span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<hr>
+<h2 id="常见问题与解决方案"><a href="#常见问题与解决方案" class="headerlink" title="常见问题与解决方案"></a>常见问题与解决方案</h2><h3 id="Q1-BottomSheet-中的卡片背景为什么会变色？"><a href="#Q1-BottomSheet-中的卡片背景为什么会变色？" class="headerlink" title="Q1: BottomSheet 中的卡片背景为什么会变色？"></a>Q1: BottomSheet 中的卡片背景为什么会变色？</h3><p><strong>A</strong>: BottomSheet 容器自身带有 elevation，导致卡片绝对高度 &gt; 0。</p>
+<p><strong>解决</strong>: 为卡片应用 <code>elevationOverlayEnabled=false</code> 的 Theme Overlay。</p>
+<h3 id="Q2-为什么不同设备上叠加程度看起来不一样？"><a href="#Q2-为什么不同设备上叠加程度看起来不一样？" class="headerlink" title="Q2: 为什么不同设备上叠加程度看起来不一样？"></a>Q2: 为什么不同设备上叠加程度看起来不一样？</h3><p><strong>A</strong>: 叠加系数受以下因素影响：</p>
+<ul>
+<li>主题的 <code>elevationOverlayColor</code>（默认是 <code>colorPrimary</code>）</li>
+<li>当前系统是否开启”强制深色”或其他辅助功能</li>
+<li>Material Components 库版本</li>
+</ul>
+<h3 id="Q3-如何自定义叠加色而不是用-colorPrimary？"><a href="#Q3-如何自定义叠加色而不是用-colorPrimary？" class="headerlink" title="Q3: 如何自定义叠加色而不是用 colorPrimary？"></a>Q3: 如何自定义叠加色而不是用 colorPrimary？</h3><p><strong>A</strong>: 在主题中覆盖 <code>elevationOverlayColor</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;elevationOverlayColor&quot;</span>&gt;</span>@color/my_custom_overlay<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br></pre></td></tr></table><div class="copy-btn"></div></figure>
+
+<hr>
+<h2 id="项目中的应用"><a href="#项目中的应用" class="headerlink" title="项目中的应用"></a>项目中的应用</h2><p>在 <code>MyPotato</code> 项目中，我们采用局部 Theme Overlay 的方案：</p>
+<ol>
+<li><p><strong>文件变更</strong>：</p>
+<ul>
+<li><code>res/values/themes.xml</code>：新增 <code>ThemeOverlay.MyPotato.CardNoTint</code></li>
+<li><code>res/layout/bottom_sheet_add_task_placeholder.xml</code>：应用主题覆盖</li>
+<li><code>res/layout/activity_task_detail.xml</code>：应用主题覆盖（保持一致性）</li>
+</ul>
+</li>
+<li><p><strong>效果</strong>：</p>
+<ul>
+<li>BottomSheet 中的长任务步骤卡片现在保持纯白背景</li>
+<li>不影响其他组件的 Material Design 3 标准视觉效果</li>
+<li>代码符合 Android 资源隔离规范</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://m3.material.io/styles/elevation/overview">Material Design 3 官方文档 - Elevation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/material-components/material-components-android/blob/master/docs/theming/ElevationOverlay.md">Material Components Android - Elevation Overlay</a></li>
+<li><a target="_blank" rel="noopener" href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/MaterialTheme.kt">MaterialShapeDrawable 源码</a></li>
+</ul>
+</div>
+  <div id="page-content-end"></div>
+  <div class="tags">
+    
+  </div>
+</article>
+
+
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    
+    
+    <a class="post-nav-item next" target="_self" href="/2026/06/15/tech/zip_extract_permission_fix/"><span class="item-link">Android平台解压压缩包适配：解决 Windows 打包引发的 Permission denied 异常</span><span class="nav-indicator-text">下一篇</a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <!-- <a class="footerItem" href="">About This Blog</a> -->
+      <span class="footerItem"><abbr title="本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。" style="cursor: help;">©</abbr>&nbsp;2026 Mark</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a></span>
+      
+    </div>
+  </div>
+</footer>
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  <noscript id="noscript-styles"><style>.hdr-info-wrap {
+  display: none;
+}
+#back-to-top {
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+}
+.lazyload-wrap {
+  display: none;
+}
+.post-cover-img-wrap .cover-img {
+  opacity: 1 !important;
+}
+#gitalk-container {
+  display: none;
+}
+.hdr-switch {
+  display: none;
+}
+#toc-toggle {
+  display: none;
+}
+.button.rss {
+  margin-right: 0 !important;
+}
+.copy-btn {
+  display: none;
+}
+#page-donates {
+  display: none;
+}
+#post-age-warning {
+  display: none;
+}
+#toc .toc-item-wrap:not(.active) {
+  opacity: unset;
+  transition: unset;
+}
+#toc:hover .toc-item-wrap:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-item-link {
+  font-weight: normal;
+  color: #333;
+}
+#toc .toc-item-wrap.active .toc-item-link::before {
+  display: none;
+}
+#toc .toc-item-wrap.active .toc-item-link:not(.active) {
+  opacity: unset;
+}
+#toc .toc-item-wrap.active .toc-sub-item-link:not(.active) {
+  opacity: unset;
+}
+#post .post-meta #content-switch {
+  display: none;
+}
+#post figure.highlight.folded,
+#raw-markdown-block figure.highlight.folded {
+  max-height: unset;
+  overflow-y: auto;
+}
+#post figure.highlight.folded .fold-toggle,
+#raw-markdown-block figure.highlight.folded .fold-toggle {
+  display: none;
+}
+</style></noscript>
+  
+  <script src="/linen-theme/js/toc.js?v=undefined" defer></script>
+  
+  
+  <!-- scripts list from theme config.yml -->
+  
+  <script src="/linen-theme/js/linen.js?v=undefined"></script>
+  
+  
+  
+  <script src="/linen-theme/js/lazyload.js?v=undefined"></script>
+  
+  
+  
+  
+</body>
+
+</html>
